@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.domain.user
 
-import com.surveyapp.kotlinsurvey.domain.user.inquiry.UserInquiry
+import com.surveyapp.kotlinsurvey.domain.survey.Survey
+import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
 import jakarta.persistence.*
 
 @Entity
@@ -9,7 +10,7 @@ class User(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increasement
-    val id: Int? = null,
+    val member_id: Int? = null,
 
     @Column
     val user_id : String,
@@ -34,7 +35,10 @@ class User(
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val userInquiries : MutableList<UserInquiry> = mutableListOf(),
 
-) {
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val surveys : MutableList<Survey> = mutableListOf(),
+
+    ) {
     init {
         if (user_id.isBlank()) {
             throw IllegalArgumentException("아이디는 비어 있을 수 없습니다")

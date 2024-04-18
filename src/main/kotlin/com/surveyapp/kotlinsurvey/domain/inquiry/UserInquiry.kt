@@ -1,8 +1,7 @@
-package com.surveyapp.kotlinsurvey.domain.user.inquiry
+package com.surveyapp.kotlinsurvey.domain.inquiry
 
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
-import java.time.LocalDate
 import java.util.Date
 
 @Entity
@@ -13,7 +12,7 @@ class UserInquiry (
     val inquiry_id : Long? = null,
 
     @ManyToOne
-    @Column
+    @JoinColumn(name="member_id", referencedColumnName = "id")
     val user: User,
 
     @Column

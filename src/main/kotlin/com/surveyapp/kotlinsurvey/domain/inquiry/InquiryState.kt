@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.domain.user.inquiry
+package com.surveyapp.kotlinsurvey.domain.inquiry
 
 enum class InquiryState {
     UNCOMPLETE,
