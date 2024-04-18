@@ -22,7 +22,7 @@ class User(
     val user_nm: String,
 
     @Column
-    val phone : String,
+    val phone_num : String,
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -49,7 +49,7 @@ class User(
         if (user_nm.isBlank()) {
             throw IllegalArgumentException("이름은 비어 있을 수 없습니다")
         }
-        if (phone.isBlank()) {
+        if (phone_num.isBlank()) {
             throw IllegalArgumentException("전화번호는 비어 있을 수 없습니다")
         }
     }

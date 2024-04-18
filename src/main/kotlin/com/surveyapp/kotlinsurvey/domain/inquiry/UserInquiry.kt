@@ -12,7 +12,7 @@ class UserInquiry (
     val inquiry_id : Long? = null,
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "id")
+    @JoinColumn(name="member_id", referencedColumnName = "member_id")
     val user: User,
 
     @Column
@@ -28,6 +28,7 @@ class UserInquiry (
     val reply : String,
 
     @Column
+    @Enumerated(EnumType.STRING)
     var status : InquiryState = InquiryState.UNCOMPLETE // default value
 )
 {
