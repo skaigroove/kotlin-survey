@@ -2,6 +2,7 @@ package com.surveyapp.kotlinsurvey.domain.user.inquiry
 
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
+import java.time.LocalDate
 import java.util.Date
 
 @Entity
@@ -12,8 +13,9 @@ class UserInquiry (
     val inquiry_id : Long? = null,
 
     @ManyToOne
+    @Column
     val user: User,
-    
+
     @Column
     val write_date : Date,
 
@@ -26,8 +28,13 @@ class UserInquiry (
     @Column
     val reply : String,
 
-
+    @Column
+    var status : InquiryState = InquiryState.UNCOMPLETE // default value
 )
 {
-
+    val isComplete: Boolean
+        get() = this.status == InquiryState.COMPLETE // complete 되었으면 true 반환
+    fun CompleteInquiry(){
+        this.status = InquiryState.COMPLETE
+    }
 }
