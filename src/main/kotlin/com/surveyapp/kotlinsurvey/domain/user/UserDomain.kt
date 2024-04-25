@@ -1,45 +1,45 @@
 package com.surveyapp.kotlinsurvey.domain.user
 
-import com.surveyapp.kotlinsurvey.domain.survey.Survey
-import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
+import com.surveyapp.kotlinsurvey.domain.survey.SurveyDomain
+import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiryDomain
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "tb_user")
-class User(
-    @Id
+class UserDomain(
+        @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increasement
     val member_id: Int? = null, // 회원 ID - 정수
 
-    @Column
+        @Column
     val user_id : String, // 사용자 ID
 
-    @Column
+        @Column
     val user_pw : String, // 사용자 비밀번호
 
-    @Column
+        @Column
     val user_nm: String, // 사용자 이름
 
-    @Column
+        @Column
     val phone_number : String, // 사용자 전화번호
 
-    @Column
+        @Column
     @Enumerated(EnumType.STRING)
-    val type: UserType, // 사용자 유형 : 회원, 관리자
+    val type: UserTypeDomain, // 사용자 유형 : 회원, 관리자
 
-    @Column
+        @Column
     @Enumerated(EnumType.STRING)
-    val gender : GenderType, // 사용자 성별
+    val gender : GenderTypeDomain, // 사용자 성별
 
     // class User : class UserInquiry 를 1:n mapping
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val userInquiries : MutableList<UserInquiry> = mutableListOf(),
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val userInquiries : MutableList<UserInquiryDomain> = mutableListOf(),
 
     // class User : class Survey 를 1:n mapping
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val surveys : MutableList<Survey> = mutableListOf(),
+        @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val surveys : MutableList<SurveyDomain> = mutableListOf(),
 
-    ) {
+        ) {
     init { // 초기화
         if (user_id.isBlank()) {
             throw IllegalArgumentException("ID 를 전달받지 못했습니다.")
