@@ -3,7 +3,7 @@ package com.surveyapp.kotlinsurvey.domain.survey
 import jakarta.persistence.*
 
 @Entity
-class ObjectiveAnswer(
+class ObjectiveAnswerDomain(
         @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val objective_id: Long? = null, // 객관식 질문 번호
