@@ -8,18 +8,26 @@ class Question(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val question_id: Long? = null, // 설문 조사 질문 번호
+    val question_id: Long? = null,
 
     @ManyToOne
-    @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
-    val user: User, // 설문 조사 게시 글 작성자
+    @JoinColumn(name = "survey_id")
+    val survey: Survey? = null, // 설문 하나 당 여러 개의 질문 가질 수 있다.
 
-    // class question : class Answer 를 1:n mapping
+    // mapping
+    // 1:n = question: answers
     @OneToMany(mappedBy = "question", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val answers : MutableList<Answer> = mutableListOf(),
+    val answers : MutableList<Answer> = mutableListOf(), // 질문 하나 당 여러개의 답변을 가질 수 있다.
 
-    @Column
-    val question: String, // 설문 조사 질문
+    // mapping
+    // 1:n = question: choices
+    @OneToMany(mappedBy = "question", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @Column(nullable = false)
+    val choices : MutableList<Choice> = mutableListOf(), // 질문 하나 당 여러개의 답변을 가질 수 있다.
+
+    @Column(name = "context", nullable = false)
+    val context: String, // 컨텍스트 영역
 ) {
+
 
 }

@@ -4,30 +4,19 @@ import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
 
 @Entity
-class Answer(
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+abstract class Answer(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
-    val id: Long? = null, // 설문 내 질문 번호
+    open val answer_id: Long? = null, // 설문 내 질문 번호
 
     @ManyToOne
-    @JoinColumn(name="member_id", referencedColumnName = "member_id")
-    val join_user : User, // 설문 조사 응답자
+    @JoinColumn(name="member_id")
+    open val join_user : User, // 멤버 하나 당 여러개의 답변이 있을 수 있다.
 
     @ManyToOne
-    @JoinColumn(name = "question_id", referencedColumnName = "question_id")
-    val question: Question, // 질문
-
-    @Column(name = "answer_type")
-    @Enumerated(EnumType.STRING)
-    val type: AnswerType, // 답변 유형 : [ 주관식, 객관식 ]
-
-    // class answer : class ObjectiveAnswer 를 1:n mapping
-    @OneToMany(mappedBy = "answer", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val objective_answer: MutableList<ObjectiveAnswer> = mutableListOf(), // 객관식 답변 목록
-
-    val subjective_answer: String? = null // 주관삭 답변
-) {
-
-}
+    @JoinColumn(name = "question_id")
+    open val question: Question, // 질문 하나에 대한 여러개의 답변이 있을 수 있다.
+)

@@ -8,23 +8,26 @@ import java.util.*
 class Survey(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increasement
-    val survey_id: Int? = null, // 설문 조사 게시 글 ID
+    val survey_id: Int? = null, // 설문 ID
+
+    @OneToMany(mappedBy = "survey", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val questions: MutableList<Question> = mutableListOf(), // 하나의 설문 조사가 담고 있는 질문 리스트
 
     @ManyToOne
     @JoinColumn(name="member_id", referencedColumnName = "id")
-    val user: User, // 설문 조사 게시 글 작성자
+    val author: User, // 설문 작성자
 
     @Column
-    val title : String, // 설문 조사 게시 글 제목
+    val title : String, // 설문 제목
 
     @Column
-    val discription : String, // 설문 조사 게시 글 내용
+    val discription : String, // 설문 설명
 
     @Column
-    val start_date : Date, // 설문 조사 시작일
+    val start_date : Date, // 설문 게시일
 
     @Column
-    val end_date : Date, // 설문 조사 종료일
+    val end_date : Date, // 설문 종료일
 
 ) {
 
