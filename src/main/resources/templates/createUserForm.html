@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8"> <!-- 문자 인코딩 설정 -->
 <title>Create User</title>
@@ -9,10 +10,11 @@
         }
     </style>
 </head>
+
 <body>
 <div class="container">
     <h1>회원가입을 진행하세요</h1>
-    <form role="form" action="@{/new}" th:object="${userForm}" method="post">
+    <form role="form" action="/user/new" th:object="${userForm}" method="post">
         <div class="form-group">
             <label th:for="loginId">Login ID:</label>
             <input type="text" th:field="*{loginId}" class="form-control" placeholder="이메일 형식으로 입력하세요">

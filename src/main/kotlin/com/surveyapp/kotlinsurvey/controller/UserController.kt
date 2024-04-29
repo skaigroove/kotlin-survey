@@ -6,13 +6,14 @@ import com.surveyapp.kotlinsurvey.domain.user.UserType
 import com.surveyapp.kotlinsurvey.service.user.UserService
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RequestMapping("/user") // endpoint
-@RestController
+@Controller
 class UserController(
     @Autowired private val userService: UserService,
 ) {
@@ -23,13 +24,13 @@ class UserController(
     }
 
     @PostMapping("/new")
-    fun crateUser(@Valid userForm: UserForm, result: BindingResult): String {
+    fun createUser(@Valid userForm: UserForm, result: BindingResult): String{
 
         if (result.hasErrors())
             return "createUserForm"
-        val user = User(null, userForm.loginId, userForm.password, userForm.name,userForm.birthDate,userForm.genderType,userForm.phoneNumber,
-            UserType.CLIENT)
+
+        val user = User(null, userForm.loginId, userForm.password, userForm.name,userForm.birthDate,userForm.genderType,userForm.phoneNumber,UserType.CLIENT)
         userService.join(user)
-        return "/"
+        return "welcome"
     }
 }
