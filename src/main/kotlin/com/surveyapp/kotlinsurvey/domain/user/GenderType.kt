@@ -1,6 +1,6 @@
 package com.surveyapp.kotlinsurvey.domain.user
 
-enum class GenderType { // 성별
-    MALE, // 남자
-    FEMALE // 여자
+enum class GenderType(val desc:String) { // 성별
+    MALE("남"), // 남자
+    FEMALE("여") // 여자
 }

@@ -13,8 +13,7 @@ class UserInquiry (
     val id : Long? = null, // 문의 글 번호
 
     @ManyToOne
-    @Column(name= "inquiry_user")
-    @JoinColumn(name="member_id", referencedColumnName = "member_id")
+    @JoinColumn(name="member_id")
     val user: User, // 문의 작성자
 
     @Column
