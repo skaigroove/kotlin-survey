@@ -40,7 +40,7 @@ class User(
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
-    val userType: UserType // 사용자 권한
+    val userType: UserType? // 사용자 권한은 nullable로 설정. 처음부터 값을 받지 않고 userService 단에서 회원가입 시, default값으로 'USER' 설정.
 
 ) {
 

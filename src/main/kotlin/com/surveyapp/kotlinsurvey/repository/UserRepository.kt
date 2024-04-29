@@ -12,32 +12,32 @@ class UserRepository(
     private val em: EntityManager, // 생성자 주입
 ) {
 
-    // user를 EntityManager에 추가
+    /* user를 EntityManager에 추가*/
     fun save(user: User) {
         em.persist(user)
     }
 
-    // user_id(Long)을 받아 유저 객체를 반환
+    /* user_id(Long)을 받아 유저 객체를 반환*/
     fun findOne(userId: Long): User {
-        return em.find(User::class.java, userId) // user_id가 primary_key 이므로 find() 해준다.
+        return em.find(User::class.java, userId) ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다. ID: $userId") // user_id가 primary_key 이므로 find() 해준다.
     }
 
-    // 모든 유저들을 찾아 리스트 형태로 반환
+    /* 모든 유저들을 찾아 리스트 형태로 반환*/
     fun findAll(): List<User> {
-        return em.createQuery("select m from User m", User::class.java).getResultList()
+        return em.createQuery("select m from User m", User::class.java).getResultList() ?: throw IllegalArgumentException("등록된 사용자가 없습니다.")
     }
 
-    // login_id(String : emain 형식)를 기준으로 유저 객체를 반환
+    /* login_id(String : emain 형식)를 기준으로 유저 객체를 반환*/
     fun findByLoginId(loginId: String): User {
         return em.createQuery("select m from User m where m.loginId = loginId", User::class.java).singleResult
+            ?: throw IllegalArgumentException("사용자를 찾을 수 없습니다. loginId: $loginId")
         // User는 단일 객체이므로, query문 작성해서 singleResult로 return 한다.
     }
 
 
-    // phone_number(String)를 기준으로 유저 객체를 반환
-    fun findByPhoneNumber(phoneNumber: String): User {
+    /* phone_number(String)를 기준으로 유저 객체를 반환*/
+    fun findByPhoneNumber(phoneNumber: String): User? {
         return em.createQuery("select m from User m where m.phoneNumber = phoneNumber", User::class.java).singleResult
         // User는 단일 객체이므로, query문 작성해서 singleResult로 return 한다.
     }
-
 }
