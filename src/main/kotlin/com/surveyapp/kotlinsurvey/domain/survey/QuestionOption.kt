@@ -9,7 +9,7 @@ class QuestionOption(
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id : Int?,
+        val id : Long,
 
         @OneToOne
         @JoinColumn(name="question_id")

@@ -48,8 +48,10 @@ class SurveyPostContorller(
         val new_survey = Survey(user = surveyRequest.user, title = surveyRequest.title, discription = surveyRequest.description, startDate = surveyRequest.startDate, endDate = surveyRequest.endDate)
 
         // 각 질문에 대한 정보를 SurveyRequest 에서 추출하여 Question 객체 생성 및 연결
+        var questionId: Long = 1 // questionOptionId 로 쓸 애
         for (questionRequest in surveyRequest.questions) {
             val question = Question(
+                    questionId = questionId,
                     context = questionRequest.context,
                     questionType = questionRequest.type,
                     survey = new_survey
@@ -58,6 +60,7 @@ class SurveyPostContorller(
             // 객관식 질문 : 옵션 정보 추가 => QuestionOption 객체 생성 및 연결
             if (questionRequest.type == QuestionType.MULTIPLECHOICE) {
                 val option = QuestionOption(
+                        id = questionId,
                         question = question,
                         option1 = questionRequest.option1,
                         option2 = questionRequest.option2,
@@ -68,6 +71,8 @@ class SurveyPostContorller(
                 question.question_option = option
             }
             new_survey.questions?.add(question)
+
+            questionId += 1
         }
 
         return new_survey

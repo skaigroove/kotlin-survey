@@ -30,5 +30,5 @@ class Question(
     val answers: MutableList<Answer> = mutableListOf() // 질문 하나 당 여러개의 답변을 가질 수 있다.
 
     @OneToOne(mappedBy = "question")
-    val question_option: QuestionOption? = null
+    var question_option: QuestionOption? = null
 }
