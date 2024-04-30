@@ -3,7 +3,7 @@ package com.surveyapp.kotlinsurvey.controller
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.domain.user.UserType
-import com.surveyapp.kotlinsurvey.service.user.UserService
+import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +19,7 @@ import java.time.LocalDate
 @RequestMapping("/user") // endpoint
 @Controller
 class UserController(
-    @Autowired private val userService: UserService,
+        @Autowired private val userService: UserService,
 ) {
     @GetMapping("/new")
     fun createForm(model: Model): String {

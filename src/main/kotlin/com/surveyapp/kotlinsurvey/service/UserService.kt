@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.service.user
+package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.controller.LoginForm
 import com.surveyapp.kotlinsurvey.domain.user.User

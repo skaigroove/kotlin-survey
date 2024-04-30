@@ -1,6 +1,6 @@
 package com.surveyapp.kotlinsurvey.user
 
-import com.surveyapp.kotlinsurvey.service.user.UserService
+import com.surveyapp.kotlinsurvey.service.UserService
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

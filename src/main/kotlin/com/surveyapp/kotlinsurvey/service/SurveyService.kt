@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.service.user
+package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.domain.survey.*
 import com.surveyapp.kotlinsurvey.repository.SurveyRepository
