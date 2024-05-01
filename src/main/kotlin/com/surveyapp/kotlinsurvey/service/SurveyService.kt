@@ -2,11 +2,9 @@ package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.domain.survey.*
 import com.surveyapp.kotlinsurvey.repository.SurveyRepository
-import com.surveyapp.kotlinsurvey.repository.UserRepository
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.lang.IllegalArgumentException
 
 @Service
 @Transactional
