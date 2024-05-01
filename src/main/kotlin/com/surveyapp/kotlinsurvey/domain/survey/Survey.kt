@@ -13,7 +13,7 @@ class Survey(
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increasement
-    val survey_id: Long? = null, // 설문 ID
+    val surveyId: Long? = null, // 설문 ID
 
     @ManyToOne
     @NotNull
@@ -24,7 +24,7 @@ class Survey(
     val title : String, // 설문 제목
 
     @Column
-    val discription : String, // 설문 설명
+    val discription : String, //         설문 설명
 
     @Column(name = "start_date", nullable = false)
     @Temporal(TemporalType.DATE) // 날짜만 입력

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 
-//@RequestMapping("/post") // endpoint
+@RequestMapping("/post") // endpoint
 @Controller
 class SurveyPostController(
         @Autowired private val surveyService: SurveyService,
@@ -33,9 +33,9 @@ class SurveyPostController(
         val survey = createSurvey(surveyRequest) // 설문 조사 생성
         surveyService.saveSurvey(survey) // 생성한 설문 조사 DB 에 저장
 
-        redirectAttributes.addAttribute("surveyId", survey.survey_id) // 생성한 설문 조사 ID => Redirect 속성에 추가함
+        redirectAttributes.addAttribute("surveyId", survey.surveyId) // 생성한 설문 조사 ID => Redirect 속성에 추가함
 
-        return "redirect:/survey/${survey.survey_id}" // 경로 반환 : 생성한 설문 조사 게시 글
+        return "redirect:/survey/${survey.surveyId}" // 경로 반환 : 생성한 설문 조사 게시 글
     }
 
     fun createSurvey(surveyRequest: SurveyRequest): Survey { // 설문 조사 생성 함수
@@ -63,7 +63,7 @@ class SurveyPostController(
                         option4 = questionRequest.option4,
                         option5 = questionRequest.option5
                 )
-                question.question_option = option
+                question.questionOption = option
             }
             newSurvey.questions?.add(question)
 

@@ -26,7 +26,6 @@ class ChoiceAnswer(
 
     @Column
     val selectedOptionId: Long // 선택한 옵션을 저장하는 필드
-
     ) : Answer(answerId, user, question,surveyParticipation)
     {
 }

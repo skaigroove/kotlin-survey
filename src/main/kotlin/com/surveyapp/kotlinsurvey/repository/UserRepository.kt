@@ -25,9 +25,8 @@ class UserRepository(
     }
 
     /* 모든 유저들을 찾아 리스트 형태로 반환*/
-    fun findAll(): List<User> {
+    fun findAll(): List<User>? {
         return em.createQuery("select m from User m", User::class.java).resultList
-            ?: throw IllegalArgumentException("등록된 사용자가 없습니다.")
     }
 
     /* login_id(String : email 형식)를 기준으로 유저 객체를 반환*/

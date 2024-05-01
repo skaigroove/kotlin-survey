@@ -1,15 +1,202 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>서베이 홈페이지</title>
+    <title>Survey Bay - 로그인하거나 회원가입하세요!</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:400,700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-sizing: border-box;
+            line-height: 1.5em;
+            color: #747474;
+            font-family: "Open Sans", sans-serif;
+            font-size: 12px;
+        }
+
+        body {
+            font-family: 'League Spartan', sans-serif, 'Quicksand'; /* 폰트 적용 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .main {
+            width: 70%;
+            height: 75%;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s ease-in 0.1s;
+        }
+
+        .home {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            color: black;
+            background: #F1EFE7;
+            display: flex;
+            flex-flow: column wrap;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: all 0.4s ease-in 0.2s;
+
+        }
+
+        .home h1 {
+            font-family: 'League Spartan';
+            color: black;
+            text-align: center;
+        }
+
+        .home h2 {
+            font-family: 'Quicksand';
+            margin-bottom: 20px; /* 간격 조정 */
+            color: black;
+            text-align: center;
+        }
+
+        a.link-copy {
+            text-decoration: none;
+        }
+
+        .btn {
+            background: #f6f3ee;
+            border: 0px solid #d5d1d1; /* 세밀한 경계선 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
+            width: 150px;
+            padding: 10px 16px;
+            margin: 10px 20px;
+            color: #333;
+            border-radius: 5px;
+
+            font-family: 'Quicksand';
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            letter-spacing: 0.1em;
+
+        }
+
+        .btn-container { /* 새로운 컨테이너 스타일 */
+            display: flex;
+            flex-direction: row; /* 같은 열에 위치 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .title {
+            font-size: 70px;
+            font-weight: 700;
+            margin-top: 100px; /* margin-left, margin-right 제거 */
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            color: transparent;
+            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent; /* Webkit 브라우저를 위한 설정 */
+            animation: gradient-animation 5s ease infinite;
+            display: inline-block; /* 백그라운드 클립이 적용되도록 display 속성 변경 */
+        }
+
+        .sub_title {
+            font-size: 12px; /* 글자 크기 조절 */
+            font-weight: 500; /* 굵기 조절 */
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 100px;
+            color: black;
+            letter-spacing: 0.8em;
+        }
+
+        /* 태블릿 및 데스크톱 대응 */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .title {
+                font-size: 50px;
+            }
+
+            .sub_title {
+                font-size: 16px;
+            }
+
+            .btn {
+                width: 130px;
+                padding: 8px 14px;
+            }
+
+            .main {
+                width: 80%;
+            }
+        }
+
+        /* 스마트폰 대응 */
+        @media (max-width: 767px) {
+            .title {
+                font-size: 40px;
+            }
+
+            .sub_title {
+                font-size: 14px;
+            }
+
+            .btn {
+                width: 100px;
+                padding: 6px 12px;
+            }
+
+            .main {
+                width: 90%;
+            }
+
+            .home {
+                flex-direction: column;
+                justify-content: start;
+                padding-top: 20px;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                margin: 20px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-<h1>환영합니다! 서베이 웰컴 페이지입니다</h1>
-<p>우리의 웹 사이트를 방문해 주셔서 감사합니다.</p>
-<div>
-    <button onclick="location.href='/user/login'">로그인</button>
-    <button onclick="location.href='/user/new'">회원가입</button>
-</div>
+<main class="main">
+    <section class="home">
+        <h1 class="title">Survey Bay</h1>
+        <h2 class="sub_title">share your idea</h2>
+        <div class="btn-container">
+            <button id="sign-up" class="btn" onclick="location.href='/user/login'">Login</button>
+            <button id="sign-in" class="btn" onclick="location.href='/user/new'">Join</button>
+        </div>
+    </section>
+</main>
 </body>
 </html>

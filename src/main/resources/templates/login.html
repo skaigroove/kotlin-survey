@@ -1,31 +1,174 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"> <!-- 문자 인코딩 설정 -->
+    <meta charset="UTF-8">
     <title>Create User</title>
     <style>
-        .fieldError {
-            border-color: #bd2130;
+        @import url("https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:400,700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-sizing: border-box;
+            line-height: 1.5em;
+            color: #747474;
+            font-family: "Open Sans", sans-serif;
+            font-size: 12px;
+        }
+
+        body {
+            font-family: 'League Spartan', sans-serif, 'Quicksand'; /* 폰트 적용 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .main {
+            width: 70%;
+            height: auto;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.1s ease-in 0.1s;
+        }
+
+        .home {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            color: black;
+            background: #F1EFE7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transition: all 0.4s ease-in 0.2s;
+        }
+        .home h1 {
+            font-family: 'League Spartan';
+            color: black;
+            text-align: center;
+        }
+        .title {
+            font-size: 70px;
+            font-weight: 700;
+            margin-top : 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            color: transparent;
+            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent; /* Webkit 브라우저를 위한 설정 */
+            animation: gradient-animation 5s ease infinite;
+            display: inline-block; /* 백그라운드 클립이 적용되도록 display 속성 변경 */
+        }
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px; /* 간격 조절 */
+            text-align: center; /* 중앙 정렬 */
+        }
+
+        .form-text {
+            margin-right: 10px; /* 텍스트 옆 간격 조절 */
+        }
+
+        .form-control {
+            flex: 1; /* 입력 필드 너비 자동 조절 */
+        }
+
+        .btn {
+            background: #f6f3ee;
+            border: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 150px;
+            padding: 10px 16px;
+            margin: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center; /* 중앙 정렬 */
+            margin-bottom: 40px;
+        }
+        /* 중형 스크린: 태블릿 */
+        @media (max-width: 1024px) {
+            .main {
+                width: 80%; /* 넓이 조정 */
+            }
+
+            .title {
+                font-size: 50px; /* 글자 크기 조정 */
+            }
+
+            .form-group {
+                flex-direction: column; /* 세로 정렬 */
+                align-items: center; /* 중앙 정렬 */
+            }
+
+            .btn {
+                width: 100px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* 소형 스크린: 스마트폰 */
+        @media (max-width: 768px) {
+            .main {
+                width: 95%; /* 넓이 조정 */
+            }
+
+            .title {
+                font-size: 40px; /* 글자 크기 조정 */
+            }
+
+            .form-group {
+                width: 100%; /* 너비 조정 */
+            }
+
+            .btn {
+                width: 90px;
+                padding: 5px 10px;
+            }
         }
     </style>
 </head>
-
 <body>
-<div class="container">
-    <h1>로그인</h1>
-    <form role="form" action="/user/login" th:object="${loginForm}" method="post">
-        <div class="form-group">
-            <label th:for="loginId">Login ID:</label>
-            <input type="text" th:field="*{loginId}" class="form-control" placeholder="이메일 형식으로 입력하세요">
-        </div>
-        <div class="form-group">
-            <label th:for="password">Password:</label>
-            <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요">
-        <button type="submit" class="btn btn-primary">로그인</button>
-        </div>
-    </form>
-    <br/>
-</div> <!-- /container -->
+<main class="main">
+    <section class="home">
+        <h1 class="title">Login</h1>
+        <form role="form" action="/user/login" th:object="${loginForm}" method="post">
+            <div class="form-group">
+                <label class="form-text" th:for="loginId">ID:</label>
+                <input type="text" th:field="*{loginId}" class="form-control" placeholder="***@email.com">
+            </div>
+            <div class="form-group">
+                <label class="form-text" th:for="password">Password:</label>
+                <input type="password" th:field="*{password}" class="form-control">
+            </div>
+            <button type="submit" class="btn">로그인</button>
+        </form>
+    </section>
+</main>
 </body>
 </html>

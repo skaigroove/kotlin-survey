@@ -23,7 +23,7 @@ class SurveyRepository (
     /* 모든 설문 조사 조회*/
     fun getSurveyList(): List<Survey>? {
         return em.createQuery("select m from Survey m", Survey::class.java)
-                .getResultList()
+            .getResultList()
     }
 
 }

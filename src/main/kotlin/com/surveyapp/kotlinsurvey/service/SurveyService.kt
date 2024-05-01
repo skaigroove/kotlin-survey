@@ -13,7 +13,7 @@ import java.lang.IllegalArgumentException
 class SurveyService(@Autowired private val surveyRepository: SurveyRepository) {
 
     fun saveSurvey(survey: Survey) {
-        val newSurvey = Survey(survey.survey_id, survey.user, survey.title, survey.discription, survey.startDate, survey.endDate)
+        val newSurvey = Survey(survey.surveyId, survey.user, survey.title, survey.discription, survey.startDate, survey.endDate)
         surveyRepository.saveSurvey(newSurvey)
     }
 

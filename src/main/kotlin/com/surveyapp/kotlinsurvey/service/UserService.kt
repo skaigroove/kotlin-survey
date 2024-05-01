@@ -51,9 +51,9 @@ class UserService(@Autowired private val userRepository: UserRepository) {
 
 
     /* 회원 전체 조회*/
-    fun findUsers(): List<User> {
+    /* fun findUsers(): List<User> {
         return userRepository.findAll()
-    }
+    } */
 
     /* userId(Long)으로 회원 한 명 조회*/
     fun findOne(userId: Long): User {
