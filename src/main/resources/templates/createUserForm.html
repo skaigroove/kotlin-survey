@@ -1,50 +1,193 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"> <!-- 문자 인코딩 설정 -->
-<title>Create User</title>
+    <meta charset="UTF-8">
+    <title>Survey Bay - Join</title>
     <style>
-        .fieldError {
-            border-color: #bd2130;
+        @import url("https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:400,700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            outline: none;
+            box-sizing: border-box;
+            line-height: 1.5em;
+            color: #747474;
+            font-family: "Open Sans", sans-serif;
+            font-size: 12px;
+        }
+
+        body {
+            font-family: 'League Spartan', sans-serif, 'Quicksand';
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .main {
+            width: 80%;
+            max-width: 800px;
+            background: #F1EFE7;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .home {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 50px;
+            font-weight: 700;
+            text-align: center;
+            color: transparent;
+            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-animation 5s ease infinite;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            font-family: 'Quicksand';
+            color: black;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .btn {
+            background: #f6f3ee;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), 0 2px 3px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            padding: 10px 16px;
+            color: #333;
+            border-radius: 5px;
+            font-family: 'Quicksand';
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Add styles for error messages */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
-<div class="container">
-    <h1>회원가입을 진행하세요</h1>
-    <form role="form" action="/user/new" th:object="${userForm}" method="post">
-        <div class="form-group">
-            <label th:for="loginId">Login ID:</label>
-            <input type="text" th:field="*{loginId}" class="form-control" placeholder="이메일 형식으로 입력하세요">
-        </div>
-        <div class="form-group">
-            <label th:for="password">Password:</label>
-            <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호를 입력하세요">
-        </div>
-        <div class="form-group">
-            <label th:for="name">Name:</label>
-            <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력하세요">
-        </div>
-        <div class="form-group">
-            <label th:for="birthDate">Birth Date:</label>
-            <input type="date" th:field="*{birthDate}" class="form-control">
-        </div>
-        <div class="form-group">
-            <label th:for="genderType">Gender:</label>
-            <select th:field="*{genderType}" class="form-control">
-                <option value="MALE">Male</option>
-                <option value="FEMALE">Female</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label th:for="phoneNumber">Phone Number:</label>
-            <input type="text" th:field="*{phoneNumber}" class="form-control" placeholder="전화번호를 입력하세요">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    <br/>
-</div> <!-- /container -->
+<div class="main">
+    <section class="home">
+        <h1 class="title">Join</h1>
+        <form role="form" action="/user/new" th:object="${userForm}" method="post" onsubmit="return validateForm()">
+            <div class="form-group">
+                <label th:for="loginId">Login ID:</label>
+                <input type="text" th:field="*{loginId}" id="loginId" placeholder="이메일 형식으로 입력하세요">
+                <div class="error-message" id="emailError"></div>
+            </div>
+            <div class="form-group">
+                <label th:for="password">Password:</label>
+                <input type="password" th:field="*{password}" id="password" placeholder="비밀번호를 입력하세요">
+                <div class="error-message" id="passwordError"></div>
+            </div>
+            <div class="form-group">
+                <label th:for="name">Name:</label>
+                <input type="text" th:field="*{name}" id="name" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label th:for="birthDate">Birth Date:</label>
+                <input type="date" th:field="*{birthDate}" id="birthDate">
+            </div>
+            <div class="form-group">
+                <label th:for="genderType">Gender:</label>
+                <select th:field="*{genderType}" id="genderType">
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label th:for="phoneNumber">Phone Number:</label>
+                <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="'-'없이 입력해 주세요">
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </section>
+</div>
+<script>
+    function validateForm() {
+        var isValid = true;
+        var emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+        var phonePattern = /^[0-9]+$/;
+        var email = document.getElementById('loginId').value;
+        var password = document.getElementById('password').value;
+        var phoneNumber = document.getElementById('phoneNumber').value;
+
+        // Validate email
+        if (!emailPattern.test(email)) {
+            document.getElementById('emailError').innerText = '올바른 이메일 형식을 입력해주세요.';
+            isValid = false;
+        } else {
+            document.getElementById('emailError').innerText = '';
+        }
+
+        // Validate password length
+        if (password.length > 15) {
+            document.getElementById('passwordError').innerText = '비밀번호는 15자리 이하여야 합니다.';
+            isValid = false;
+        } else {
+            document.getElementById('passwordError').innerText = '';
+        }
+
+        // Validate phone number for special characters
+        if (!phonePattern.test(phoneNumber)) {
+            document.getElementById('phoneError').innerText = '전화번호는 숫자만 포함해야 합니다.';
+            isValid = false;
+        } else {
+            document.getElementById('phoneError').innerText = '';
+        }
+
+        return isValid;
+    }
+</script>
 </body>
 </html>

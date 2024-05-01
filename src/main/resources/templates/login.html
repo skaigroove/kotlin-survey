@@ -170,5 +170,15 @@
         </form>
     </section>
 </main>
+<script>
+    // 페이지 로드 시 오류 메시지 검사 및 표시
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const loginError = urlParams.get('error');
+        if (loginError) {
+            alert('로그인 실패: 아이디와 비밀번호를 확인해주세요.');
+        }
+    }
+</script>
 </body>
 </html>

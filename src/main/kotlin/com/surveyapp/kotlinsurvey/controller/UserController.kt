@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.time.LocalDate
 
 @RequestMapping("/user") // endpoint
@@ -45,18 +46,18 @@ class UserController(
     }
 
     @PostMapping("/login")
-    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession) : String{
-        val loginResult : LoginForm? = userService.login(loginForm)
+    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession, redirectAttributes: RedirectAttributes): String {
+        val loginResult: LoginForm? = userService.login(loginForm)
         if (loginResult != null) {
-            // login 성공
+            // 로그인 성공
             session.setAttribute("loginId", loginResult.loginId)
-            println("로그인에 성공하였습니다")
+            println("로그인에 성공하였습니다.")
             return "redirect:/home/list"
         } else {
-            // login 실패
-            println("로그인에 실패하였습니다")
-            return "login"
+            // 로그인 실패
+            println("로그인에 실패하였습니다.")
+            redirectAttributes.addAttribute("error", "true") // 로그인 실패 시 쿼리 파라미터 추가
+            return "redirect:/user/login"
         }
-
     }
 }
