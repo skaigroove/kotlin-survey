@@ -13,7 +13,7 @@ class Question(
 
     @ManyToOne
     @JoinColumn(name = "survey_id")
-    val survey: Survey? = null, // 설문 하나 당 여러 개의 질문 가질 수 있다.
+    var survey: Survey? = null, // 설문 하나 당 여러 개의 질문 가질 수 있다.
 
     @Column(name = "context", nullable = false)
     val context: String, // 컨텍스트 영역

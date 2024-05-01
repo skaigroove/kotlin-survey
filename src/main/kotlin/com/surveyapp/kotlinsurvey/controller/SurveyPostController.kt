@@ -23,13 +23,13 @@ class SurveyPostController(
     fun list(model: Model): String { // Controller -> view : data 전달할 떄 사용되는 객체 : Model
         val surveyPostList: List<Survey>? = surveyService.getSurveyList()
         model.addAttribute("postList", surveyPostList)
-        return "home" // 경로 반환 - 해당 페이지 -> 사용자에게 응답으로 전달하여 보여 줌
+        return "home.html" // 경로 반환 - 해당 페이지 -> 사용자에게 응답으로 전달하여 보여 줌
     }
 
     @GetMapping("/post") // '/' 경로에 대한 HTTP GEt 요청 처리 method - post() 지정
-    fun post(): String {
-        return "post" } // 경로 반환 - 해당 페이지 -> 사용자에게 응답으로 전달하여 보여 줌
+    fun post(): String { return "post.html" } // 경로 반환 - 해당 페이지 -> 사용자에게 응답으로 전달하여 보여 줌
 
+    /*
     @PostMapping("/post")
     fun write(@ModelAttribute surveyRequest: SurveyRequest, session: HttpSession, redirectAttributes: RedirectAttributes): String { // 설문 조사 생성
         // 세션에서 로그인 ID 가져오기
@@ -83,4 +83,47 @@ class SurveyPostController(
         }
         return newSurvey
     }
+     */
+
+    @PostMapping("/post")
+    fun write(@RequestBody surveyRequest: SurveyRequest): String {
+        val questions = surveyRequest.questions.map { questionRequest ->
+            val question = Question(
+                    context = questionRequest.context,
+                    questionType = questionRequest.type
+            )
+
+            println("if 시작")
+            if (questionRequest.type == QuestionType.MULTIPLECHOICE) {
+                question.questionOption = QuestionOption(
+                        id = question.questionId,
+                        question = question,
+                        option1 = questionRequest.option1,
+                        option2 = questionRequest.option2,
+                        option3 = questionRequest.option3,
+                        option4 = questionRequest.option4,
+                        option5 = questionRequest.option5
+                )
+            }
+            question
+        }.toMutableList()
+
+        val survey = Survey(
+                user = surveyRequest.user,
+                title = surveyRequest.title,
+                discription = surveyRequest.description,
+                startDate = surveyRequest.startDate,
+                endDate = surveyRequest.endDate,
+                //questions = surveyRequest.questions
+        )
+
+        questions.forEach { it.survey = survey }
+
+        surveyService.saveSurvey(survey)
+
+        println("return 전")
+
+        return "redirect:/home/list"
+    }
+
 }

@@ -12,6 +12,7 @@ class SurveyRepository (
     private val em: EntityManager, // 생성자 주입
 ){
     fun saveSurvey(survey: Survey) {
+        println("saveSurvey()")
         em.persist(survey)
     }
 
