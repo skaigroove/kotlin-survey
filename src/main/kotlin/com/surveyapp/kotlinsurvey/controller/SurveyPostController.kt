@@ -40,7 +40,7 @@ class SurveyPostController(
 
     fun createSurvey(surveyRequest: SurveyRequest): Survey { // 설문 조사 생성 함수
 
-        val new_survey = Survey(user = surveyRequest.user, title = surveyRequest.title, discription = surveyRequest.description, startDate = surveyRequest.startDate, endDate = surveyRequest.endDate)
+        val newSurvey = Survey(user = surveyRequest.user, title = surveyRequest.title, discription = surveyRequest.description, startDate = surveyRequest.startDate, endDate = surveyRequest.endDate)
 
         // 각 질문에 대한 정보를 SurveyRequest 에서 추출하여 Question 객체 생성 및 연결
         var questionId: Long = 1 // questionOptionId 로 쓸 애
@@ -49,7 +49,7 @@ class SurveyPostController(
                     questionId = questionId,
                     context = questionRequest.context,
                     questionType = questionRequest.type,
-                    survey = new_survey
+                    survey = newSurvey
             )
 
             // 객관식 질문 : 옵션 정보 추가 => QuestionOption 객체 생성 및 연결
@@ -65,12 +65,12 @@ class SurveyPostController(
                 )
                 question.question_option = option
             }
-            new_survey.questions?.add(question)
+            newSurvey.questions?.add(question)
 
             questionId += 1
         }
 
-        return new_survey
+        return newSurvey
     }
 
 
