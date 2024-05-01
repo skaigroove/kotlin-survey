@@ -16,7 +16,7 @@ class SurveyRepository (
     }
 
     /* id를 기준으로 설문을 조회 (id가 unique 하므로, 단일 조회) */
-    fun getSurvey(id: Long?): Survey? {
+    fun getSurvey(id: Long): Survey? {
         return em.find(Survey::class.java, id) // EntityManager를 사용하기 때문에, java class로 적어준다
     }
 

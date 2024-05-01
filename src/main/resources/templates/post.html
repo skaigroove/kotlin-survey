@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>설문조사 생성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .survey-form {
+            width: 50%;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="text"], input[type="date"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+
+    </style>
+</head>
+<body>
+<div class="survey-form">
+    <h1>새 설문조사 생성</h1>
+    <form id="createSurveyForm" action="/post" method="POST">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">설명:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="startDate">시작일:</label>
+        <input type="date" id="startDate" name="startDate" required><br><br>
+
+        <label for="endDate">종료일:</label>
+        <input type="date" id="endDate" name="endDate" required><br><br>
+
+        <div id="questionsContainer">
+            <button type="button" onclick="addQuestion()">질문 추가</button>
+            <br><br>
+        </div>
+
+        <button type="submit">생성</button>
+    </form>
+</div>
+ <!-- js -->
+<script>
+    let questionCount = 0;
+
+    function addQuestion() {
+        questionCount++;
+        const questionsContainer = document.getElementById('questionsContainer');
+        const newQuestionDiv = document.createElement('div');
+        newQuestionDiv.setAttribute('id', `question${questionCount}`);
+        newQuestionDiv.innerHTML = `
+    <div>
+        <label for="questionType${questionCount}">질문 유형:</label>
+        <select name="questionType" id="questionType${questionCount}" onchange="toggleOptions(this, ${questionCount})">
+            <option value="SUBJECTIVE">주관식</option>
+            <option value="MULTIPLECHOICE">객관식</option>
+        </select><br><br>
+        <label for="questionText${questionCount}">질문 내용:</label>
+        <input type="text" id="questionText${questionCount}" name="questionText" required><br><br>
+    </div>
+    <div id="optionsContainer${questionCount}" style="display:none;"></div>
+    `;
+        questionsContainer.appendChild(newQuestionDiv);
+        questionsContainer.appendChild(document.querySelector('button')); // 질문 추가 버튼을 맨 아래로 이동
+    }
+
+    function toggleOptions(select, questionId) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionId}`);
+        if (select.value === 'MULTIPLECHOICE') {
+            optionsContainer.innerHTML = '';
+            for (let i = 1; i <= 2; i++) {
+                optionsContainer.innerHTML += `
+            <label for="option${questionId}-${i}">옵션 ${i}:</label>
+            <input type="text" id="option${questionId}-${i}" name="option${questionId}[]" required><br><br>
+            `;
+            }
+            let addButton = document.createElement('button');
+            addButton.textContent = '옵션 추가';
+            addButton.type = 'button';
+            addButton.onclick = function() { addOption(questionId); };
+            optionsContainer.appendChild(addButton);
+            optionsContainer.style.display = 'block';
+        } else {
+            optionsContainer.style.display = 'none';
+            optionsContainer.innerHTML = '';
+        }
+    }
+
+    function addOption(questionId) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionId}`);
+        let currentOptions = optionsContainer.querySelectorAll('input[type=text]').length;
+        if (currentOptions < 5) {
+            currentOptions++;
+            let newOptionInput = document.createElement('div');
+            newOptionInput.innerHTML = `<label for="option${questionId}-${currentOptions}">옵션 ${currentOptions}:</label>
+            <input type="text" id="option${questionId}-${currentOptions}" name="option${questionId}[]" required><br><br>`;
+            optionsContainer.insertBefore(newOptionInput, optionsContainer.lastChild);
+        }
+        if (currentOptions === 5) {
+            optionsContainer.removeChild(optionsContainer.lastChild); // 최대 옵션 수에 도달하면 추가 버튼 제거
+        }
+    }
+
+    document.getElementById('createSurveyForm').onsubmit = function(event) {
+        // 모든 객관식 옵션 검증
+        const allMultipleChoiceInputs = document.querySelectorAll('input[type=text][name^="option"]');
+        for (let input of allMultipleChoiceInputs) {
+            if (input.value.trim() === '') {
+                alert('모든 객관식 옵션을 입력해야 합니다.');
+                event.preventDefault();
+                return false;
+            }
+        }
+    };
+</script>
+</body>
+</html>
