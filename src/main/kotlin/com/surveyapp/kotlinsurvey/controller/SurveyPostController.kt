@@ -21,7 +21,7 @@ class SurveyPostController(
         val surveyPostList: List<Survey>? = surveyService.getSurveyList()
         model.addAttribute("postList", surveyPostList)
 
-        return "board/list.html" // 경로 반환 - 해당 페이지 -> 사용자에게 응답으로 전달하여 보여 줌
+        return "home.html" // 경로 반환 - 해당 페이지 -> 사용자에게 응답으로 전달하여 보여 줌
     }
 
     @GetMapping("/post") // '/' 경로에 대한 HTTP GEt 요청 처리 method - post() 지정
@@ -43,10 +43,8 @@ class SurveyPostController(
         val newSurvey = Survey(user = surveyRequest.user, title = surveyRequest.title, discription = surveyRequest.description, startDate = surveyRequest.startDate, endDate = surveyRequest.endDate)
 
         // 각 질문에 대한 정보를 SurveyRequest 에서 추출하여 Question 객체 생성 및 연결
-        var questionId: Long = 1 // questionOptionId 로 쓸 애
         for (questionRequest in surveyRequest.questions) {
             val question = Question(
-                    questionId = questionId,
                     context = questionRequest.context,
                     questionType = questionRequest.type,
                     survey = newSurvey
@@ -55,7 +53,7 @@ class SurveyPostController(
             // 객관식 질문 : 옵션 정보 추가 => QuestionOption 객체 생성 및 연결
             if (questionRequest.type == QuestionType.MULTIPLECHOICE) {
                 val option = QuestionOption(
-                        id = questionId,
+                        id = question.questionId,
                         question = question,
                         option1 = questionRequest.option1,
                         option2 = questionRequest.option2,
@@ -66,8 +64,6 @@ class SurveyPostController(
                 question.questionOption = option
             }
             newSurvey.questions?.add(question)
-
-            questionId += 1
         }
 
         return newSurvey
