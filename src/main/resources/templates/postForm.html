@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>설문조사 생성</title>
@@ -40,18 +40,18 @@
 <body>
 <div class="survey-form">
     <h1>새 설문조사 생성</h1>
-    <form id="createSurveyForm" action="/post" method="POST">
-        <label for="title">제목:</label>
-        <input type="text" id="title" name="title" required><br><br>
+    <form role="form" action="/home/post" th:object="${surveyRequest}"  method="POST">
+        <label for="title" th:for="title">제목:</label>
+        <input type="text" th:field="*{title}" id="title" name="title"><br><br>
 
-        <label for="description">설명:</label>
-        <textarea id="description" name="description" required></textarea><br><br>
+        <label for="description" th:for="description">설명:</label>
+        <textarea id="description" th:field="*{description}" name="description"></textarea><br><br>
 
-        <label for="startDate">시작일:</label>
-        <input type="date" id="startDate" name="startDate" required><br><br>
+        <label for="startDate" th:for="startDate">시작일:</label>
+        <input type="date" id="startDate" th:field="*{startDate}" name="startDate"><br><br>
 
-        <label for="endDate">종료일:</label>
-        <input type="date" id="endDate" name="endDate" required><br><br>
+        <label for="endDate" th:for="endDate">종료일:</label>
+        <input type="date" id="endDate" th:field="*{endDate}" name="endDate"><br><br>
 
         <div id="questionsContainer">
             <button type="button" onclick="addQuestion()">질문 추가</button>
