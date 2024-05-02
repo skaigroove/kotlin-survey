@@ -1,5 +1,7 @@
 package com.surveyapp.kotlinsurvey.controller
 
+import com.surveyapp.kotlinsurvey.controller.form.LoginForm
+import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.domain.user.UserType
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.time.LocalDate
 
 @RequestMapping("/user") // endpoint
@@ -41,23 +42,23 @@ class UserController(
 
     @GetMapping("/login")
     fun loginForm(model :Model): String {
-        model.addAttribute("loginForm",LoginForm("","")) // 초기화한 폼을 모델에 추가
+        model.addAttribute("loginForm", LoginForm("","")) // 초기화한 폼을 모델에 추가
         return "login"
     }
 
     @PostMapping("/login")
-    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession, redirectAttributes: RedirectAttributes): String {
-        val loginResult: LoginForm? = userService.login(loginForm)
+    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession) : String{
+        val loginResult : LoginForm? = userService.login(loginForm)
         if (loginResult != null) {
-            // 로그인 성공
+            // login 성공
             session.setAttribute("loginId", loginResult.loginId)
-            println("로그인에 성공하였습니다.")
-            return "redirect:/home/list"
+            println("로그인에 성공하였습니다")
+            return "redirect:/home/"
         } else {
-            // 로그인 실패
-            println("로그인에 실패하였습니다.")
-            redirectAttributes.addAttribute("error", "true") // 로그인 실패 시 쿼리 파라미터 추가
-            return "redirect:/user/login"
+            // login 실패
+            println("로그인에 실패하였습니다")
+            return "login"
         }
+
     }
 }

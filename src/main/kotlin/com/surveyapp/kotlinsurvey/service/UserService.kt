@@ -1,6 +1,6 @@
 package com.surveyapp.kotlinsurvey.service
 
-import com.surveyapp.kotlinsurvey.controller.LoginForm
+import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.repository.UserRepository
 import jakarta.transaction.Transactional

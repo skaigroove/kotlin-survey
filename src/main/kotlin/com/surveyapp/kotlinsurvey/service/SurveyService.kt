@@ -7,12 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-@Transactional
 class SurveyService(@Autowired private val surveyRepository: SurveyRepository) {
 
+    @Transactional
     fun saveSurvey(survey: Survey) {
-        val newSurvey = Survey(survey.surveyId, survey.user, survey.title, survey.discription, survey.startDate, survey.endDate)
-        surveyRepository.saveSurvey(newSurvey)
+        surveyRepository.saveSurvey(survey)
     }
 
     fun getSurvey(surveyId: Long): Survey? { return surveyRepository.getSurvey(surveyId) }

@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.form
 
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import java.time.LocalDate

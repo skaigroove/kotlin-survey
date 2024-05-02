@@ -11,12 +11,10 @@ import java.util.*
 class Survey(
 
     @Id
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increasement
-    val surveyId: Long? = null, // 설문 ID
+    val surveyId: Long?, // 설문 ID
 
     @ManyToOne
-    @NotNull
     @JoinColumn(name="user_id")
     val user : User, // 설문 작성자
 
@@ -24,7 +22,7 @@ class Survey(
     val title : String, // 설문 제목
 
     @Column
-    val discription : String, //         설문 설명
+    val discription : String, // 설문 설명
 
     @Column(name = "start_date", nullable = false)
     @Temporal(TemporalType.DATE) // 날짜만 입력
@@ -36,7 +34,7 @@ class Survey(
 
 ) {
     @OneToMany(mappedBy = "survey", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val questions: MutableList<Question>? = null // 하나의 설문 조사가 담고 있는 질문 리스트
+    var questions: MutableList<Question> = mutableListOf() // 하나의 설문 조사가 담고 있는 질문 리스트
 
     // Survey에서 SurveyParticipation으로의 일대다 매핑
     @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
