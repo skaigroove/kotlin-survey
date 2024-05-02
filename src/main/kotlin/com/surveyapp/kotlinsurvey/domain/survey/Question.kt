@@ -21,8 +21,9 @@ class Question(
     @Enumerated(EnumType.STRING)
     val questionType: QuestionType, // 질문 유형
 
-    @Column(name="question_options")
     @ElementCollection
+    @CollectionTable(name = "question_options", joinColumns = [JoinColumn(name = "question_id")])
+    @Column(name = "option_value")
     var questionOptions: MutableList<String> = mutableListOf() // 각 선지를 리스트로 받음
 
 ) {

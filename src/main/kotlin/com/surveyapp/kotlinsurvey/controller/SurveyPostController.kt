@@ -43,7 +43,6 @@ class SurveyPostController(
     @PostMapping("/post")
     fun write(
         // 설문 조사 생성
-
         @Valid @ModelAttribute("surveyForm") surveyForm: SurveyForm,
         session: HttpSession,
         result: BindingResult,
