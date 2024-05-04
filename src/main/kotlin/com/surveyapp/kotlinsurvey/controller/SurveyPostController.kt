@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import java.time.LocalDate
 
 @RequestMapping("/home") // endpoint
 @Controller
@@ -74,6 +75,19 @@ class SurveyPostController(
 
         // 생성한 설문조사를 저장함
         val survey = createSurvey(surveyForm, user)
+
+        // 입력된 question이 없을 때 에러처리
+        if (surveyForm.questions.isEmpty())
+            return "redirect:/home/post?questionEmptyError=true"
+
+        // 입력된 question이 없을 때 에러처리
+        if (surveyForm.endDate < surveyForm.startDate)
+            return "redirect:/home/post?dateSettingError1=true"
+
+        // 입력된 question이 없을 때 에러처리
+        if (surveyForm.startDate < LocalDate.now())
+            return "redirect:/home/post?dateSettingError2=true"
+
         surveyService.saveSurvey(survey)
 
         return "home"

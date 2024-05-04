@@ -298,7 +298,27 @@
     <p>© 2024 SurveyBay. All rights reserved.</p>
 </footer>
 <script>
-    /* 배너 관련 애니메이션 처리*/
+
+    // 설문 문항이 하나라도 존재하지 않으면 에러 반환하고 리다이렉션
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const questionEmptyError = urlParams.get('questionEmptyError');
+        const dateSettingError1 = urlParams.get('dateSettingError1');
+        const dateSettingError2 = urlParams.get('dateSettingError2');
+
+        if (questionEmptyError) {
+            alert('설문 생성 에러: 적어도 하나의 설문 문항이 필요합니다.');
+        }
+        else if (dateSettingError1) {
+            alert('설문 생성 에러: 설문 종료 날짜가 설문 시작 날짜보다 빠릅니다.');
+        }
+        else if (dateSettingError2) {
+            alert('설문 생성 에러: 설문 시작 날짜가 현재 날짜보다 빠릅니다.');
+        }
+    }
+
+    /**
+     * 배너 관련 애니메이션 처리*/
     const navbar = document.querySelector('.navbar');
     const mainContent = document.getElementById('mainContent');
 
@@ -316,9 +336,37 @@
         }, 3000); // 2초 후에 실행
     });
 
+
+    /**
+     *  필드 입력 검사 */
+    document.getElementById('createSurveyForm').onsubmit = function() {
+        // 모든 입력 필드 검사
+        const inputs = this.querySelectorAll('input[type="text"], textarea');
+        for (let input of inputs) {
+            if (input.value.trim() === '') {
+                alert('모든 필드를 채워주세요.');
+                input.focus(); // 누락된 입력 필드에 포커스 설정
+                return false; // 폼 제출 중단
+            }
+        }
+
+        // 객관식 옵션 검사
+        const allOptions = document.querySelectorAll('.select_option');
+        for (let option of allOptions) {
+            if (option.value.trim() === '') {
+                alert('모든 선지를 입력해주세요.');
+                option.focus(); // 누락된 선지에 포커스 설정
+                return false; // 폼 제출 중단
+            }
+        }
+        return true; // 모든 검사를 통과한 경우, 폼 제출 허용
+    };
+
+
+    /**
+     *  설문조사 관련 애니메이션 처리 */
     let questions = [];  // 질문들을 관리하는 배열
 
-    // 설문조사 관련 애니메이션 처리
     function addQuestion() {
         const questionIndex = questions.length;
         questions.push({
@@ -395,12 +443,17 @@
 
     // 옵션 삭제 함수
     function removeOption(questionIndex, optionIndex) {
-        const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
-        optionDiv.remove(); // 선택한 옵션을 DOM에서 제거
-        questions[questionIndex].options.splice(optionIndex, 1); // 배열에서 해당 옵션 삭제
+        const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
+        if (questions[questionIndex].options.length > 2) {  // 최소 2개의 옵션 유지
+            const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
+            optionDiv.remove(); // 선택한 옵션을 DOM에서 제거
+            questions[questionIndex].options.splice(optionIndex, 1); // 배열에서 해당 옵션 삭제
 
-        // 모든 옵션의 ID와 placeholder를 업데이트
-        updateOptionIndexes(questionIndex);  // 모든 선지의 번호를 업데이트하는 함수 호출
+            // 모든 옵션의 ID와 placeholder를 업데이트
+            updateOptionIndexes(questionIndex);  // 모든 선지의 번호를 업데이트하는 함수 호출
+        } else {
+            alert("최소 2개의 선지가 필요합니다."); // 최소 옵션 수 미만인 경우 경고
+        }
     }
 
     function updateOptionIndexes(questionIndex) {

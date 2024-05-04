@@ -4,10 +4,12 @@ import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.EntityManager
 import jakarta.persistence.NoResultException
 import jakarta.persistence.PersistenceContext
+import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
 
 @Repository
+@Transactional
 class UserRepository(
     @Autowired @PersistenceContext // 생성자 주입 자동화 어노테이션
     private val em: EntityManager, // 생성자 주입

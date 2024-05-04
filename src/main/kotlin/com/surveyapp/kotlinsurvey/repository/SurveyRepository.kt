@@ -7,7 +7,7 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 
 @Repository
-
+@Transactional
 class SurveyRepository (
 
     @PersistenceContext // 생성자 주입 자동화 어노테이션
