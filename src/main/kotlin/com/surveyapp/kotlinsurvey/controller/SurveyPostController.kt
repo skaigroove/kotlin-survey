@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.controller
 
+import com.surveyapp.kotlinsurvey.config.QuestionTypeEditor
 import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
 import com.surveyapp.kotlinsurvey.domain.survey.*
 import com.surveyapp.kotlinsurvey.domain.user.User
@@ -12,10 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import java.time.LocalDate
-
 
 @RequestMapping("/home") // endpoint
 @Controller
@@ -116,5 +116,10 @@ class SurveyPostController(
         survey.questions.addAll(questions)
 
         return survey
+    }
+
+    @InitBinder
+    fun initBinder(binder: WebDataBinder) {
+        binder.registerCustomEditor(QuestionType::class.java, QuestionTypeEditor())
     }
 }

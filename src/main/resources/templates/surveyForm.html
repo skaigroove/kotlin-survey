@@ -101,9 +101,9 @@
                 <button type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
                 <label for="questionType${questionIndex}">유형:</label>
                 <select id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
-                    <option value="">유형 선택</option>
-                    <option value="SUBJECTIVE">주관식</option>
-                    <option value="MULTIPLE_CHOICE">객관식</option>
+                    <option value="NONE">유형 선택</option>
+                    <option value='SUBJECTIVE'>주관식</option>
+                    <option value='MULTIPLE_CHOICE'>객관식</option>
                 </select>
             </div>
             <div>

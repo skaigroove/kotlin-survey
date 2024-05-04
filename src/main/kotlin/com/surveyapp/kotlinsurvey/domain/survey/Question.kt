@@ -17,7 +17,7 @@ class Question(
     @Column(name = "context", nullable = false)
     val context: String, // 컨텍스트 영역
 
-    @Column(name = "question_type")
+    @Column(name = "question_type", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     val questionType: QuestionType, // 질문 유형
 

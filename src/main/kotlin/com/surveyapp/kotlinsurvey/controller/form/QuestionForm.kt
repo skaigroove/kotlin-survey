@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.controller.form
 
 import com.surveyapp.kotlinsurvey.domain.survey.QuestionType
+
 data class QuestionForm(
     var context: String = "default",
     var questionType: QuestionType = QuestionType.SUBJECTIVE,
