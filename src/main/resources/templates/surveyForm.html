@@ -259,10 +259,8 @@
     </div>
     <nav class="navbar">
         <ul>
-            <li><a href="#">설문 목록</a></li>
-            <li><a>
-                <button class="btn_transparent" onclick="location.href='/home/post'">설문 생성</button>
-            </a></li>
+            <li><a><button class="btn" onclick="location.href='/home/list'">설문 목록</button></a></li>
+            <li><a><button class="btn_transparent" onclick="location.href='/home/post'">설문 생성</button></a></li>
             <li><a href="#">마이 페이지</a></li>
             <li><a href="#">고객 문의</a></li>
         </ul>
@@ -273,10 +271,10 @@
         <form id="createSurveyForm" action="/home/post" method="POST" th:action="@{/home/post}"
               th:object="${surveyForm}">
             <label for="title"></label>
-            <input class="title" type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요" required><br>
+            <input class="title" type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요." required><br>
 
             <label for="description"></label>
-            <textarea class="description" id="description" th:field="*{description}" placeholder="설명을 입력하세요" required></textarea><br>
+            <textarea class="description" id="description" th:field="*{description}" placeholder="설명을 입력하세요." required></textarea><br>
 
             <div class=" div-row">
                 <label for="startDate"></label>
@@ -390,7 +388,7 @@
         optionDiv.id = `option${questionIndex}-${optionIndex}`;
         optionDiv.innerHTML = `
             <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}" placeholder="${optionIndex + 1}번 선지를 입력하세요" name="questions[${questionIndex}].options" required>
-            <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">옵션 삭제</button><br>
+            <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">선지 삭제</button><br>
         `;
         optionsContainer.appendChild(optionDiv);
     }
