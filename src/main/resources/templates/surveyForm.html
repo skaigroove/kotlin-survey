@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>SurveyBay::Create Survey</title>
+    <title>SurveyBay</title>
     <style>
         html, body {
-            height: 120%;
+            height: 100%;
             margin: 0;
             padding: 0;
         }
@@ -14,87 +14,34 @@
             min-height: 100vh; /* 뷰포트 높이의 100% */
             display: flex;
             flex-direction: column;
-            justify-content: center; /* 중앙 정렬 */
         }
 
+        .container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 전체 페이지의 기본 스타일 */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-        }
-        .survey-form {
-            width: 50%;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .form-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        input[type="text"], input[type="date"], textarea {
-            width: calc(100% - 12px);
-            padding: 8px;
-            padding-bottom: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        select {
-            width: 15%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-        button:hover {
-            opacity: 0.8;
+            background: #e7e2d1;
         }
 
-        /*SurveyBay 그라디언트 애니메이션*/
-        .h1 {
-            font-family: 'League Spartan';
-            font-size: 30px;
-            font-weight: 700;
-            margin-top: 100px; /* margin-left, margin-right 제거 */
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            color: transparent;
-            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; /* Webkit 브라우저를 위한 설정 */
-            animation: gradient-animation 5s ease infinite;
-            display: inline-block; /* 백그라운드 클립이 적용되도록 display 속성 변경 */
+        /* 헤더 영역 */
+        header {
+            background: linear-gradient(180deg, white, #f1eee3, #e7e2d1);
+            color: white;
+            position: relative;
         }
-        @keyframes gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+
+        .banner h1 {
+            margin: 0;
+            padding: 10px 20px;
         }
 
         /* 네비게이션 바 초기 상태: 투명하고 높이가 0 */
@@ -105,7 +52,7 @@
             opacity: 0;
             height: 0;
             overflow: hidden;
-            background: linear-gradient(180deg,#e7e2d1,#efede4,white);
+            background: linear-gradient(180deg, #e7e2d1, #efede4, white);
             padding: 0 20px;
             width: 100%;
             position: absolute;
@@ -113,6 +60,7 @@
             left: 0;
             transition: all 0.5s ease; /* 부드러운 전환 효과 */
         }
+
         .navbar ul {
             list-style: none;
             padding: 0;
@@ -132,6 +80,13 @@
             color: black;
             text-decoration: none;
         }
+
+        /* 주요 내용 */
+        main {
+            text-align: center;
+            transition: margin-top 0.5s ease; /* 부드러운 전환 효과 */
+        }
+
         /* 푸터 */
         footer {
             background-color: #333;
@@ -141,6 +96,159 @@
             position: fixed;
             width: 100%;
             bottom: 0;
+        }
+
+        .h1 {
+            font-family: 'League Spartan';
+            font-size: 30px;
+            font-weight: 700;
+            margin-top: 100px; /* margin-left, margin-right 제거 */
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            color: transparent;
+            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent; /* Webkit 브라우저를 위한 설정 */
+            animation: gradient-animation 5s ease infinite;
+            display: inline-block; /* 백그라운드 클립이 적용되도록 display 속성 변경 */
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 버튼 스타일 조정 */
+        .btn_transparent {
+            background: none;
+            color: black; /* 링크 색상과 일치 */
+            border: none; /* 기본 테두리 제거 */
+            padding: 10px; /* 통일된 패딩 */
+            font-family: inherit; /* 상속받은 폰트 스타일 사용 */
+            font-size: inherit; /* 상속받은 폰트 크기 사용 */
+            cursor: pointer; /* 클릭 가능한 항목으로 표시 */
+            transition: color 0.3s ease; /* 색상 변경 애니메이션 */
+        }
+
+        /* 버튼 호버 효과 */
+        .btn:hover {
+            color: #005f99; /* 호버 시 색상 변경 */
+        }
+
+        /* 서베이 폼 디자인*/
+        .survey-form {
+            width: 100%;
+            background: #e7e2d1;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title {
+            width: calc(50% - 50px);
+            height: 50px; /* 높이를 200px로 설정 */
+            padding: 10px;
+            margin-top: 100px;
+            font-size: 30px;
+        }
+
+        .description {
+            width: calc(50% - 30px); /* 기존 설정 유지 */
+            height: 200px; /* 높이를 200px로 설정 */
+            padding: 15px; /* 패딩 추가로 입력 영역 내부 여백 제공 */
+            border: 1px solid #ccc; /* 테두리 설정 유지 */
+            box-sizing: border-box; /* 박스 크기 계산 방식을 경계 박스 기준으로 설정 */
+            resize: vertical; /* 사용자가 수직으로만 크기 조정 가능하도록 설정 */
+            margin-bottom: 20px;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .date {
+            width: calc(23.5% - 30px); /* 기존 설정 유지 */
+            height: 40px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
+
+        .div-row {
+            display: flex; /* Flexbox 레이아웃 적용 */
+            align-items: center; /* 요소들을 수직 중앙 정렬 */
+            margin-bottom: 10px; /* 여백 추가 */
+            text-align: center;
+            justify-content: center;
+        }
+
+        .space {
+            margin: 30px;
+        }
+        .btn {
+            background: #f6f3ee;
+            border: 0px solid #d5d1d1; /* 세밀한 경계선 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
+            width: 150px;
+            padding: 10px 16px;
+            margin: 10px 20px;
+            color: #333;
+            border-radius: 5px;
+
+            font-family: 'Quicksand';
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            letter-spacing: 0.1em;
+
+        }
+        .btn_submit{
+            background: #f6f3ee;
+            border: 0px solid #d5d1d1; /* 세밀한 경계선 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
+            width: 150px;
+            padding: 10px 16px;
+            margin: 10px 20px;
+            margin-bottom: 200px;
+            color: #333;
+            border-radius: 5px;
+
+            font-family: 'Quicksand';
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center; /* 텍스트 중앙 정렬 */
+            letter-spacing: 0.1em;
+        }
+        .select{
+            width: calc(10% - 30px); /* 기존 설정 유지 */
+            height: 40px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
+        .questionContext{
+            width: calc(50% - 30px); /* 기존 설정 유지 */
+            height: 50px; /* 높이를 200px로 설정 */
+            padding: 15px; /* 패딩 추가로 입력 영역 내부 여백 제공 */
+            border: 1px solid #ccc; /* 테두리 설정 유지 */
+            box-sizing: border-box; /* 박스 크기 계산 방식을 경계 박스 기준으로 설정 */
+            resize: vertical; /* 사용자가 수직으로만 크기 조정 가능하도록 설정 */
+            margin-bottom: 20px;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+        .select_option{
+            width: calc(35% - 30px); /* 기존 설정 유지 */
+            height: 30px;
+            margin-left: 5px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -152,48 +260,73 @@
     <nav class="navbar">
         <ul>
             <li><a href="#">설문 목록</a></li>
-            <li><a><button class="btn" onclick="location.href='/home/post'">설문추가</button></a></li>
+            <li><a>
+                <button class="btn_transparent" onclick="location.href='/home/post'">설문 생성</button>
+            </a></li>
             <li><a href="#">마이 페이지</a></li>
             <li><a href="#">고객 문의</a></li>
         </ul>
     </nav>
 </header>
-<div class="survey-form">
-    <h1>새 설문조사 생성</h1>
-    <form id="createSurveyForm" action="/home/post" method="POST" th:action="@{/home/post}" th:object="${surveyForm}">
-        <label for="title">제목:</label>
-        <input type="text" id="title" th:field="*{title}" required><br>
+<main class="mainContent">
+    <div class="survey-form">
+        <form id="createSurveyForm" action="/home/post" method="POST" th:action="@{/home/post}"
+              th:object="${surveyForm}">
+            <label for="title"></label>
+            <input class="title" type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요" required><br>
 
-        <label for="description">설명:</label>
-        <textarea id="description" th:field="*{description}" required></textarea><br>
+            <label for="description"></label>
+            <textarea class="description" id="description" th:field="*{description}" placeholder="설명을 입력하세요" required></textarea><br>
 
-        <label for="startDate">시작일:</label>
-        <input type="date" id="startDate" th:field="*{startDate}" required><br>
+            <div class=" div-row">
+                <label for="startDate"></label>
+                <input class="date" type="date" id="startDate" th:field="*{startDate}" required><br>
+                <div class="space"> ~ </div>
+                <label for="endDate"></label>
+                <input class="date" type="date" id="endDate" th:field="*{endDate}" required><br>
+            </div>
 
-        <label for="endDate">종료일:</label>
-        <input type="date" id="endDate" th:field="*{endDate}" required><br>
+            <div class = "questionContainer" id="questionsContainer">
+            </div>
 
-        <div id="questionsContainer">
+            <button class="btn" type="button" onclick="addQuestion()">질문 추가</button>
+            <br><br>
 
-        </div>
-
-        <button type="button" onclick="addQuestion()">질문 추가</button><br><br>
-
-        <button type="submit">생성</button>
-    </form>
-</div>
+            <button class="btn_submit" type="submit">생성</button>
+        </form>
+    </div>
+</main>
 <footer>
     <p>© 2024 SurveyBay. All rights reserved.</p>
 </footer>
 <script>
+    /* 배너 관련 애니메이션 처리*/
+    const navbar = document.querySelector('.navbar');
+    const mainContent = document.getElementById('mainContent');
+
+    document.querySelector('.banner').addEventListener('mouseover', function () {
+        navbar.style.opacity = '1';
+        navbar.style.height = '50px'; // 네비게이션 바의 높이 설정
+        mainContent.style.marginTop = '50px'; // 메인 콘텐츠 밀림 조정
+    });
+
+    document.querySelector('.banner').addEventListener('mouseout', function () {
+        setTimeout(() => {
+            navbar.style.opacity = '0';
+            navbar.style.height = '0px';
+            mainContent.style.marginTop = '20px';
+        }, 3000); // 2초 후에 실행
+    });
+
     let questions = [];  // 질문들을 관리하는 배열
 
+    // 설문조사 관련 애니메이션 처리
     function addQuestion() {
         const questionIndex = questions.length;
         questions.push({
             type: null,
             context: '',
-            options: []
+            options: []  // 옵션들을 저장하는 배열을 추가
         });
 
         const questionsContainer = document.getElementById('questionsContainer');
@@ -202,21 +335,19 @@
         newQuestionDiv.id = `question${questionIndex}`;
         newQuestionDiv.innerHTML = `
             <div>
-                <p>${questionIndex + 1}번 질문</p>
-                <button type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
-                <label for="questionType${questionIndex}">유형:</label>
-                <select id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
+                <p id="questionLabel${questionIndex}">${questionIndex + 1}번 질문</p>
+                <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
                     <option value="NONE">유형 선택</option>
                     <option value='SUBJECTIVE'>주관식</option>
                     <option value='MULTIPLE_CHOICE'>객관식</option>
                 </select>
+                <button class="btn" type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
             </div>
             <div>
-                <label for="questionText${questionIndex}">질문 내용</label>
-                <textarea id="questionText${questionIndex}" name="questions[${questionIndex}].context" required rows="3"></textarea>
+                <textarea class="questionContext" id="questionText${questionIndex}" name="questions[${questionIndex}].context" placeholder="질문 내용을 입력하세요." required rows="3"></textarea>
             </div>
             <div id="optionsContainer${questionIndex}" style="display:none;">
-                <button type="button" onclick="addOption(${questionIndex})">선지 추가</button>
+                <button class="btn" type="button" onclick="addOption(${questionIndex})">선지 추가</button>
             </div>
         `;
         questionsContainer.appendChild(newQuestionDiv);
@@ -226,38 +357,61 @@
         const questionDiv = document.getElementById(`question${questionIndex}`);
         questionDiv.remove();
         questions.splice(questionIndex, 1); // 배열에서 해당 질문 삭제
+        updateQuestionLabels(); // 질문 번호를 업데이트하는 함수 호출
+    }
+
+    function updateQuestionLabels() {
+        const questionLabels = document.querySelectorAll('[id^="questionLabel"]');
+        questionLabels.forEach((label, index) => {
+            label.textContent = `${index + 1}번 질문`; // 질문 번호 업데이트
+        });
     }
 
     function toggleOptions(select, questionIndex) {
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
         if (select.value === 'MULTIPLE_CHOICE') {
             optionsContainer.style.display = 'block';
+            addOption(questionIndex);
+            addOption(questionIndex);
         } else {
             optionsContainer.style.display = 'none';
             questions[questionIndex].options = []; // 옵션 데이터 초기화
         }
     }
 
+    // 옵션 추가 함수
     function addOption(questionIndex) {
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
         const optionIndex = questions[questionIndex].options.length;
-        questions[questionIndex].options.push(''); // 옵션 추가
+        questions[questionIndex].options.push(''); // 옵션 배열에 빈 문자열을 추가
 
         const optionDiv = document.createElement('div');
         optionDiv.className = 'option-div';
         optionDiv.id = `option${questionIndex}-${optionIndex}`;
         optionDiv.innerHTML = `
-            <label for="option${questionIndex}-${optionIndex}">옵션 ${optionIndex + 1}:</label>
-            <input type="text" id="option${questionIndex}-${optionIndex}" name="questions[${questionIndex}].options" required>
-            <button type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">옵션 삭제</button><br>
+            <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}" placeholder="${optionIndex + 1}번 선지를 입력하세요" name="questions[${questionIndex}].options" required>
+            <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">옵션 삭제</button><br>
         `;
         optionsContainer.appendChild(optionDiv);
     }
 
+    // 옵션 삭제 함수
     function removeOption(questionIndex, optionIndex) {
         const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
-        optionDiv.remove();
+        optionDiv.remove(); // 선택한 옵션을 DOM에서 제거
         questions[questionIndex].options.splice(optionIndex, 1); // 배열에서 해당 옵션 삭제
+
+        // 모든 옵션의 ID와 placeholder를 업데이트
+        updateOptionIndexes(questionIndex);  // 모든 선지의 번호를 업데이트하는 함수 호출
+    }
+
+    function updateOptionIndexes(questionIndex) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
+        const optionDivs = optionsContainer.querySelectorAll('.option-div');
+        optionDivs.forEach((div, index) => {
+            div.querySelector('input').id = `option${questionIndex}-${index}`;
+            div.querySelector('input').placeholder = `${index + 1}번 선지를 입력하세요`;
+        });
     }
 </script>
 
