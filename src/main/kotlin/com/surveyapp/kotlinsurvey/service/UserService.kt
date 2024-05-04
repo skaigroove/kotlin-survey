@@ -15,16 +15,24 @@ class UserService(@Autowired private val userRepository: UserRepository) {
     /* userRepository에 받은 user 정보로 회원가입*/
     @Transactional
     fun join(user: User): User {
-        validateDuplicateUser(user) // 중복이면 에러를 반환한다
+        validateDuplicateUserByLoginId(user) // 중복이면 에러를 반환한다
         userRepository.save(user)
         return user
     }
 
     /* loginId를 기준으로 저장소의 유저가 중복되는지 검사*/
-    fun validateDuplicateUser(user: User) {
+    fun validateDuplicateUserByLoginId(user: User) : Boolean{
         val findMember: User? = userRepository.findByLoginId(user.loginId)
         if (findMember != null) // 레포지토리에 멤버가 존재한다면
-            throw IllegalArgumentException("이미 존재하는 회원입니다.")
+            return true
+        return false
+    }
+
+    fun validateDuplicateUserByPhoneNum(user: User) : Boolean{
+        val findMember: User? = userRepository.findByPhoneNumber(user.phoneNumber)
+        if (findMember != null) // 레포지토리에 멤버가 존재한다면
+            return true
+        return false
     }
 
     /* 로그인*/

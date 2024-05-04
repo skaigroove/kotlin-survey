@@ -120,73 +120,100 @@
         <h1 class="title">Join</h1>
         <form role="form" action="/user/new" th:object="${userForm}" method="post" onsubmit="return validateForm()">
             <div class="form-group">
-                <label th:for="loginId">Login ID:</label>
-                <input type="text" th:field="*{loginId}" id="loginId" placeholder="이메일 형식으로 입력하세요">
-                <div class="error-message" id="emailError"></div>
+                <label for="loginId">Login ID:</label>
+                <input type="text" id="loginId" name="loginId" placeholder="example@email.com">
             </div>
             <div class="form-group">
-                <label th:for="password">Password:</label>
-                <input type="password" th:field="*{password}" id="password" placeholder="비밀번호를 입력하세요">
-                <div class="error-message" id="passwordError"></div>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="15자리 미만으로 입력해주세요">
             </div>
             <div class="form-group">
-                <label th:for="name">Name:</label>
-                <input type="text" th:field="*{name}" id="name" placeholder="이름을 입력하세요">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="이름을 입력하세요">
             </div>
             <div class="form-group">
-                <label th:for="birthDate">Birth Date:</label>
-                <input type="date" th:field="*{birthDate}" id="birthDate">
+                <label for="birthDate">Birth Date:</label>
+                <input type="date" id="birthDate" name="birthDate">
             </div>
             <div class="form-group">
-                <label th:for="genderType">Gender:</label>
-                <select th:field="*{genderType}" id="genderType">
+                <label for="genderType">Gender:</label>
+                <select id="genderType" name="genderType">
                     <option value="MALE">Male</option>
                     <option value="FEMALE">Female</option>
                 </select>
             </div>
             <div class="form-group">
-                <label th:for="phoneNumber">Phone Number:</label>
-                <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="'-'없이 입력해 주세요">
-                <div class="error-message" id="phoneError"></div>
+                <label for="phoneNumber">Phone Number:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="'-'없이 입력해 주세요">
             </div>
             <button type="submit" class="btn">Submit</button>
         </form>
     </section>
 </div>
+
 <script>
+
+    // 페이지 로드 시 오류 메시지 검사 및 표시
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const loginIdDuplicatedError = urlParams.get('loginIdDuplicatedError');
+        const phoneNumberDuplicatedError = urlParams.get('phoneNumberDuplicatedError');
+        if (loginIdDuplicatedError) {
+            alert('중복되는 아이디가 존재합니다.');
+        }
+        if (phoneNumberDuplicatedError) {
+            alert('이미 가입한 적이 있는 전화번호입니다.');
+        }
+    }
     function validateForm() {
-        var isValid = true;
-        var emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-        var phonePattern = /^[0-9]+$/;
-        var email = document.getElementById('loginId').value;
+        var loginId = document.getElementById('loginId').value;
         var password = document.getElementById('password').value;
+        var name = document.getElementById('name').value;
         var phoneNumber = document.getElementById('phoneNumber').value;
+        var loginIdPattern = /^[^@]+@[^@]+\.[^@]+$/;
+        var phonePattern = /^[0-9]+$/;
 
-        // Validate email
-        if (!emailPattern.test(email)) {
-            document.getElementById('emailError').innerText = '올바른 이메일 형식을 입력해주세요.';
-            isValid = false;
-        } else {
-            document.getElementById('emailError').innerText = '';
+        if (!loginId) {
+            alert('이메일을 입력해 주세요.');
+            return false;
         }
-
-        // Validate password length
-        if (password.length > 15) {
-            document.getElementById('passwordError').innerText = '비밀번호는 15자리 이하여야 합니다.';
-            isValid = false;
-        } else {
-            document.getElementById('passwordError').innerText = '';
+        if (!loginIdPattern.test(loginId)) {
+            alert('올바른 이메일 형식을 입력해주세요.');
+            return false;
         }
-
-        // Validate phone number for special characters
+        if (!password) {
+            alert('비밀번호를 입력해 주세요.');
+            return false;
+        }
+        if (!name) {
+            alert('이름을 입력해 주세요.');
+            return false;
+        }
+        if (!phoneNumber) {
+            alert('전화번호를 입력해 주세요.');
+            return false;
+        }
         if (!phonePattern.test(phoneNumber)) {
-            document.getElementById('phoneError').innerText = '전화번호는 숫자만 포함해야 합니다.';
-            isValid = false;
-        } else {
-            document.getElementById('phoneError').innerText = '';
+            alert('전화번호는 숫자만 포함해야 합니다.');
+            return false;
         }
 
-        return isValid;
+        if (password.length > 15) {
+            alert('비밀번호는 15자리 이하여야 합니다.');
+            return false;
+        }
+
+        if (loginId.length > 20) {
+            alert('이메일은 20자리 이하여야 합니다.');
+            return false;
+        }
+
+        if (name.length > 10) {
+            alert('이름은 10자리 이하여야 합니다.');
+            return false;
+        }
+
+        return true;
     }
 </script>
 </body>

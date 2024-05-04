@@ -21,7 +21,7 @@ import java.time.LocalDate
 @RequestMapping("/user") // endpoint
 @Controller
 class UserController(
-        @Autowired private val userService: UserService,
+    @Autowired private val userService: UserService,
 ) {
     @GetMapping("/new")
     fun createForm(model: Model): String {
@@ -30,25 +30,43 @@ class UserController(
     }
 
     @PostMapping("/new")
-    fun createUser(@Valid userForm: UserForm, result: BindingResult): String{
+    fun createUser(@Valid userForm: UserForm, result: BindingResult): String {
 
         if (result.hasErrors())
             return "createUserForm"
 
-        val user = User(null, userForm.loginId, userForm.password, userForm.name,userForm.birthDate,userForm.genderType,userForm.phoneNumber,UserType.CLIENT)
+        val user = User(
+            null,
+            userForm.loginId,
+            userForm.password,
+            userForm.name,
+            userForm.birthDate,
+            userForm.genderType,
+            userForm.phoneNumber,
+            UserType.CLIENT
+        )
+
+        // 레포지토리에 이미 유저가 존재한다면
+        if (userService.validateDuplicateUserByLoginId(user))
+            return "redirect:/user/new?loginIdDuplicatedError=true"
+
+        if (userService.validateDuplicateUserByPhoneNum(user))
+            return "redirect:/user/new?phoneNumberDuplicatedError=true"
+
+        // 유저가 존재하지 않는다면 회원가입하고 웰컴 페이지로 이동
         userService.join(user)
-        return "welcome"
+        return "redirect:/"
     }
 
     @GetMapping("/login")
-    fun loginForm(model :Model): String {
-        model.addAttribute("loginForm", LoginForm("","")) // 초기화한 폼을 모델에 추가
+    fun loginForm(model: Model): String {
+        model.addAttribute("loginForm", LoginForm("", "")) // 초기화한 폼을 모델에 추가
         return "login"
     }
 
     @PostMapping("/login")
-    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession) : String{
-        val loginResult : LoginForm? = userService.login(loginForm)
+    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession): String {
+        val loginResult: LoginForm? = userService.login(loginForm)
         if (loginResult != null) {
             // login 성공
             session.setAttribute("loginId", loginResult.loginId)
