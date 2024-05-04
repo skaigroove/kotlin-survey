@@ -112,4 +112,12 @@ class SurveyPostController(
 
         return survey
     }
+
+    @GetMapping("/list")
+    fun list(model: Model): String {
+        val surveyPostList = surveyService.getSurveyList()
+        model.addAttribute("postList", surveyPostList)
+
+        return "list"
+    }
 }
