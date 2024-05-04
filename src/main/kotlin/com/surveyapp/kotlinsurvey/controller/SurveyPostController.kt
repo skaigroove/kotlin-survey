@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.time.LocalDate
@@ -90,7 +89,7 @@ class SurveyPostController(
 
         surveyService.saveSurvey(survey)
 
-        return "home"
+        return "redirect:/home/list"
     }
 
     fun createSurvey(surveyForm: SurveyForm, user: User): Survey { // 설문 조사 생성 함수
@@ -128,10 +127,29 @@ class SurveyPostController(
     }
 
     @GetMapping("/list")
-    fun list(model: Model): String {
-        val surveyPostList = surveyService.getSurveyList()
-        model.addAttribute("postList", surveyPostList)
+    fun list(model: Model): String { // 설문 목록
+        val surveyPostList = surveyService.getSurveyList() // Survey table 에 기록된 모든 설문 get
+        model.addAttribute("postList", surveyPostList) // "postList" 로 surveyPostList 추가
 
-        return "list"
+        return "list" // 경로 반환 : list.html
     }
+
+    @GetMapping("/list/participate/{surveyId}")
+    fun participateSurvey(@PathVariable surveyId: Long, model: Model): String { // 설문 참여
+        val survey = surveyService.getSurveyById(surveyId)
+        model.addAttribute("participate", survey)
+
+        return "participate" // 경로 반환 : participate.html
+    }
+
+    /*
+    @PostMapping("/submitSurvey")
+    fun submitSurvey(
+        @Valid @ModelAttribute("surveyForm") surveyForm: SurveyForm,
+        session: HttpSession,
+        result: BindingResult,
+        redirectAttributes: RedirectAttributes,
+    )
+
+     */
 }
