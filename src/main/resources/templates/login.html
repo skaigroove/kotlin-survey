@@ -157,7 +157,7 @@
 <main class="main">
     <section class="home">
         <h1 class="title">Login</h1>
-        <form role="form" action="/user/login" th:object="${loginForm}" method="post">
+        <form id = "loginForm" role="form" action="/user/login" th:object="${loginForm}" method="post">
             <div class="form-group">
                 <label class="form-text" th:for="loginId">ID:</label>
                 <input type="text" th:field="*{loginId}" class="form-control" placeholder="***@email.com">
@@ -179,6 +179,30 @@
             alert('로그인 실패: 아이디와 비밀번호를 확인해주세요.');
         }
     }
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        var email = document.getElementById('loginId').value;
+        var password = document.getElementById('password').value;
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email pattern check
+
+        if (!email) {
+            alert('아이디를 입력하세요.');
+            event.preventDefault(); // Prevent form submission
+            return;
+        }
+
+        if (!emailPattern.test(email)) {
+            alert('유효한 이메일 주소를 입력하세요.');
+            event.preventDefault(); // Prevent form submission
+            return;
+        }
+
+        if (!password) {
+            alert('비밀번호를 입력하세요.');
+            event.preventDefault(); // Prevent form submission
+        }
+    });
+
 </script>
 </body>
 </html>
