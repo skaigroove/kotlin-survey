@@ -125,11 +125,11 @@
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="15자리 미만으로 입력해주세요">
+                <input type="password" id="password" name="password" placeholder="15자리 미만으로 입력해 주세요.">
             </div>
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="이름을 입력하세요">
+                <input type="text" id="name" name="name" placeholder="이름을 입력하세요.">
             </div>
             <div class="form-group">
                 <label for="birthDate">Birth Date:</label>
@@ -144,7 +144,7 @@
             </div>
             <div class="form-group">
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="'-'없이 입력해 주세요">
+                <input type="text" id="phoneNumber" name="phoneNumber" placeholder="'-'없이 입력해 주세요.">
             </div>
             <button type="submit" class="btn">Submit</button>
         </form>
@@ -159,10 +159,10 @@
         const loginIdDuplicatedError = urlParams.get('loginIdDuplicatedError');
         const phoneNumberDuplicatedError = urlParams.get('phoneNumberDuplicatedError');
         if (loginIdDuplicatedError) {
-            alert('중복되는 아이디가 존재합니다.');
+            alert('이미 가입한 아이디입니다.');
         }
         if (phoneNumberDuplicatedError) {
-            alert('이미 가입한 적이 있는 전화번호입니다.');
+            alert('이미 가입한 전화번호입니다.');
         }
     }
     function validateForm() {
@@ -179,7 +179,7 @@
             return false;
         }
         if (!loginIdPattern.test(loginId)) {
-            alert('올바른 이메일 형식을 입력해주세요.');
+            alert('올바른 이메일 형식을 입력해 주세요.');
             return false;
         }
         if (!password) {
@@ -200,7 +200,7 @@
         }
 
         if (!birthDate) {
-            alert('생년월일이 입력되어야 합니다');
+            alert('생년월일을 입력해 주세요.');
             return false;
         }
 
@@ -209,8 +209,8 @@
             return false;
         }
 
-        if (loginId.length > 20) {
-            alert('이메일은 20자리 이하여야 합니다.');
+        if (loginId.length > 100) {
+            alert('이메일은 100자리 이하여야 합니다.');
             return false;
         }
 
@@ -218,9 +218,6 @@
             alert('이름은 10자리 이하여야 합니다.');
             return false;
         }
-
-
-
 
         return true;
     }
