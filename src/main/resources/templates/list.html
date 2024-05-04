@@ -204,7 +204,7 @@
         <tbody>
         <tr class="text-center" th:each="post, iterState : ${postList}"> <!-- postList 에 있는 원소 하나씩 post 에 대입해서 반복 -->
             <th scope="row">
-                <span th:text="${post.id}"></span> <!-- post  id 출력 -->
+                <span th:text="${post.surveyId}"></span> <!-- post  id 출력 -->
             </th>
 
             <td>
@@ -216,21 +216,16 @@
             </td>
 
             <td>
-                <span th:text="${#temporals.format(post.startDate, 'yyyy-MM-dd') + ' ~ ' + ${#temporals.format(post.endDate, 'yyyy-MM-dd')}}"></span>
+                <span th:text="${#temporals.format(post.startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(post.endDate, 'yyyy-MM-dd')}"></span>
                 <!-- post 응답 기한 출력 -->
             </td>
 
             <td>
-                <th:block th:if="${post != null}">
-                    <button class="btn_post" onclick="location.href='/home/list/participate'">참여</button> <!-- post 참여 버튼 -->
-                </th:block>
-
+                <button class="btn_post" onclick="location.href='/home/list/participate'">참여</button> <!-- post 참여 버튼 -->
             </td>
 
             <td>
-                <th:block th:if="${post != null}">
-                    <button class="btn_post" onclick="location.href='/home/list/result'">결과</button> <!-- post 결과 확인 버튼 -->
-                </th:block>
+                <button class="btn_post" onclick="location.href='/home/list/result'">결과</button> <!-- post 결과 확인 버튼 -->
             </td>
 
         </tr>
