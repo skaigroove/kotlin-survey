@@ -81,68 +81,80 @@
     </form>
 </div>
 <script>
-    let questionCount = 0;
+    let questions = [];  // 질문들을 관리하는 배열
 
     function addQuestion() {
-        questionCount++;
+        const questionIndex = questions.length;
+        questions.push({
+            type: null,
+            context: '',
+            options: []
+        });
+
         const questionsContainer = document.getElementById('questionsContainer');
         const newQuestionDiv = document.createElement('div');
-        newQuestionDiv.className = 'form-column'; // 클래스 이름을 'form-column'에서 'form-row'로 변경 (선택적)
-        newQuestionDiv.id = `question${questionCount}`; // 각 질문에 고유 ID 부여
+        newQuestionDiv.className = 'form-column';
+        newQuestionDiv.id = `question${questionIndex}`;
         newQuestionDiv.innerHTML = `
-    <div>
-        <p id="questionNum${questionCount}">${questionCount}번</p>
-        <button type="button" onclick="removeQuestion(${questionCount})"> 질문 삭제</button>
-        <label for="questionType${questionCount}">유형:</label>
-        <select id="questionType${questionCount}" name="questions[${questionCount}].type" onchange="toggleOptions(this, ${questionCount})">
-            <option value="SUBJECTIVE">주관식</option>
-            <option value="MULTIPLECHOICE">객관식</option>
-        </select>
-    </div>
-    <div>
-        <label id = "deleteQuestion" for="questionText${questionCount}">질문</label>
-        <textarea id="questionText${questionCount}" name="questions[${questionCount}].context" required rows="3"></textarea>
-    </div>
-    <div id="optionsContainer${questionCount}" style="display:none;"></div>
-    `;
+            <div>
+                <p>${questionIndex + 1}번 질문</p>
+                <button type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
+                <label for="questionType${questionIndex}">유형:</label>
+                <select id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
+                    <option value="">유형 선택</option>
+                    <option value="SUBJECTIVE">주관식</option>
+                    <option value="MULTIPLE_CHOICE">객관식</option>
+                </select>
+            </div>
+            <div>
+                <label for="questionText${questionIndex}">질문 내용</label>
+                <textarea id="questionText${questionIndex}" name="questions[${questionIndex}].context" required rows="3"></textarea>
+            </div>
+            <div id="optionsContainer${questionIndex}" style="display:none;">
+                <button type="button" onclick="addOption(${questionIndex})">선지 추가</button>
+            </div>
+        `;
         questionsContainer.appendChild(newQuestionDiv);
     }
 
-    function removeQuestion(questionId) {
-        const questionDiv = document.getElementById(`question${questionId}`);
-        questionDiv.remove(); // 선택한 질문을 DOM에서 제거
-        questionCount--;
+    function removeQuestion(questionIndex) {
+        const questionDiv = document.getElementById(`question${questionIndex}`);
+        questionDiv.remove();
+        questions.splice(questionIndex, 1); // 배열에서 해당 질문 삭제
     }
 
-    function toggleOptions(select, questionId) {
-        const optionsContainer = document.getElementById(`optionsContainer${questionId}`);
-        optionsContainer.innerHTML = '<button type="button" onclick="addOption(' + questionId + ')">선지 추가</button>'; // 선지 추가 버튼 초기화
-        if (select.value === 'MULTIPLECHOICE') {
+    function toggleOptions(select, questionIndex) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
+        if (select.value === 'MULTIPLE_CHOICE') {
             optionsContainer.style.display = 'block';
         } else {
             optionsContainer.style.display = 'none';
+            questions[questionIndex].options = []; // 옵션 데이터 초기화
         }
     }
 
-    function addOption(questionId) {
-        const optionsContainer = document.getElementById(`optionsContainer${questionId}`);
-        let optionCount = optionsContainer.getElementsByTagName('input').length + 1;
+    function addOption(questionIndex) {
+        const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
+        const optionIndex = questions[questionIndex].options.length;
+        questions[questionIndex].options.push(''); // 옵션 추가
+
         const optionDiv = document.createElement('div');
         optionDiv.className = 'option-div';
-        optionDiv.id = `option${questionId}-${optionCount}`;
+        optionDiv.id = `option${questionIndex}-${optionIndex}`;
         optionDiv.innerHTML = `
-        <label for="option${questionId}-${optionCount}">옵션 ${optionCount}:</label>
-        <input type="text" id="option${questionId}-${optionCount}" name="questions[${questionId}].options" required>
-        <button type="button" onclick="removeOption(${questionId}, ${optionCount})">옵션 ${optionCount} 삭제</button><br>
+            <label for="option${questionIndex}-${optionIndex}">옵션 ${optionIndex + 1}:</label>
+            <input type="text" id="option${questionIndex}-${optionIndex}" name="questions[${questionIndex}].options" required>
+            <button type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">옵션 삭제</button><br>
         `;
-        optionsContainer.appendChild(optionDiv); // 선지 입력 필드 추가
+        optionsContainer.appendChild(optionDiv);
     }
 
-    function removeOption(questionId, optionNumber) {
-        const optionDiv = document.getElementById(`option${questionId}-${optionNumber}`);
-        optionDiv.remove(); // 선택한 옵션을 DOM에서 제거
+    function removeOption(questionIndex, optionIndex) {
+        const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
+        optionDiv.remove();
+        questions[questionIndex].options.splice(optionIndex, 1); // 배열에서 해당 옵션 삭제
     }
-
 </script>
+
 </body>
 </html>

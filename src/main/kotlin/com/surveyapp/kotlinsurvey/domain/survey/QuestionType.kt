@@ -1,6 +1,9 @@
 package com.surveyapp.kotlinsurvey.domain.survey
 
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+
 enum class QuestionType {
-    MULTIPLECHOICE,
+    MULTIPLE_CHOICE,
     SUBJECTIVE
 }

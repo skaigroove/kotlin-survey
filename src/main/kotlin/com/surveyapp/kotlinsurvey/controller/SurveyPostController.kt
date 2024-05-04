@@ -34,7 +34,7 @@ class SurveyPostController(
         // 모델에 surveyForm 초기화하여 추가
         model.addAttribute(
             "surveyForm",
-            SurveyForm("", "", LocalDate.now(), LocalDate.now())
+            SurveyForm()
         )
 
         return "surveyForm"
@@ -49,11 +49,15 @@ class SurveyPostController(
         redirectAttributes: RedirectAttributes,
     ): String {
 
-        // SurveyForm에서 오류가 있을 경우, 홈페이지로 리다이렉트
+        surveyForm.questions.forEach {
+            println("Question Type: ${it.questionType}")
+        }
+
+        // SurveyForm에서 오류가 있을 경우
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.surveyForm", result);
-            redirectAttributes.addFlashAttribute("surveyForm", surveyForm);
-            return "fail";
+            result.allErrors.forEach { error ->
+                println("Error: ${error.defaultMessage}")
+            }
         }
 
         /**
@@ -99,13 +103,16 @@ class SurveyPostController(
                 survey,
                 form.context,
                 form.questionType,
-                if (form.questionType == QuestionType.MULTIPLECHOICE) form.options.toMutableList() else mutableListOf()
+                if (form.questionType == QuestionType.MULTIPLE_CHOICE) form.options.toMutableList() else mutableListOf()
             )
         }.toMutableList()
 
-
+        surveyForm.questions.forEach {
+            println("Question type: ${it.questionType}, Question context: ${it.context}")
+        }
 
         // Survey 객체에 질문 리스트 설정
+        survey.questions.clear()
         survey.questions.addAll(questions)
 
         return survey
