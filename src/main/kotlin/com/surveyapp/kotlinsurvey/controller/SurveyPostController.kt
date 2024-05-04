@@ -49,10 +49,6 @@ class SurveyPostController(
         redirectAttributes: RedirectAttributes,
     ): String {
 
-        surveyForm.questions.forEach {
-            println("Question Type: ${it.questionType}")
-        }
-
         // SurveyForm에서 오류가 있을 경우
         if (result.hasErrors()) {
             result.allErrors.forEach { error ->
