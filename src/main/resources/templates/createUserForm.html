@@ -170,6 +170,7 @@
         var password = document.getElementById('password').value;
         var name = document.getElementById('name').value;
         var phoneNumber = document.getElementById('phoneNumber').value;
+        var birthDate = document.getElementById('birthDate').value;
         var loginIdPattern = /^[^@]+@[^@]+\.[^@]+$/;
         var phonePattern = /^[0-9]+$/;
 
@@ -198,6 +199,11 @@
             return false;
         }
 
+        if (!birthDate) {
+            alert('생년월일이 입력되어야 합니다');
+            return false;
+        }
+
         if (password.length > 15) {
             alert('비밀번호는 15자리 이하여야 합니다.');
             return false;
@@ -212,6 +218,9 @@
             alert('이름은 10자리 이하여야 합니다.');
             return false;
         }
+
+
+
 
         return true;
     }

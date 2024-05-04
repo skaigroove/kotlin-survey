@@ -71,7 +71,7 @@ class UserController(
             // login 성공
             session.setAttribute("loginId", loginResult.loginId)
             println("로그인에 성공하였습니다")
-            return "redirect:/home"
+            return "home"
         } else {
             // login 실패
             println("로그인에 실패하였습니다")
