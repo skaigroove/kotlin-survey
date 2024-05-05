@@ -122,14 +122,4 @@ class SurveyPostController(
 
         return survey
     }
-
-    /*
-    @PostMapping("/submitSurvey")
-    fun submitSurvey(
-        @Valid @ModelAttribute("surveyForm") surveyForm: SurveyForm,
-        session: HttpSession,
-        result: BindingResult,
-        redirectAttributes: RedirectAttributes,
-    )
-     */
 }

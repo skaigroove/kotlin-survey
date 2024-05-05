@@ -22,12 +22,4 @@ class SurveyListController(
 
         return "list" // 경로 반환 : list.html
     }
-
-    @GetMapping("/list/participate/{surveyId}")
-    fun participateSurvey(@PathVariable surveyId: Long, model: Model): String { // 설문 참여
-        val survey = surveyService.getSurveyById(surveyId)
-        model.addAttribute("participate", survey)
-
-        return "participate" // 경로 반환 : participate.html
-    }
 }
