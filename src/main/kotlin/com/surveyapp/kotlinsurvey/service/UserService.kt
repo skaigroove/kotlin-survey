@@ -3,6 +3,7 @@ package com.surveyapp.kotlinsurvey.service
 import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.repository.UserRepository
+import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -67,6 +68,19 @@ class UserService(@Autowired private val userRepository: UserRepository) {
     fun findOne(userId: Long): User {
         return userRepository.findOne(userId)
     }
+
+    fun checkLogin(session: HttpSession): User? {
+        val loginId = session.getAttribute("loginId") as? String // 사용자 - loginId get
+        if (loginId == null) { // 로그인 안 된 상황
+            println("사용자 로그인 정보가 없습니다.")
+            return null
+        }
+        else { // 로그인 된 상황
+            val user = userRepository.findByLoginId(loginId)
+            return user
+        }
+    }
+
 
 
 }
