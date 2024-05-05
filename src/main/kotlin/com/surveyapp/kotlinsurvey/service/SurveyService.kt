@@ -15,7 +15,7 @@ class SurveyService(@Autowired private val surveyRepository: SurveyRepository) {
         surveyRepository.saveSurvey(survey)
     }
 
-    fun getSurvey(surveyId: Long): Survey? { return surveyRepository.getSurvey(surveyId) }
+    fun getSurveyById(surveyId: Long): Survey? { return surveyRepository.getSurveyById(surveyId) }
 
     fun getSurveyList(): List<Survey>? { return surveyRepository.getSurveyList() }
 
