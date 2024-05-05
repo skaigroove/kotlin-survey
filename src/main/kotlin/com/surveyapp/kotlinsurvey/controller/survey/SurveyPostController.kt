@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.survey
 
 import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
 import com.surveyapp.kotlinsurvey.domain.survey.*
@@ -24,11 +24,6 @@ class SurveyPostController(
     @Autowired private val surveyService: SurveyService,
     @Autowired private val userRepository: UserRepository,
 ) {
-    @GetMapping("/")
-    fun home(): String {
-        return "home"
-    }
-
     @GetMapping("/post")
     fun createSurveyForm(model: Model): String {
 
@@ -128,22 +123,6 @@ class SurveyPostController(
         return survey
     }
 
-    @GetMapping("/list")
-    fun list(model: Model): String { // 설문 목록
-        val surveyPostList = surveyService.getSurveyList() // Survey table 에 기록된 모든 설문 get
-        model.addAttribute("postList", surveyPostList) // "postList" 로 surveyPostList 추가
-
-        return "list" // 경로 반환 : list.html
-    }
-
-    @GetMapping("/list/participate/{surveyId}")
-    fun participateSurvey(@PathVariable surveyId: Long, model: Model): String { // 설문 참여
-        val survey = surveyService.getSurveyById(surveyId)
-        model.addAttribute("participate", survey)
-
-        return "participate" // 경로 반환 : participate.html
-    }
-
     /*
     @PostMapping("/submitSurvey")
     fun submitSurvey(
@@ -152,6 +131,5 @@ class SurveyPostController(
         result: BindingResult,
         redirectAttributes: RedirectAttributes,
     )
-
      */
 }

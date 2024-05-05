@@ -77,6 +77,5 @@ class UserController(
             println("로그인에 실패하였습니다")
             return "redirect:/user/login?error=true"
         }
-
     }
 }

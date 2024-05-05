@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 
 
 @Controller
-class HelloController {
-
+class WelcomeController {
     // 첫 화면으로 보여질 루트 페이지
     @GetMapping("/")
     fun welcomePage(): String {

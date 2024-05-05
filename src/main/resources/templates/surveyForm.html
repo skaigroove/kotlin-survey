@@ -191,6 +191,7 @@
         .space {
             margin: 30px;
         }
+
         .btn {
             background: #f6f3ee;
             border: 0px solid #d5d1d1; /* 세밀한 경계선 */
@@ -209,7 +210,8 @@
             letter-spacing: 0.1em;
 
         }
-        .btn_submit{
+
+        .btn_submit {
             background: #f6f3ee;
             border: 0px solid #d5d1d1; /* 세밀한 경계선 */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
@@ -227,13 +229,15 @@
             text-align: center; /* 텍스트 중앙 정렬 */
             letter-spacing: 0.1em;
         }
-        .select{
+
+        .select {
             width: calc(10% - 30px); /* 기존 설정 유지 */
             height: 40px;
             margin-left: 5px;
             margin-bottom: 5px;
         }
-        .questionContext{
+
+        .questionContext {
             width: calc(50% - 30px); /* 기존 설정 유지 */
             height: 50px; /* 높이를 200px로 설정 */
             padding: 15px; /* 패딩 추가로 입력 영역 내부 여백 제공 */
@@ -244,7 +248,8 @@
             margin-top: 20px;
             font-size: 15px;
         }
-        .select_option{
+
+        .select_option {
             width: calc(35% - 30px); /* 기존 설정 유지 */
             height: 30px;
             margin-left: 5px;
@@ -259,10 +264,17 @@
     </div>
     <nav class="navbar">
         <ul>
-            <li><a><button class="btn" onclick="location.href='/home/list'">설문 목록</button></a></li>
-            <li><a><button class="btn_transparent" onclick="location.href='/home/post'">설문 생성</button></a></li>
+            <li><a>
+                <button class="btn" onclick="location.href='/home/list'">설문 목록</button>
+            </a></li>
+            <li><a>
+                <button class="btn_transparent" onclick="location.href='/home/post'">설문 생성</button>
+            </a></li>
             <li><a href="#">마이 페이지</a></li>
             <li><a href="#">고객 문의</a></li>
+            <li><a>
+                <button class="btn" onclick="location.href='/home/logout'">로그아웃</button>
+            </a></li>
         </ul>
     </nav>
 </header>
@@ -274,17 +286,18 @@
             <input class="title" type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요." required><br>
 
             <label for="description"></label>
-            <textarea class="description" id="description" th:field="*{description}" placeholder="설명을 입력하세요." required></textarea><br>
+            <textarea class="description" id="description" th:field="*{description}" placeholder="설명을 입력하세요."
+                      required></textarea><br>
 
             <div class=" div-row">
                 <label for="startDate"></label>
                 <input class="date" type="date" id="startDate" th:field="*{startDate}" required><br>
-                <div class="space"> ~ </div>
+                <div class="space"> ~</div>
                 <label for="endDate"></label>
                 <input class="date" type="date" id="endDate" th:field="*{endDate}" required><br>
             </div>
 
-            <div class = "questionContainer" id="questionsContainer">
+            <div class="questionContainer" id="questionsContainer">
             </div>
 
             <button class="btn" type="button" onclick="addQuestion()">질문 추가</button>
@@ -300,7 +313,7 @@
 <script>
 
     // 설문 문항이 하나라도 존재하지 않으면 에러 반환하고 리다이렉션
-    window.onload = function() {
+    window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);
         const questionEmptyError = urlParams.get('questionEmptyError');
         const dateSettingError1 = urlParams.get('dateSettingError1');
@@ -308,11 +321,9 @@
 
         if (questionEmptyError) {
             alert('설문 생성 에러: 적어도 하나의 설문 문항이 필요합니다.');
-        }
-        else if (dateSettingError1) {
+        } else if (dateSettingError1) {
             alert('설문 생성 에러: 설문 종료 날짜가 설문 시작 날짜보다 빠릅니다.');
-        }
-        else if (dateSettingError2) {
+        } else if (dateSettingError2) {
             alert('설문 생성 에러: 설문 시작 날짜가 현재 날짜보다 빠릅니다.');
         }
     }
@@ -339,7 +350,7 @@
 
     /**
      *  필드 입력 검사 */
-    document.getElementById('createSurveyForm').onsubmit = function() {
+    document.getElementById('createSurveyForm').onsubmit = function () {
         // 모든 입력 필드 검사
         const inputs = this.querySelectorAll('input[type="text"], textarea');
         for (let input of inputs) {
