@@ -1,10 +1,9 @@
 package com.surveyapp.kotlinsurvey.domain.survey
 
+import com.surveyapp.kotlinsurvey.domain.question.Question
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
-import jakarta.validation.constraints.NotNull
 import java.time.LocalDate
-import java.util.*
 
 @Entity
 @Table(name = "tb_survey")
@@ -33,10 +32,10 @@ class Survey(
     val endDate : LocalDate, // 설문 종료일
 
 ) {
-    @OneToMany(mappedBy = "survey", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     var questions: MutableList<Question> = mutableListOf() // 하나의 설문 조사가 담고 있는 질문 리스트
 
     // Survey에서 SurveyParticipation으로의 일대다 매핑
-    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val participations: List<SurveyParticipation> = mutableListOf()
 }

@@ -45,7 +45,7 @@ class User(
 ) {
 
     // class User : class UserInquiry 를 1:n mapping
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL], orphanRemoval = true)
     val userInquiries : MutableList<UserInquiry>? = null
 
     // class User : class Survey 를 1:n mapping
@@ -53,7 +53,7 @@ class User(
     val surveys: MutableList<Survey>? = null
 
     // User에서 SurveyParticipation으로의 일대다 매핑
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val participations: List<SurveyParticipation> = mutableListOf()
 }
 

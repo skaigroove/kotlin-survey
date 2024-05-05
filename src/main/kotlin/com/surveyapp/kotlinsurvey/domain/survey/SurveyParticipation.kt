@@ -1,9 +1,8 @@
 package com.surveyapp.kotlinsurvey.domain.survey
 
-import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
+import com.surveyapp.kotlinsurvey.domain.answer.Answer
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
-import org.jetbrains.annotations.NotNull
 import java.util.*
 
 @Entity
@@ -30,6 +29,6 @@ data class SurveyParticipation(
         participationDate = Date()
     }
 
-    @OneToMany(mappedBy = "surveyParticipation", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "surveyParticipation", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val answers: MutableList<Answer> = mutableListOf()
 }

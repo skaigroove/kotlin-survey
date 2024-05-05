@@ -1,15 +1,18 @@
-package com.surveyapp.kotlinsurvey.domain.survey
+package com.surveyapp.kotlinsurvey.domain.answer
 
+import com.surveyapp.kotlinsurvey.domain.question.Question
+import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "tb_text_answer")
-class TextAnswer(
+@Table(name = "tb_choice_answer")
+class ChoiceAnswer(
 
     @Id
+    @Column(name="answer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    override val answerId: Long? = null, // 객관식 질문 번호
+    override val answerId: Long?, // 객관식 질문 번호
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_user_id"))
@@ -23,9 +26,9 @@ class TextAnswer(
     @JoinColumn(name = "participation_id", nullable = false)
     override val surveyParticipation: SurveyParticipation, // 양방향 매핑
 
-    val text: String // 주관식 답변 내용
-
-) : Answer(answerId, user, question, surveyParticipation)
-{
-
+    @Column
+    val selectedOptionId: Long // 선택한 옵션을 저장하는 필드
+    )
+    : Answer(answerId, user, question,surveyParticipation)
+    {
 }

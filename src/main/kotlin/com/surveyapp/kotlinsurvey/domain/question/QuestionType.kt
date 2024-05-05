@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.domain.survey
+package com.surveyapp.kotlinsurvey.domain.question
 
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated

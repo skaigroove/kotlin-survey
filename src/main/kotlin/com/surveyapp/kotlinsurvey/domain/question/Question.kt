@@ -1,5 +1,7 @@
-package com.surveyapp.kotlinsurvey.domain.survey
+package com.surveyapp.kotlinsurvey.domain.question
 
+import com.surveyapp.kotlinsurvey.domain.survey.Survey
+import com.surveyapp.kotlinsurvey.domain.answer.Answer
 import jakarta.persistence.*
 
 @Entity
@@ -28,6 +30,6 @@ class Question(
 
 ) {
     // 1:n = question: answers
-    @OneToMany(mappedBy = "question", cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val answers: MutableList<Answer> = mutableListOf() // 질문 하나 당 여러개의 답변을 가질 수 있다.
 }
