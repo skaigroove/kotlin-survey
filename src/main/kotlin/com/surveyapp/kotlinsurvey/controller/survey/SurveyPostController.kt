@@ -7,6 +7,7 @@ import com.surveyapp.kotlinsurvey.domain.question.QuestionType
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.repository.UserRepository
 import com.surveyapp.kotlinsurvey.service.SurveyService
+import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
 import jakarta.validation.Valid
 
@@ -22,7 +23,7 @@ import java.time.LocalDate
 @Controller
 class SurveyPostController(
     @Autowired private val surveyService: SurveyService,
-    @Autowired private val userRepository: UserRepository,
+    @Autowired private val userService: UserService,
 ) {
     @GetMapping("/post")
     fun createSurveyForm(model: Model): String {
@@ -55,7 +56,7 @@ class SurveyPostController(
         /**
          * 세션에서 로그인 ID 가져와서 Repository로부터 해당 유저 정보를 받아오고, 그 유저 정보로 설문조사를 생성한다.
          */
-
+/*
         // 로그인이 안 되어 있을경우 로그인 페이지로 리다이렉션
         val loginId = session.getAttribute("loginId") as? String
         if (loginId == null) {
@@ -68,19 +69,24 @@ class SurveyPostController(
         if (user == null) {
             return "redirect:/user/login"
         }
+*/
+        // login 여부 확인
+        val user = userService.checkLogin(session)
+        if (user == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/user/login"
 
         // 생성한 설문조사를 저장함
         val survey = createSurvey(surveyForm, user)
 
-        // 입력된 question이 없을 때 에러처리
+        // 입력된 question 이 없을 때 오류 처리
         if (surveyForm.questions.isEmpty())
             return "redirect:/home/post?questionEmptyError=true"
 
-        // 입력된 question이 없을 때 에러처리
+        // 입력된 응답 기한 날짜 중 종료일이 시작일보다 앞설 때 오류 처리
         if (surveyForm.endDate < surveyForm.startDate)
             return "redirect:/home/post?dateSettingError1=true"
 
-        // 입력된 question이 없을 때 에러처리
+        // 입력된 응답 기한 날짜 중 시작일이 오늘보다 더 빠를 때 오류 처리
         if (surveyForm.startDate < LocalDate.now())
             return "redirect:/home/post?dateSettingError2=true"
 
@@ -91,7 +97,7 @@ class SurveyPostController(
 
     fun createSurvey(surveyForm: SurveyForm, user: User): Survey { // 설문 조사 생성 함수
 
-        // 받아온 surveyForm의 값들을 Survey 생성자에 넣어 survey 생성
+        // 받아 온 surveyForm 의 값을 Survey 생성자에 넣어 survey 생성
         val survey = Survey(
             null,
             user,
@@ -122,14 +128,4 @@ class SurveyPostController(
 
         return survey
     }
-
-    /*
-    @PostMapping("/submitSurvey")
-    fun submitSurvey(
-        @Valid @ModelAttribute("surveyForm") surveyForm: SurveyForm,
-        session: HttpSession,
-        result: BindingResult,
-        redirectAttributes: RedirectAttributes,
-    )
-     */
 }
