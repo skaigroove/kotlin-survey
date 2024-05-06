@@ -22,21 +22,21 @@ class User(
     val loginId: String, // 사용자 ID
 
     @Column(name = "password", nullable = false, length = 20)
-    val password: String, // 사용자 비밀번호
+    var password: String, // 사용자 비밀번호
 
     @Column(name = "name", nullable = false, length = 10)
-    val name: String, // 사용자 이름
+    var name: String, // 사용자 이름
 
     @Column(name = "birth_date", nullable = false)
     @Temporal(TemporalType.DATE) // 날짜만 입력
-    val birthDate: LocalDate, // 사용자 생년월일
+    var birthDate: LocalDate, // 사용자 생년월일
 
     @Column(name = "gender_type")
     @Enumerated(EnumType.STRING)
-    val genderType: GenderType, // 사용자 성별
+    var genderType: GenderType, // 사용자 성별
 
     @Column(name = "phone_number", nullable = false, length = 11)
-    val phoneNumber: String, // 사용자 전화번호
+    var phoneNumber: String, // 사용자 전화번호
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)

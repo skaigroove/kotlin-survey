@@ -1,8 +1,10 @@
 package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.controller.form.LoginForm
+import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.repository.UserRepository
+import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -19,6 +21,7 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         userRepository.save(user)
         return user
     }
+
 
     /* loginId를 기준으로 저장소의 유저가 중복되는지 검사*/
     fun validateDuplicateUserByLoginId(user: User) : Boolean{
@@ -57,16 +60,26 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         }
     }
 
-
-    /* 회원 전체 조회*/
-    /* fun findUsers(): List<User> {
-        return userRepository.findAll()
-    } */
-
     /* userId(Long)으로 회원 한 명 조회*/
     fun findOne(userId: Long): User {
         return userRepository.findOne(userId)
     }
 
+    fun findUserByLoginId(loginId:String):User?{
+        return userRepository.findByLoginId(loginId)
+    }
+
+    fun updateUser(loginId: String, userForm: UserForm) {
+        val user = userRepository.findByLoginId(loginId)
+
+        user?.let {
+            it.name = userForm.name
+            it.password = userForm.password
+            it.birthDate = userForm.birthDate
+            it.genderType = userForm.genderType
+            it.phoneNumber = userForm.phoneNumber
+            userRepository.save(it)
+        }
+    }
 
 }
