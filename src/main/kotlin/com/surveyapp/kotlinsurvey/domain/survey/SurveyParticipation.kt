@@ -3,6 +3,7 @@ package com.surveyapp.kotlinsurvey.domain.survey
 import com.surveyapp.kotlinsurvey.domain.answer.Answer
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
+import java.time.LocalDate
 import java.util.*
 
 @Entity
@@ -11,7 +12,7 @@ data class SurveyParticipation(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val participationId: Long,
+    val participationId: Long?,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -22,11 +23,11 @@ data class SurveyParticipation(
     val survey: Survey,
 
     @Column(name = "participation_date", nullable = false, updatable = false)
-    var participationDate: Date? = null
+    var participationDate: LocalDate? = null
 ) {
     @PrePersist
     fun onPrePersist() {
-        participationDate = Date()
+        participationDate =LocalDate.now()
     }
 
     @OneToMany(mappedBy = "surveyParticipation", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)

@@ -56,20 +56,8 @@ class SurveyPostController(
         /**
          * 세션에서 로그인 ID 가져와서 Repository로부터 해당 유저 정보를 받아오고, 그 유저 정보로 설문조사를 생성한다.
          */
-/*
-        // 로그인이 안 되어 있을경우 로그인 페이지로 리다이렉션
-        val loginId = session.getAttribute("loginId") as? String
-        if (loginId == null) {
-            println("사용자 로그인 정보가 없습니다.")
-            return "redirect:/user/login"
-        }
 
-        // 로그인 유저 정보가 없을 경우 로그인 페이지로 리다이렉션
-        val user: User? = userRepository.findByLoginId(loginId)
-        if (user == null) {
-            return "redirect:/user/login"
-        }
-*/
+
         // login 여부 확인
         val user = userService.checkLogin(session)
         if (user == null) // 로그인 안 되었음 => null 반환됨

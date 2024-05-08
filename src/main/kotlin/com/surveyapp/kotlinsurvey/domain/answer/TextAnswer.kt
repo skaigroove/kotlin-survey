@@ -25,9 +25,13 @@ class TextAnswer(
     @JoinColumn(name = "participation_id", nullable = false)
     override val surveyParticipation: SurveyParticipation, // 양방향 매핑
 
-    val text: String // 주관식 답변 내용
+    @Column
+    override val answerType: AnswerType = AnswerType.SUBJECTIVE, // 답변 유형
 
-) : Answer(answerId, user, question, surveyParticipation)
+    @Column
+    val text: String? // 주관식 답변 내용
+
+) : Answer(answerId,AnswerType.SUBJECTIVE, user, question, surveyParticipation)
 {
 
 }

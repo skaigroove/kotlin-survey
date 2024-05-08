@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Participate in Survey</title>
 </head>
 <body>
-
+<h1>Participate in Survey</h1>
+<form th:action="@{/home/list/participate/{surveyId}(surveyId=${surveyId})}" th:object="${AnswerListForm}" method="post">
+    <div th:each="question, idx : ${questions}">
+        <div>
+            <p th:text="${question.context}"></p>
+            <div th:switch="${question.questionType}">
+                <div th:case="'MULTIPLE_CHOICE'">
+                    <th:block th:each="option : ${question.questionOptions}">
+                        <input type="radio" th:name="|answerList[${idx.index}].selectedOptionId|" th:value="${option}"/>
+                        <span th:text="${question.questionOptions[${idx.index}]}"></span>
+                    </th:block>
+                </div>
+                <div th:case="'SUBJECTIVE'">
+                    <input type="text" th:name="|answerList[${idx.index}].text|" />
+                </div>
+            </div>
+            <input type="hidden" th:name="|answerList[${idx.index}].questionId|" th:value="${question.questionId}" />
+            <input type="hidden" th:name="|answerList[${idx.index}].answerType|" th:value="${question.questionType}" />
+        </div>
+    </div>
+    <button type="submit">Submit Answers</button>
+</form>
 </body>
 </html>

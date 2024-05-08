@@ -161,7 +161,6 @@
             transition: all 0.3s ease;
             text-align: center; /* 텍스트 중앙 정렬 */
             letter-spacing: 0.1em;
-
         }
 
         /* 버튼 호버 효과 */
@@ -217,7 +216,9 @@
             </td>
 
             <td>
-                <button class="btn_post" onclick="location.href='/home/list/participate'">참여</button> <!-- post 참여 버튼 -->
+                <a th:href="@{/home/list/participate/{surveyId}(surveyId=${post.surveyId})}">
+                    <button class="btn_post">참여</button>
+                </a>
             </td>
 
             <td>

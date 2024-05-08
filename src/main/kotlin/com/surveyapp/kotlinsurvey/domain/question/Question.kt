@@ -32,4 +32,8 @@ class Question(
     // 1:n = question: answers
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val answers: MutableList<Answer> = mutableListOf() // 질문 하나 당 여러개의 답변을 가질 수 있다.
+
+    fun addAnswer(answer: Answer) {
+        answers.add(answer)
+    }
 }

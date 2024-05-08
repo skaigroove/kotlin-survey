@@ -38,4 +38,8 @@ class Survey(
     // Survey에서 SurveyParticipation으로의 일대다 매핑
     @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val participations: List<SurveyParticipation> = mutableListOf()
+
+    fun findQuestion(questionId: Long?): Question? {
+        return questions.find { it.questionId == questionId }
+    }
 }

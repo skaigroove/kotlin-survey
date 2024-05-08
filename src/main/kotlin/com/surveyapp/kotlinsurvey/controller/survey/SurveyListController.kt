@@ -18,6 +18,7 @@ class SurveyListController(
     @GetMapping("/list")
     fun list(model: Model): String { // 설문 목록
         val surveyPostList = surveyService.getSurveyList() // Survey table 에 기록된 모든 설문 get
+
         model.addAttribute("postList", surveyPostList) // "postList" 로 surveyPostList 추가
 
         return "list" // 경로 반환 : list.html

@@ -27,8 +27,11 @@ class ChoiceAnswer(
     override val surveyParticipation: SurveyParticipation, // 양방향 매핑
 
     @Column
-    val selectedOptionId: Long // 선택한 옵션을 저장하는 필드
+    override val answerType: AnswerType = AnswerType.MULTIPLE_CHOICE, // 답변 유형
+
+    @Column
+    val selectedOptionId: Long? // 선택한 옵션을 저장하는 필드
     )
-    : Answer(answerId, user, question,surveyParticipation)
+    : Answer(answerId,AnswerType.MULTIPLE_CHOICE,user, question,surveyParticipation)
     {
 }

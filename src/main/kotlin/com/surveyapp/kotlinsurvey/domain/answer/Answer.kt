@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.domain.answer
 
 import com.surveyapp.kotlinsurvey.domain.question.Question
+import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
@@ -13,6 +14,10 @@ abstract class Answer(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open val answerId: Long? = null, // 설문 내 질문 번호
+
+    @Column(name = "answer_type", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    open val answerType: AnswerType, // 답변 유형
 
     @ManyToOne
     @JoinColumn(name="user_id", foreignKey = ForeignKey(name = "fk_user_id"))

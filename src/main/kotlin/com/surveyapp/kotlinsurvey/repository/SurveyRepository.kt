@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.repository
 
+import com.surveyapp.kotlinsurvey.domain.question.Question
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
@@ -27,6 +28,15 @@ class SurveyRepository (
     fun getSurveyList(): List<Survey>? {
         return em.createQuery("select m from Survey m", Survey::class.java)
             .getResultList()
+    }
+
+    fun getQuestionList(): List<Question>? {
+        return em.createQuery("select m from Question m", Question::class.java)
+            .getResultList()
+    }
+
+    fun mergeSurvey(survey: Survey) {
+        em.merge(survey) // merge() : 이미 영속성 컨텍스트에 존재하는 엔티티를 수정
     }
 
 }
