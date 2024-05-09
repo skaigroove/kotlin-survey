@@ -448,9 +448,11 @@
         optionDiv.className = 'option-div';
         optionDiv.id = `option${questionIndex}-${optionIndex}`;
         optionDiv.innerHTML = `
-            <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}" placeholder="${optionIndex + 1}번 선지를 입력하세요" name="questions[${questionIndex}].options" required>
-            <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">선지 삭제</button><br>
-        `;
+        <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}"
+               name="questions[${questionIndex}].questionOptions[${optionIndex}].optionText"
+               placeholder="${optionIndex + 1}번 선지를 입력하세요" required>
+        <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">선지 삭제</button><br>
+    `;
         optionsContainer.appendChild(optionDiv);
     }
 

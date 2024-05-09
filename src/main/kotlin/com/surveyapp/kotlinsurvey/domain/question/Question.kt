@@ -23,15 +23,13 @@ class Question(
     @Enumerated(EnumType.STRING)
     val questionType: QuestionType, // 질문 유형
 
-    @ElementCollection
-    @CollectionTable(name = "question_options", joinColumns = [JoinColumn(name = "question_id")])
-    @Column(name = "option_value")
-    var questionOptions: MutableList<String> = mutableListOf() // 각 선지를 리스트로 받음
-
 ) {
     // 1:n = question: answers
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val answers: MutableList<Answer> = mutableListOf() // 질문 하나 당 여러개의 답변을 가질 수 있다.
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    var questionOptions : MutableList<QuestionOption> = mutableListOf() // 질문 하나 당 여러개의 선택지를 가질 수 있다.
 
     fun addAnswer(answer: Answer) {
         answers.add(answer)

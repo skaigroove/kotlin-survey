@@ -1,9 +1,7 @@
 package com.surveyapp.kotlinsurvey.controller.survey
 
-import com.surveyapp.kotlinsurvey.controller.form.AnswerForm
 import com.surveyapp.kotlinsurvey.controller.form.AnswerListForm
-import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
-import com.surveyapp.kotlinsurvey.domain.survey.Survey
+import com.surveyapp.kotlinsurvey.domain.question.QuestionType
 import com.surveyapp.kotlinsurvey.repository.UserRepository
 import com.surveyapp.kotlinsurvey.service.SurveyService
 import jakarta.servlet.http.HttpSession
@@ -27,17 +25,17 @@ class SurveyResponseController(
 
         val survey = surveyService.getSurveyById(surveyId) // surveyId로 설문 정보를 가져옴
         val questions = survey?.questions // 설문 정보로부터 질문 리스트를 가져옴
-        model.addAttribute("participate", survey) // 참여 할 설문 정보를 model에 추가
+
+        model.addAttribute("survey", survey) // 참여 할 설문 정보를 model에 추가
         model.addAttribute("questions", questions) // 질문 리스트를 model에 추가
-        model.addAttribute("AnswerForm", AnswerForm()) // 답변 폼을 model에 추가
         model.addAttribute("AnswerListForm", AnswerListForm()) // 답변 리스트 폼을 model에 추가
+
         return "participate" // 경로 반환 : participate.html
     }
 
     @PostMapping("/list/participate/{surveyId}")
     fun participateSurvey(
         @PathVariable surveyId: Long,
-        @Valid @ModelAttribute("AnswerForm") answerForm: AnswerForm,
         @Valid @ModelAttribute("AnswerListForm") answerListForm: AnswerListForm,
         session: HttpSession,
         result: BindingResult,
@@ -57,6 +55,4 @@ class SurveyResponseController(
 
         return "redirect:/home/list" // 경로 반환 : list.html
     }
-
-
 }
