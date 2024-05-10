@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>SurveyBay :: Inquiry</title>
+  <title>SurveyBay::Inquiry Page</title>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
@@ -144,16 +144,17 @@
       transition: color 0.3s ease; /* 색상 변경 애니메이션 */
     }
 
-    /* 버튼 스타일 조정 - 참여, 결과 */
-    .btn_post {
+    /* 버튼 스타일 조정 - 문의 글 작성 */
+    .btn_inquiry_post {
       background: #f6f3ee;
       border: 0px solid #d5d1d1; /* 세밀한 경계선 */
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
-      width: 70px;
+      width: 120px;
       padding: 10px 16px;
       margin: 10px 20px;
       color: #333;
       border-radius: 5px;
+
 
       font-family: 'Quicksand';
       font-weight: bold;
@@ -161,7 +162,6 @@
       transition: all 0.3s ease;
       text-align: center; /* 텍스트 중앙 정렬 */
       letter-spacing: 0.1em;
-
     }
 
     /* 버튼 호버 효과 */
@@ -180,15 +180,53 @@
       <li><a><button class="btn" onclick="location.href='/home/list'">설문 목록</button></a></li>
       <li><a><button class="btn" onclick="location.href='/home/post'">설문 생성</button></a></li>
       <li><a><button class="btn" onclick="location.href='/user/profile'">마이 페이지</button></a></li>
-      <li><a href="#">고객 문의</a></li>
+      <li><a><button class="btn" onclick="location.href='/home/inquiry'">고객 문의</button></a></li>
       <li><a><button class="btn" onclick="location.href='/home/logout'">로그아웃</button></a></li>
     </ul>
   </nav>
 </header>
 <main id="mainContent">
-  /* 정보 들어 갈 부분*/
+  <table class="table"> <!-- table 생성 -->
+    <tr class="text-center"> <!-- 텍스트 중앙 정렬 -->
+      <th scope="col">문의 번호</th> <!-- table 제목 셀 설정 : 문의 번호 -->
+      <th scope="col">제목</th> <!-- table 제목 셀 설정 : 제목 -->
+      <th scope="col">작성자</th> <!-- table 제목 셀 설정 : 작성자 -->
+      <th scope="col">작성 일자</th> <!-- table 제목 셀 설정 : 작성 일자 -->
+    </tr>
+
+
+    <tbody>
+    <tr class="text-center" th:each="inquiryPost, iterState : ${inquiryList}"> <!-- inquiryList 에 있는 원소 하나씩 inquiryPost 에 대입해서 반복 -->
+      <th scope="row">
+        <span th:text="${inquiryPost.inquiryId}"></span> <!-- inquiryPost - inquiryId 출력 -->
+      </th>
+
+      <td>
+        <a th:href="@{'/home/inquiry/{inquiryId}' + ${inquiryPost.inquiryId}}">
+          <span th:text="${inquiryPost.title}"></span>  <!-- inquiryPost 제목 출력 -->
+        </a>
+      </td>
+
+      <td>
+        <span th:text="${inquiryPost.user.name}"></span>  <!-- inquiryPost 작성자 출력 -->
+      </td>
+
+      <td>
+        <span th:text="${#temporals.format(inquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span> <!-- inquiryPost 작성 일자 출력 -->
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-auto mr-auto"></div>
+    <button class="btn_inquiry_post" onclick="location.href='/home/inquiry/post'">문의 글 작성</button>
+  </div>
 </main>
 
+<footer>
+  <p>© 2024 SurveyBay. All rights reserved.</p>
+</footer>
 <script>
   const navbar = document.querySelector('.navbar');
   const mainContent = document.getElementById('mainContent');
@@ -207,5 +245,6 @@
     }, 3000); // 2초 후에 실행
   });
 </script>
+
 </body>
 </html>

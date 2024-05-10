@@ -2,7 +2,7 @@ package com.surveyapp.kotlinsurvey.domain.inquiry
 
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
-import java.util.Date
+import java.time.LocalDateTime
 
 @Entity
 class UserInquiry (
@@ -17,13 +17,16 @@ class UserInquiry (
     val user: User, // 문의 작성자
 
     @Column
-    val write_date : Date, // 문의 작성 일자
+    val title: String, // 문의 게시 글 제목
+
+    @Column(name = "write_date", nullable = false, updatable = false)
+    val writeDate : LocalDateTime? = null, // 문의 작성 일자
 
     @Column
     val content : String, // 문의 내용
 
-    @Column
-    val answer_date : Date, // 답변 작성 일자
+    @Column(name = "answer_date", nullable = false, updatable = true)
+    var answerDate : LocalDateTime? = null, // 답변 작성 일자
 
     @Column
     val reply : String, // 답변
