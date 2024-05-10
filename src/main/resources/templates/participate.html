@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Participate in Survey</h1>
-<form th:action="@{/home/list/participate/{surveyId}(surveyId=${surveyId})}" th:object="${AnswerListForm}"
+<form th:action="@{/home/list/participate/{surveyId}(surveyId=${surveyId})}" th:object="${answerListForm}"
       method="post">
     <p th:text="${survey.discription}"></p>
     <div th:each="question, idx : ${questions}">

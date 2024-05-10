@@ -28,7 +28,7 @@ class SurveyResponseController(
 
         model.addAttribute("survey", survey) // 참여 할 설문 정보를 model에 추가
         model.addAttribute("questions", questions) // 질문 리스트를 model에 추가
-        model.addAttribute("AnswerListForm", AnswerListForm()) // 답변 리스트 폼을 model에 추가
+        model.addAttribute("answerListForm", AnswerListForm()) // 답변 리스트 폼을 model에 추가
 
         return "participate" // 경로 반환 : participate.html
     }
@@ -36,7 +36,7 @@ class SurveyResponseController(
     @PostMapping("/list/participate/{surveyId}")
     fun participateSurvey(
         @PathVariable surveyId: Long,
-        @Valid @ModelAttribute("AnswerListForm") answerListForm: AnswerListForm,
+        @Valid @ModelAttribute answerListForm: AnswerListForm,
         session: HttpSession,
         result: BindingResult,
         redirectAttributes: RedirectAttributes,

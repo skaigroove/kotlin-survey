@@ -1,5 +1,5 @@
 package com.surveyapp.kotlinsurvey.controller.form
 
 class AnswerListForm {
-    val answerList : List<AnswerForm> = mutableListOf()
+    var answerList : List<AnswerForm> = mutableListOf()
 }
