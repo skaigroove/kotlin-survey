@@ -198,11 +198,11 @@
     <tbody>
     <tr class="text-center" th:each="inquiryPost, iterState : ${inquiryList}"> <!-- inquiryList 에 있는 원소 하나씩 inquiryPost 에 대입해서 반복 -->
       <th scope="row">
-        <span th:text="${inquiryPost.inquiryId}"></span> <!-- inquiryPost - inquiryId 출력 -->
+        <span th:text="${inquiryPost.id}"></span> <!-- inquiryPost - id(inquiryId) 출력 -->
       </th>
 
       <td>
-        <a th:href="@{'/home/inquiry/{inquiryId}' + ${inquiryPost.inquiryId}}">
+        <a th:href="@{'/home/inquiry/{id}' + ${inquiryPost.id}}">
           <span th:text="${inquiryPost.title}"></span>  <!-- inquiryPost 제목 출력 -->
         </a>
       </td>
