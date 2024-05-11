@@ -23,11 +23,11 @@ data class SurveyParticipation(
     val survey: Survey,
 
     @Column(name = "participation_date", nullable = false, updatable = false)
-    var participationDate: LocalDate? = null
+    var participationDate: LocalDate?
 ) {
     @PrePersist
     fun onPrePersist() {
-        participationDate =LocalDate.now()
+        participationDate = LocalDate.now()
     }
 
     @OneToMany(mappedBy = "surveyParticipation", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)

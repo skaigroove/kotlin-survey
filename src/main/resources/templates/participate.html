@@ -15,9 +15,9 @@
             <div th:each="option, optionIdx : ${question.questionOptions}">
                 <label th:for="${'question' + idx.index + 'option' + optionIdx.index}">
                     <input type="radio" th:id="${'question' + idx.index + 'option' + optionIdx.index}"
-                           th:name="${'answerList[' + idx.index + '].selectedOptionId'}"
+                           th:name="${'answerList[' + idx.index + '].selectedOption'}"
                            th:value="${option.questionOptionId}"/>
-                    <span th:text="${option.questionOption}"></span>
+                    <span th:text="${option.questionOptionText}"></span>
                 </label>
             </div>
         </th:block>

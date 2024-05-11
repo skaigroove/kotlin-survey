@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Chart.js 라이브러리 추가 -->
+</head>
+<body>
+<h1>Survey Results</h1>
+<input type="hidden" th:id="surveyId" th:value="${surveyId}">
+<!-- 설문조사 ID를 저장할 숨겨진 입력 필드 -->
+<canvas id="myChart" width="400" height="400"></canvas> <!-- 차트를 그릴 캔버스 요소 -->
+<script>
+    const surveyId = document.getElementById('surveyId').value; // 설문 ID를 숨겨진 필드에서 가져옴
+
+    fetch('/home/api/list/statistic/' + surveyId) // 수정된 API 경로
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(statistics => {
+            const labels = [];  // 선지 텍스트
+            const data = [];    // 카운트
+
+            Object.values(statistics).forEach(questionOptions => {
+                questionOptions.forEach(option => {
+                    labels.push(option.first);  // 선지 텍스트
+                    data.push(option.second);   // 선택 횟수
+                });
+            });
+
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '# of Responses',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                }
+            });
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+</script>
+</body>
+</html>

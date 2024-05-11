@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.domain.answer
 
 import com.surveyapp.kotlinsurvey.domain.question.Question
+import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
@@ -10,7 +11,7 @@ import jakarta.persistence.*
 class ChoiceAnswer(
 
     @Id
-    @Column(name="answer_id")
+    @Column(name = "answer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val answerId: Long?, // 객관식 질문 번호
 
@@ -29,9 +30,9 @@ class ChoiceAnswer(
     @Column
     override val answerType: AnswerType = AnswerType.MULTIPLE_CHOICE, // 답변 유형
 
-    @Column
-    val selectedOptionId: Long? // 선택한 옵션을 저장하는 필드
-    )
-    : Answer(answerId,AnswerType.MULTIPLE_CHOICE,user, question,surveyParticipation)
-    {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "selected_option_id")
+    val selectedOption: QuestionOption?
+
+    ) : Answer(answerId, AnswerType.MULTIPLE_CHOICE, user, question, surveyParticipation) {
 }

@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.repository
 
 import com.surveyapp.kotlinsurvey.domain.question.Question
+import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
@@ -39,4 +40,25 @@ class SurveyRepository (
         em.merge(survey) // merge() : 이미 영속성 컨텍스트에 존재하는 엔티티를 수정
     }
 
+    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
+        return em.find(QuestionOption::class.java, questionOptionId)
+    }
+
+    fun getSurveyParticipation(surveyId: Long): List<Any> {
+        return em.createQuery(
+            "select count(p) from SurveyParticipation p join p.answers a where p.survey.surveyId = :surveyId ",
+            Array<Any>::class.java
+        )
+            .setParameter("surveyId", surveyId)
+            .resultList
+    }
+
+    fun getSurveyStatisticsMultipleChoice(surveyId: Long): List<Any> {
+        return em.createQuery(
+            "SELECT op.questionOptionText, COUNT(so) FROM QuestionOption op LEFT JOIN op.choiceAnswers so WHERE so.surveyParticipation.survey.surveyId = :surveyId GROUP BY op.questionOptionText",
+            Array<Any>::class.java
+        )
+            .setParameter("surveyId", surveyId)
+            .resultList
+    }
 }

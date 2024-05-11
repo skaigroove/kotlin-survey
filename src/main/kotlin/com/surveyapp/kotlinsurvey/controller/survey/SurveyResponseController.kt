@@ -51,7 +51,7 @@ class SurveyResponseController(
         val user = userRepository.findByLoginId(loginId) ?: return "redirect:/login"
         val survey = surveyService.getSurveyById(surveyId) ?: return "redirect:/home/list"
 
-        surveyService.participateSurvey(survey, answerListForm) // 설문 참여
+        surveyService.participateSurvey(survey,loginId, answerListForm) // 설문 참여
 
         return "redirect:/home/list" // 경로 반환 : list.html
     }
