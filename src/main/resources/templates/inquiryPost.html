@@ -299,8 +299,9 @@
                 </div>
             </div>
         </div>
+
         <div class="reply-Inquiry">
-            <form id="reply-Inquiry" th:action="@{/home/inquiry/${inquiryId}(inquiryId = ${inquiryId})}" method="POST" th:object="${replyInquiryForm}">
+            <form id="reply-Inquiry" th:action="@{/home/inquiry/{id}(id =${inquiryPost.id})}" method="POST" th:object="${replyInquiryForm}">
                 <label for="reply">답변</label>
                 <textarea class="content" id="reply" th:field="*{reply}" placeholder="답변 내용을 입력하세요."
                           required></textarea><br>
