@@ -202,7 +202,7 @@
       </th>
 
       <td>
-        <a th:href="@{'/home/inquiry/{id}' + ${inquiryPost.id}}">
+        <a th:href="@{/home/inquiry/{id}(id =${inquiryPost.id})}">
           <span th:text="${inquiryPost.title}"></span>  <!-- inquiryPost 제목 출력 -->
         </a>
       </td>

@@ -85,25 +85,20 @@ class UserInquiryController(
         return inquiry
     }
 
-    @GetMapping("/{id}")
-    fun detailInquiry(@PathVariable id: Long, model: Model): String{
-        if (id == null)
-        {
-            println("Error : Inquiry id == null")
-        }
+    @GetMapping("/{inquiryId}")
+    fun detailInquiry(@PathVariable inquiryId: Long, model: Model): String{
 
-        val inquiryPost: UserInquiry? = userInquiryService.getInquiryById(id)
+        val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
 
         model.addAttribute("inquiryPost", inquiryPost)
         model.addAttribute("replyInquiryForm", ReplyInquiryForm())
 
         return "inquiryPost"
-
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{inquiryId}")
     fun replyInquiry(
-        @PathVariable id: Long,
+        @PathVariable inquiryId: Long,
         @Valid @ModelAttribute("replyInquiryForm") replyInquiryForm: ReplyInquiryForm,
         session: HttpSession,
         result: BindingResult,
@@ -122,13 +117,13 @@ class UserInquiryController(
             return "redirect:/user/login"
 
         if (replyInquiryForm.reply.isEmpty())
-            return "redirect:/home/inquiry/{id}?replyEmptyError=true"
+            return "redirect:/home/inquiry/{inquiryId}?replyEmptyError=true"
 
-        val inquiry = userInquiryService.getInquiryById(id)
+        val inquiry = userInquiryService.getInquiryById(inquiryId)
 
         userInquiryService.saveReplyInquiry(inquiry,replyInquiryForm)
 
-        return "redirect:redirect:/home/inquiry/{id}"
+        return "redirect:redirect:/home/inquiry/{inquiryId}"
 
     }
 

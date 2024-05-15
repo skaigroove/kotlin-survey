@@ -274,7 +274,8 @@
                 <button class="btn_transparent" onclick="location.href='/user/profile'">마이 페이지</button>
             </a></li>
             <li><a>
-                <button class="btn_transparent" onclick="location.href='/home/inquiry'">고객 문의</button></a></li>
+                <button class="btn_transparent" onclick="location.href='/home/inquiry'">고객 문의</button>
+            </a></li>
             <li><a>
                 <button class="btn_transparent" onclick="location.href='/home/logout'">로그아웃</button>
             </a></li>
@@ -282,38 +283,37 @@
     </nav>
 </header>
 <main class="mainContent">
-    <form id="detail-Inquiry" th:action="@{/home/inquiry/{id}(id=${id})}" method="POST" th:object="${inquiryPost}">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title" th:text="${inquiryPost.title} + ' - ' + ${inquiryPost.user.name}"></h5>
-                <p class="card-text">
-                    <small class="text-muted" th:text="${#temporals.format(inquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
-                </p>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${inquiryPost.title} + ' - ' + ${inquiryPost.user.name}"></h5>
+            <p class="card-text">
+                <small class="text-muted"
+                       th:text="${#temporals.format(inquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+            </p>
+
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">
+                        <small class="text-muted" th:text="${inquiryPost.content}"></small>
+                    </p>
+                </div>
             </div>
         </div>
-
-        <div class="card">
-            <div class="card-body">
-                <p class="card-text">
-                    <small class="text-muted" th:text="${inquiryPost.content}"></small>
-                </p>
-            </div>
+        <div class="reply-Inquiry">
+            <form id="reply-Inquiry" th:action="@{/home/inquiry/${inquiryId}(inquiryId = ${inquiryId})}" method="POST" th:object="${replyInquiryForm}">
+                <label for="reply">답변</label>
+                <textarea class="content" id="reply" th:field="*{reply}" placeholder="답변 내용을 입력하세요."
+                          required></textarea><br>
+                <button class="btn_submit" type="submit">답변 등록</button>
+            </form>
         </div>
-    </form>
-
-    <div class="reply-Inquiry">
-        <form id="reply-Inquiry" th:action="@{/home/inquiry/{id}(id=${inquiryPost.id})}" method="POST" th:object="${replyInquiryForm}">
-            <label for="reply">답변</label>
-            <textarea class="content" id="reply" th:field="*{reply}" placeholder="답변 내용을 입력하세요." required></textarea><br>
-            <button class="btn_submit" type="submit">답변 등록</button>
-        </form>
-        </div>
+    </div>
 </main>
+
 <footer>
     <p>© 2024 SurveyBay. All rights reserved.</p>
 </footer>
 <script>
-
     // 문의 제목이나 설명 중 하나라도 입력하지 않으면 오류 반환 후 리다이렉션
     window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);
