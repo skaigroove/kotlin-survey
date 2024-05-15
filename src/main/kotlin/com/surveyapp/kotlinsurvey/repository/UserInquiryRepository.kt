@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager
 import jakarta.persistence.PersistenceContext
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 @Transactional
@@ -20,7 +21,7 @@ class UserInquiryRepository(
     }
 
     /* inquiryId 를 기준으로 문의 게시 글 조회 (inquiryId 가 unique 하므로, 단일 조회) */
-    fun getInquiryById(inquiryId: Long?): UserInquiry? {
+    fun getInquiryById(inquiryId: Long?): UserInquiry {
         return em.find(UserInquiry::class.java, inquiryId) // EntityManager를 사용하기 때문에, java class로 적어준다
     }
 
@@ -29,5 +30,6 @@ class UserInquiryRepository(
         return em.createQuery("select m from UserInquiry m", UserInquiry::class.java)
             .getResultList()
     }
+
 
 }

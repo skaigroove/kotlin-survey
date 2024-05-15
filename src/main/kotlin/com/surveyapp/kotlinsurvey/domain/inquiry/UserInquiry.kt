@@ -29,7 +29,7 @@ class UserInquiry (
     var answerDate : LocalDateTime? = null, // 답변 작성 일자
 
     @Column
-    val reply : String, // 답변
+    var reply : String, // 답변
 
     @Column
     @Enumerated(EnumType.STRING)

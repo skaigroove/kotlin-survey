@@ -8,6 +8,4 @@ data class UserInquiryForm(
     var title: String = "",
     var writeDate: LocalDateTime = LocalDateTime.now(),
     var content: String = "",
-    var answerDate: LocalDateTime = LocalDateTime.now(),
-    var reply: String = ""
     )

@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.controller
 
+import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
 import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
 import com.surveyapp.kotlinsurvey.controller.form.UserInquiryForm
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/home/inquiry")
@@ -78,22 +80,57 @@ class UserInquiryController(
     fun createInquiry(inquiryForm: UserInquiryForm, user: User): UserInquiry { // inquiry 생성
 
         // UserInquiryForm => UserInquiry 생성자에 넣어 생성
-        val inquiry = UserInquiry(null, user, inquiryForm.title, inquiryForm.writeDate, inquiryForm.content, inquiryForm.answerDate, inquiryForm.reply, inquiryForm.state)
+        val inquiry = UserInquiry(null, user, inquiryForm.title, inquiryForm.writeDate, inquiryForm.content, LocalDateTime.now(), "", inquiryForm.state)
 
         return inquiry
     }
 
     @GetMapping("/{id}")
-    fun detail(@PathVariable("id") id: Long, model: Model): String{
+    fun detailInquiry(@PathVariable id: Long, model: Model): String{
+        if (id == null)
+        {
+            println("Error : Inquiry id == null")
+        }
+
         val inquiryPost: UserInquiry? = userInquiryService.getInquiryById(id)
 
         model.addAttribute("inquiryPost", inquiryPost)
+        model.addAttribute("replyInquiryForm", ReplyInquiryForm())
 
         return "inquiryPost"
 
     }
 
+    @PostMapping("/{id}")
+    fun replyInquiry(
+        @PathVariable id: Long,
+        @Valid @ModelAttribute("replyInquiryForm") replyInquiryForm: ReplyInquiryForm,
+        session: HttpSession,
+        result: BindingResult,
+        redirectAttributes: RedirectAttributes,
+    ): String {
 
+        // userInquiryFrom : binding 오류 확인
+        if (result.hasErrors())
+        {
+            result.allErrors.forEach { error -> println("Error: ${error.defaultMessage}")}
+        }
+
+        // login 여부 확인
+        val user = userService.checkLogin(session)
+        if (user == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/user/login"
+
+        if (replyInquiryForm.reply.isEmpty())
+            return "redirect:/home/inquiry/{id}?replyEmptyError=true"
+
+        val inquiry = userInquiryService.getInquiryById(id)
+
+        userInquiryService.saveReplyInquiry(inquiry,replyInquiryForm)
+
+        return "redirect:redirect:/home/inquiry/{id}"
+
+    }
 
 
 

@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.service
 
+import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
 import com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
@@ -21,8 +22,16 @@ class UserInquiryService(
     }
 
     // 문의 게시 글 조회
-    fun getInquiryById(inquiryId: Long): UserInquiry? { return userInquiryRepository.getInquiryById(inquiryId) }
+    fun getInquiryById(inquiryId: Long): UserInquiry { return userInquiryRepository.getInquiryById(inquiryId) }
 
     // 모든 문의 게시 글 조회
     fun getInquiryList(): List<UserInquiry>? { return userInquiryRepository.getInquiryList() }
+
+    // 문의 답변 저장
+    fun saveReplyInquiry(inquiry: UserInquiry, replyInquiryForm: ReplyInquiryForm)
+    {
+        inquiry.answerDate = replyInquiryForm.answerDate
+        inquiry.reply = replyInquiryForm.reply
+        inquiry.status = InquiryState.COMPLETE
+    }
 }
