@@ -283,8 +283,7 @@
 </header>
 <main class="mainContent">
     <div class="create-Inquiry">
-        <form id="createInquiry" action="/home/inquiry/post" method="POST" th:action="@{/home/inquiry/post}"
-              th:object="${userInquiryForm}">
+        <form id="createInquiry" action="/home/inquiry/post" method="POST" th:object="${userInquiryForm}">
             <label for="title"></label>
             <input class="title" type="text" id="title" th:field="*{title}" placeholder="문의 제목을 입력하세요." required><br>
 
