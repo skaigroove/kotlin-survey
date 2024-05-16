@@ -64,6 +64,7 @@ class UserInquiryController(
         // inquiry 생성
         val inquiry = createInquiry(userInquiryForm, user)
 
+        /*
         // title 입력 x 오류 처리
         if (userInquiryForm.title.isEmpty())
             return "redirect:/home/inquiry/post?titleEmptyError=true"
@@ -71,6 +72,7 @@ class UserInquiryController(
         // content 입력 x 오류 처리
         if (userInquiryForm.content.isEmpty())
             return "redirect:/home/inquiry/post?contentEmptyError=true"
+         */
 
         userInquiryService.saveInquiry(inquiry) // 저장
 
@@ -89,6 +91,8 @@ class UserInquiryController(
     fun detailInquiry(@PathVariable inquiryId: Long, model: Model): String{
 
         val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
+
+        println("Status: ${inquiryPost.status}")
 
         model.addAttribute("inquiryPost", inquiryPost)
         model.addAttribute("replyInquiryForm", ReplyInquiryForm())
@@ -116,14 +120,16 @@ class UserInquiryController(
         if (user == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/user/login"
 
+        /*
         if (replyInquiryForm.reply.isEmpty())
             return "redirect:/home/inquiry/{inquiryId}?replyEmptyError=true"
+        */
 
         val inquiry = userInquiryService.getInquiryById(inquiryId)
 
         userInquiryService.saveReplyInquiry(inquiry,replyInquiryForm)
 
-        return "redirect:redirect:/home/inquiry/{inquiryId}"
+        return "redirect:/home/inquiry/{inquiryId}"
 
     }
 

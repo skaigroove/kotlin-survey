@@ -300,13 +300,26 @@
             </div>
         </div>
 
-        <div class="reply-Inquiry">
-            <form id="reply-Inquiry" th:action="@{/home/inquiry/{id}(id =${inquiryPost.id})}" method="POST" th:object="${replyInquiryForm}">
+        <!-- thymeleaf 조건문 if : 답변 작성 x (답변 안 적은 것) -->
+        <div class="reply-Inquiry" th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}">
+            <form id="reply-Inquiry" th:action="@{/home/inquiry/{id}(id=${inquiryPost.id})}" method="POST" th:object="${replyInquiryForm}">
                 <label for="reply">답변</label>
-                <textarea class="content" id="reply" th:field="*{reply}" placeholder="답변 내용을 입력하세요."
-                          required></textarea><br>
+                <textarea class="content" id="reply" th:field="*{reply}" placeholder="답변 내용을 입력하세요." required></textarea><br>
                 <button class="btn_submit" type="submit">답변 등록</button>
             </form>
+        </div>
+
+        <!-- thymeleaf 조건문 if : 답변 작성 o (답변 적은 것) -->
+        <div class="answered-Inquiry" th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}">
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">
+                        <strong>답변:</strong>
+                        <small class="text-muted" th:text="${inquiryPost.reply}"></small>
+                        <small class="text-muted" th:text="${#temporals.format(inquiryPost.answerDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </main>
@@ -315,6 +328,7 @@
     <p>© 2024 SurveyBay. All rights reserved.</p>
 </footer>
 <script>
+    /*
     // 문의 제목이나 설명 중 하나라도 입력하지 않으면 오류 반환 후 리다이렉션
     window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);
@@ -324,6 +338,8 @@
             alert('답변 내용을 입력해 주세요.');
         }
     }
+    */
+
 
     /**
      * 배너 관련 애니메이션 처리*/
