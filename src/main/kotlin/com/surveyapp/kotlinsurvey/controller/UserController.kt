@@ -5,6 +5,7 @@ import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.domain.user.UserType
+import com.surveyapp.kotlinsurvey.repository.UserRepository
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
 import jakarta.validation.Valid
@@ -67,9 +68,12 @@ class UserController(
     @PostMapping("/login")
     fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession): String {
         val loginResult: LoginForm? = userService.login(loginForm)
+        val loginUserName: String = userService.findUserByLoginId(loginForm.loginId)!!.name
+
         if (loginResult != null) {
             // login 성공
             session.setAttribute("loginId", loginResult.loginId)
+            session.setAttribute("username", loginUserName)
             println("로그인에 성공하였습니다")
             return "home"
         } else {

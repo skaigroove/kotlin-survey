@@ -29,9 +29,9 @@ class TextAnswer(
     override val answerType: AnswerType = AnswerType.SUBJECTIVE, // 답변 유형
 
     @Column
-    val text: String? // 주관식 답변 내용
+    override val text: String? // 주관식 답변 내용
 
-) : Answer(answerId,AnswerType.SUBJECTIVE, user, question, surveyParticipation)
+) : Answer(answerId,AnswerType.SUBJECTIVE, user, question, text, surveyParticipation)
 {
 
 }

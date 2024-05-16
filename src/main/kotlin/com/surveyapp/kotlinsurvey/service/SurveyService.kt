@@ -92,7 +92,7 @@ class SurveyService(
             val question = survey.findQuestion(alf.questionId) // questionId를 통해 question을 찾음
 
             val answer : Answer = when(question?.questionType) { // questionType에 따라 다른 Answer 객체 생성
-                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,AnswerType.MULTIPLE_CHOICE,findQuestionOptionById(alf.selectedOption!!))
+                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,AnswerType.MULTIPLE_CHOICE,null, findQuestionOptionById(alf.selectedOption!!))
                 QuestionType.SUBJECTIVE -> TextAnswer(null,user,question,surveyParticipation,AnswerType.SUBJECTIVE,alf.text)
                 else -> { throw IllegalArgumentException("Invalid Question Type")}
             }
@@ -107,17 +107,6 @@ class SurveyService(
 
     fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
         return surveyRepository.findQuestionOptionById(questionOptionId)
-    }
-
-    // surveyId를 통해, 해당 설문에 대한 각 선지의 count를 반환.
-    fun getSurveyStatistics(surveyId: Long): Map<String, Long> {
-        val rawResults = surveyRepository.getSurveyStatisticsMultipleChoice(surveyId) // 설문에 대한 각 선지의 count를 반환 => 여기선 Object를 받음.
-        val statistics = rawResults.map { it as Array<*> }
-            .associate { it[0].toString() to it[1] as Long } // Object를 Array로 변환 후, Map으로 변환
-        println("statistics=")
-        println(statistics)
-
-        return statistics
     }
 
 }

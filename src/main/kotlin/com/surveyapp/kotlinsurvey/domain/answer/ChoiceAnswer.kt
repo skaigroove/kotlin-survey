@@ -30,9 +30,12 @@ class ChoiceAnswer(
     @Column
     override val answerType: AnswerType = AnswerType.MULTIPLE_CHOICE, // 답변 유형
 
+    @Column
+    override val text : String? = null, // 주관식 답변 내용
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "selected_option_id")
     val selectedOption: QuestionOption?
 
-    ) : Answer(answerId, AnswerType.MULTIPLE_CHOICE, user, question, surveyParticipation) {
+    ) : Answer(answerId, AnswerType.MULTIPLE_CHOICE, user, question, text, surveyParticipation) {
 }

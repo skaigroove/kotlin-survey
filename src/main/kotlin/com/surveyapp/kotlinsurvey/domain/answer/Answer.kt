@@ -27,6 +27,9 @@ abstract class Answer(
     @JoinColumn(name = "question_id", foreignKey = ForeignKey(name = "fk_question_id"))
     open val question: Question, // 질문 하나당 여러 개의 답변이 있을 수 있다.
 
+    @Column
+    open val text : String? = null, // 주관식 답변 내용
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participation_id", nullable = false)
     open val surveyParticipation: SurveyParticipation // 양방향 매핑

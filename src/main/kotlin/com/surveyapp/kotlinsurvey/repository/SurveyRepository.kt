@@ -10,11 +10,11 @@ import org.springframework.stereotype.Repository
 
 @Repository
 @Transactional
-class SurveyRepository (
+class SurveyRepository(
 
     @PersistenceContext // 생성자 주입 자동화 어노테이션
     private val em: EntityManager, // 생성자 주입
-){
+) {
     @Transactional
     fun saveSurvey(survey: Survey) {
         em.persist(survey)
@@ -55,9 +55,18 @@ class SurveyRepository (
 
     fun getSurveyStatisticsMultipleChoice(surveyId: Long): List<Any> {
         return em.createQuery(
-            "SELECT op.questionOptionText, COUNT(so) FROM QuestionOption op LEFT JOIN op.choiceAnswers so WHERE so.surveyParticipation.survey.surveyId = :surveyId GROUP BY op.questionOptionText",
+            "SELECT q.context, op.questionOptionText, COUNT(so) FROM Question q JOIN q.questionOptions op LEFT JOIN op.choiceAnswers so WHERE so.surveyParticipation.survey.surveyId = :surveyId GROUP BY q.questionId, op.questionOptionId",
             Array<Any>::class.java
         )
+            .setParameter("surveyId", surveyId)
+            .resultList
+    }
+
+    fun getSurveyStatisticsSubjective(surveyId: Long): List<Any> {
+
+        val type = "SUBJECTIVE"
+        return em.createQuery(
+            "SELECT q.context, a.text FROM Question q JOIN q.answers a WHERE a.surveyParticipation.survey.surveyId = :surveyId AND a.answerType = :type",Array<Any>::class.java)
             .setParameter("surveyId", surveyId)
             .resultList
     }

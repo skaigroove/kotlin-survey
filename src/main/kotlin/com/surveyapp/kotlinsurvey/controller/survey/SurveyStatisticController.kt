@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.controller.survey
 
+import com.surveyapp.kotlinsurvey.repository.SurveyRepository
 import com.surveyapp.kotlinsurvey.service.SurveyService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -11,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/home")
-class SurveyStatisticController(@Autowired private val surveyService: SurveyService) {
+class SurveyStatisticController(@Autowired private val surveyRepository: SurveyRepository) {
 
     @GetMapping("api/list/statistic/{surveyId}")
-    fun getSurveyStatistic(@PathVariable surveyId: Long): ResponseEntity<Map<String, Long>> {
+    fun getSurveyStatistic(@PathVariable surveyId: Long): ResponseEntity<List<Any>> {
         try {
-            val statistics = surveyService.getSurveyStatistics(surveyId)
+            val statistics = surveyRepository.getSurveyStatisticsMultipleChoice(surveyId)
             if (statistics.isNotEmpty()) {
                 return ResponseEntity.ok(statistics)
             } else {
