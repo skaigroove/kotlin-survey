@@ -16,10 +16,7 @@ class SurveyStatisticViewController(@Autowired private val surveyRepository: Sur
     @GetMapping("/list/statistic/{surveyId}")
     fun showSurveyStatisticPage(@PathVariable surveyId: Long, model: Model): String {
 
-        val statistics = surveyRepository.getSurveyStatisticsMultipleChoice(surveyId)
-
             model.addAttribute("surveyId", surveyId)
-            model.addAttribute("statistics", statistics)
 
             return "statistic"  // Thymeleaf 템플릿 이름
     }

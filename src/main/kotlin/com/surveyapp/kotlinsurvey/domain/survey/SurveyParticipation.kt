@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.domain.survey
 
 import com.surveyapp.kotlinsurvey.domain.answer.Answer
+import com.surveyapp.kotlinsurvey.domain.answer.TextAnswer
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
 import java.time.LocalDate
@@ -23,13 +24,19 @@ data class SurveyParticipation(
     val survey: Survey,
 
     @Column(name = "participation_date", nullable = false, updatable = false)
-    var participationDate: LocalDate?
+    var participationDate: LocalDate?,
 ) {
     @PrePersist
     fun onPrePersist() {
         participationDate = LocalDate.now()
     }
 
-    @OneToMany(mappedBy = "surveyParticipation", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "surveyParticipation",
+        fetch = FetchType.LAZY,
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
     val answers: MutableList<Answer> = mutableListOf()
+
 }

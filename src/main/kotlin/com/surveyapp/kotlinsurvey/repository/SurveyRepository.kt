@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.repository
 
+import com.surveyapp.kotlinsurvey.domain.answer.AnswerType
 import com.surveyapp.kotlinsurvey.domain.question.Question
 import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
@@ -53,21 +54,4 @@ class SurveyRepository(
             .resultList
     }
 
-    fun getSurveyStatisticsMultipleChoice(surveyId: Long): List<Any> {
-        return em.createQuery(
-            "SELECT q.context, op.questionOptionText, COUNT(so) FROM Question q JOIN q.questionOptions op LEFT JOIN op.choiceAnswers so WHERE so.surveyParticipation.survey.surveyId = :surveyId GROUP BY q.questionId, op.questionOptionId",
-            Array<Any>::class.java
-        )
-            .setParameter("surveyId", surveyId)
-            .resultList
-    }
-
-    fun getSurveyStatisticsSubjective(surveyId: Long): List<Any> {
-
-        val type = "SUBJECTIVE"
-        return em.createQuery(
-            "SELECT q.context, a.text FROM Question q JOIN q.answers a WHERE a.surveyParticipation.survey.surveyId = :surveyId AND a.answerType = :type",Array<Any>::class.java)
-            .setParameter("surveyId", surveyId)
-            .resultList
-    }
 }

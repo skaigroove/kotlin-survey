@@ -92,7 +92,7 @@ class SurveyService(
             val question = survey.findQuestion(alf.questionId) // questionId를 통해 question을 찾음
 
             val answer : Answer = when(question?.questionType) { // questionType에 따라 다른 Answer 객체 생성
-                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,AnswerType.MULTIPLE_CHOICE,null, findQuestionOptionById(alf.selectedOption!!))
+                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,AnswerType.MULTIPLE_CHOICE,findQuestionOptionById(alf.selectedOption!!))
                 QuestionType.SUBJECTIVE -> TextAnswer(null,user,question,surveyParticipation,AnswerType.SUBJECTIVE,alf.text)
                 else -> { throw IllegalArgumentException("Invalid Question Type")}
             }
