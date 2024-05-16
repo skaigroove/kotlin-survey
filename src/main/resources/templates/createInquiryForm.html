@@ -288,8 +288,7 @@
             <input class="title" type="text" id="title" th:field="*{title}" placeholder="문의 제목을 입력하세요." required><br>
 
             <label for="content"></label>
-            <textarea class="content" id="content" th:field="*{content}" placeholder="문의 내용을 입력하세요."
-                      required></textarea><br>
+            <textarea class="content" id="content" th:field="*{content}" placeholder="문의 내용을 입력하세요." required></textarea><br>
 
             <button class="btn_submit" type="submit">생성</button>
         </form>
@@ -300,6 +299,7 @@
 </footer>
 <script>
 
+    /*
     // 문의 제목이나 설명 중 하나라도 입력하지 않으면 오류 반환 후 리다이렉션
     window.onload = function () {
         const urlParams = new URLSearchParams(window.location.search);
@@ -312,6 +312,7 @@
             alert('문의 내용을 입력해 주세요.');
         }
     }
+     */
 
     /**
      * 배너 관련 애니메이션 처리*/
