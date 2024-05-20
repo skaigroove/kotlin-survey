@@ -21,7 +21,7 @@ class Survey(
     val title : String, // 설문 제목
 
     @Column
-    val discription : String, // 설문 설명
+    val description : String, // 설문 설명
 
     @Column(name = "start_date", nullable = false)
     @Temporal(TemporalType.DATE) // 날짜만 입력

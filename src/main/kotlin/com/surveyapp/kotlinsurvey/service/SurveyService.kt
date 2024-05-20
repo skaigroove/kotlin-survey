@@ -109,4 +109,10 @@ class SurveyService(
         return surveyRepository.findQuestionOptionById(questionOptionId)
     }
 
+    fun getRemainingDays(survey: Survey?): Any {
+        if(survey == null) return 0
+        return survey.endDate!!.toEpochDay() - LocalDate.now().toEpochDay()
+
+    }
+
 }

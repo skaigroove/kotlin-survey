@@ -3,6 +3,7 @@ package com.surveyapp.kotlinsurvey.service
 import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.User
+import com.surveyapp.kotlinsurvey.domain.user.UserType
 import com.surveyapp.kotlinsurvey.repository.UserRepository
 import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
@@ -20,6 +21,14 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         validateDuplicateUserByLoginId(user) // 중복이면 에러를 반환한다
         userRepository.save(user)
         return user
+    }
+
+    fun validateAdmin(user: User): Boolean {
+
+        if (user.userType == UserType.ADMIN) {
+            return true
+        }
+        return false
     }
 
 

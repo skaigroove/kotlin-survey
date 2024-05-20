@@ -21,14 +21,18 @@ class SurveyResponseController(
     @Autowired private val userRepository: UserRepository,
 ) {
     @GetMapping("/list/participate/{surveyId}")
-    fun createAnswerForm(@PathVariable surveyId: Long, model: Model): String { // 설문 참여
+    fun createAnswerForm(@PathVariable surveyId: Long, model: Model,session: HttpSession): String { // 설문 참여
 
         val survey = surveyService.getSurveyById(surveyId) // surveyId로 설문 정보를 가져옴
         val questions = survey?.questions // 설문 정보로부터 질문 리스트를 가져옴
+        val remainingDays = surveyService.getRemainingDays(survey) // 남은 날짜 계산
 
+        val username = session.getAttribute("username") // 세션에서 사용자 이름 가져오기
+        model.addAttribute("username", username); // model에 "username" 추가
         model.addAttribute("survey", survey) // 참여 할 설문 정보를 model에 추가
         model.addAttribute("questions", questions) // 질문 리스트를 model에 추가
         model.addAttribute("answerListForm", AnswerListForm()) // 답변 리스트 폼을 model에 추가
+        model.addAttribute("remainingDays", remainingDays) // 남은 날짜를 model에 추가
 
         return "participate" // 경로 반환 : participate.html
     }

@@ -19,18 +19,18 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import java.time.LocalDate
 
-@RequestMapping("/user") // endpoint
+@RequestMapping("/") // endpoint
 @Controller
 class UserController(
     @Autowired private val userService: UserService,
 ) {
-    @GetMapping("/new")
+    @GetMapping("user/new")
     fun createForm(model: Model): String {
         model.addAttribute("userForm", UserForm("", "", "", LocalDate.now(), GenderType.FEMALE, "")) // 기본값으로 초기화
         return "createUserForm"
     }
 
-    @PostMapping("/new")
+    @PostMapping("user/new")
     fun createUser(@Valid userForm: UserForm, result: BindingResult): String {
 
         if (result.hasErrors())
@@ -59,27 +59,41 @@ class UserController(
         return "redirect:/"
     }
 
-    @GetMapping("/login")
+    @GetMapping("/")
     fun loginForm(model: Model): String {
         model.addAttribute("loginForm", LoginForm("", "")) // 초기화한 폼을 모델에 추가
         return "login"
     }
 
-    @PostMapping("/login")
-    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession): String {
+    @PostMapping("/")
+    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession,model:Model): String {
         val loginResult: LoginForm? = userService.login(loginForm)
         val loginUserName: String = userService.findUserByLoginId(loginForm.loginId)!!.name
+
+        model.addAttribute("username", loginUserName)
 
         if (loginResult != null) {
             // login 성공
             session.setAttribute("loginId", loginResult.loginId)
             session.setAttribute("username", loginUserName)
+
+            //로그인 유저 이름 출력
+            println("username: $loginUserName")
             println("로그인에 성공하였습니다")
-            return "home"
+
+            val user = userService.findUserByLoginId(loginForm.loginId)
+
+            if (user != null && user.userType == UserType.ADMIN) {
+                return "home-admin"
+            } else if (user != null && user.userType == UserType.CLIENT) {
+                return "home"
+            }
+
         } else {
             // login 실패
             println("로그인에 실패하였습니다")
-            return "redirect:/user/login?error=true"
+            return "redirect:/?error=true"
         }
+        return "redirect:/"
     }
 }

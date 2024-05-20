@@ -1,208 +1,152 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Create User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurveyBay 로그인</title>
     <style>
-        @import url("https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:400,700&display=swap");
-        @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&display=swap");
-        @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
 
         * {
             margin: 0;
             padding: 0;
-            outline: none;
             box-sizing: border-box;
-            line-height: 1.5em;
-            color: #747474;
-            font-family: "Open Sans", sans-serif;
-            font-size: 12px;
+            font-family: 'Noto Sans KR', sans-serif;
         }
 
         body {
-            font-family: 'League Spartan', sans-serif, 'Quicksand'; /* 폰트 적용 */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            background-color: #1c1c1e;
+            color: #fff;
         }
 
-        .main {
-            width: 70%;
-            height: auto;
-            margin: auto;
+        .login-container {
+            background-color: #2c2c2e;
+            padding: 60px 40px;
+            width: 500px; /* 너비를 500px로 설정 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-            transition: all 0.1s ease-in 0.1s;
-        }
-
-        .home {
-            width: 100%;
-            height: 100%;
-            border-radius: 10px;
-            color: black;
-            background: #F1EFE7;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 1;
-            transition: all 0.4s ease-in 0.2s;
-        }
-        .home h1 {
-            font-family: 'League Spartan';
-            color: black;
             text-align: center;
         }
-        .title {
-            font-size: 70px;
-            font-weight: 700;
-            margin-top : 20px;
+
+        .login-title {
+            font-size: 36px;
             margin-bottom: 20px;
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center; /* 텍스트 중앙 정렬 */
-            color: transparent;
-            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; /* Webkit 브라우저를 위한 설정 */
-            animation: gradient-animation 5s ease infinite;
-            display: inline-block; /* 백그라운드 클립이 적용되도록 display 속성 변경 */
+            font-family: 'Poetsen One', sans-serif; /* Poetsen One 폰트 적용 */
         }
-        @keyframes gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
+
+        .login-subtitle {
+            font-size: 80px;
+            margin-bottom: 40px;
+            font-weight: 700;
+            font-family: 'Bebas Neue', sans-serif; /* Bebas Neue 폰트 적용 */
         }
+
         .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px; /* 간격 조절 */
-            text-align: center; /* 중앙 정렬 */
+            margin-bottom: 25px;
+            position: relative;
         }
 
-        .form-text {
-            margin-right: 10px; /* 텍스트 옆 간격 조절 */
+        .form-group input {
+            width: 100%;
+            padding: 15px 50px 15px 15px;
+            margin-top: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #3a3a3c;
+            color: #fff;
+            font-size: 18px;
         }
 
-        .form-control {
-            flex: 1; /* 입력 필드 너비 자동 조절 */
+        .form-group i {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: #8e8e93;
+            font-size: 20px;
         }
 
         .btn {
-            background: #f6f3ee;
-            border: 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 150px;
-            padding: 10px 16px;
-            margin: 10px 20px;
+            width: 100%;
+            padding: 15px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center; /* 중앙 정렬 */
-            margin-bottom: 40px;
-        }
-        /* 중형 스크린: 태블릿 */
-        @media (max-width: 1024px) {
-            .main {
-                width: 80%; /* 넓이 조정 */
-            }
-
-            .title {
-                font-size: 50px; /* 글자 크기 조정 */
-            }
-
-            .form-group {
-                flex-direction: column; /* 세로 정렬 */
-                align-items: center; /* 중앙 정렬 */
-            }
-
-            .btn {
-                width: 100px;
-                padding: 6px 12px;
-            }
+            margin-bottom: 20px;
         }
 
-        /* 소형 스크린: 스마트폰 */
-        @media (max-width: 768px) {
-            .main {
-                width: 95%; /* 넓이 조정 */
-            }
+        .login-btn {
+            margin-top: 10px;
+            background-color: #5856d6;
+            color: #fff;
+        }
 
-            .title {
-                font-size: 40px; /* 글자 크기 조정 */
-            }
+        .signup-btn {
+            background-color: #fff;
+            color: #000;
+        }
 
-            .form-group {
-                width: 100%; /* 너비 조정 */
-            }
+        .footer-links a {
+            color: #8e8e93;
+            text-decoration: none;
+            font-size: 16px;
+        }
 
-            .btn {
-                width: 90px;
-                padding: 5px 10px;
-            }
+        .footer-links {
+            margin-top: 30px;
         }
     </style>
 </head>
 <body>
-<main class="main">
-    <section class="home">
-        <h1 class="title">Login</h1>
-        <form id = "loginForm" role="form" action="/user/login" th:object="${loginForm}" method="post">
-            <div class="form-group">
-                <label class="form-text" th:for="loginId">ID:</label>
-                <input type="text" th:field="*{loginId}" class="form-control" placeholder="***@email.com">
-            </div>
-            <div class="form-group">
-                <label class="form-text" th:for="password">Password:</label>
-                <input type="password" th:field="*{password}" class="form-control">
-            </div>
-            <button type="submit" class="btn">로그인</button>
-        </form>
-    </section>
-</main>
+<div class="login-container">
+    <div class="login-title">Welcome</div>
+    <div class="login-subtitle">SurveyBay</div>
+    <form id="loginForm" action="/" method="post">
+        <div class="form-group">
+            <input type="text" id="loginId" name="loginId" placeholder="아이디" required>
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="form-group">
+            <input type="password" id="password" name="password" placeholder="비밀번호" required>
+            <i class="fas fa-lock"></i>
+        </div>
+        <button type="submit" class="btn login-btn" onclick="location.href='/home'" >로그인</button>
+    </form>
+    <button class="btn signup-btn" onclick="location.href='/user/new'" >이메일 회원가입 </button>
+    <div class="footer-links">
+        <a href="#">아이디 / 비밀번호 찾기</a>
+    </div>
+</div>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script>
-    // 페이지 로드 시 오류 메시지 검사 및 표시
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const loginError = urlParams.get('error');
-        if (loginError) {
-            alert('로그인 실패: 아이디와 비밀번호를 확인해주세요.');
-        }
-    }
-
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         var email = document.getElementById('loginId').value;
         var password = document.getElementById('password').value;
-        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email pattern check
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!email) {
             alert('아이디를 입력하세요.');
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault();
             return;
         }
 
         if (!emailPattern.test(email)) {
             alert('유효한 이메일 주소를 입력하세요.');
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault();
             return;
         }
 
         if (!password) {
             alert('비밀번호를 입력하세요.');
-            event.preventDefault(); // Prevent form submission
+            event.preventDefault();
         }
     });
-
 </script>
 </body>
 </html>

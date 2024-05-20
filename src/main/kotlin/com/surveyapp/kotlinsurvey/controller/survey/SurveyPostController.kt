@@ -55,7 +55,7 @@ class SurveyPostController(
         // login 여부 확인
         val user = userService.checkLogin(session)
         if (user == null) // 로그인 안 되었음 => null 반환됨
-            return "redirect:/user/login"
+            return "redirect:/"
 
         // 생성한 설문조사를 저장함
         val survey = surveyService.createSurvey(surveyForm, user)

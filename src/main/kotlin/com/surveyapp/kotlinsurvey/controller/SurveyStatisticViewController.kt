@@ -18,6 +18,6 @@ class SurveyStatisticViewController(@Autowired private val surveyRepository: Sur
 
             model.addAttribute("surveyId", surveyId)
 
-            return "statistic"  // Thymeleaf 템플릿 이름
+            return "statistic"
     }
 }
