@@ -101,12 +101,19 @@
         .footer-links {
             margin-top: 30px;
         }
+
+        .error-message {
+            color: #ff7200;
+            margin-bottom: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
 <div class="login-container">
     <div class="login-title">Welcome</div>
     <div class="login-subtitle">SurveyBay</div>
+    <div class="error-message" id="errorMessage">아이디 또는 비밀번호가 잘못되었습니다.</div>
     <form id="loginForm" action="/" method="post">
         <div class="form-group">
             <input type="text" id="loginId" name="loginId" placeholder="아이디" required>
@@ -116,15 +123,23 @@
             <input type="password" id="password" name="password" placeholder="비밀번호" required>
             <i class="fas fa-lock"></i>
         </div>
-        <button type="submit" class="btn login-btn" onclick="location.href='/home'" >로그인</button>
+        <button type="submit" class="btn login-btn">로그인</button>
     </form>
-    <button class="btn signup-btn" onclick="location.href='/user/new'" >이메일 회원가입 </button>
+    <button class="btn signup-btn" onclick="location.href='/user/new'">이메일 회원가입</button>
     <div class="footer-links">
         <a href="#">아이디 / 비밀번호 찾기</a>
     </div>
 </div>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        if (error) {
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    });
+
     document.getElementById('loginForm').addEventListener('submit', function(event) {
         var email = document.getElementById('loginId').value;
         var password = document.getElementById('password').value;

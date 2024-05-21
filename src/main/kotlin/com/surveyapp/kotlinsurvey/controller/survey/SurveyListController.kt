@@ -7,23 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 
-
-@RequestMapping("/home") // endpoint
+@RequestMapping("/home")
 @Controller
 class SurveyListController(
     @Autowired private val surveyService: SurveyService,
+    @Autowired private val userRepository: UserRepository
 ) {
     @GetMapping("/list")
-    fun list(model: Model, session: HttpSession): String { // 설문 목록
-        val username = session.getAttribute("username") // 세션에서 사용자 이름 가져오기
-        model.addAttribute("username", username); // model에 "username" 추가
+    fun list(model: Model, session: HttpSession): String {
+        val username = session.getAttribute("username")
+        model.addAttribute("username", username)
 
-        val surveyPostList = surveyService.getSurveyList() // 모든 설문 리스트 가져오기
-        model.addAttribute("postList", surveyPostList) // "postList" 로 surveyPostList 추가
+        val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/login"
+        val user = userRepository.findByLoginId(userLoginId)
+        model.addAttribute("user", user)
 
-        return "list" // 경로 반환 : list.html
+        val surveyPostList = surveyService.getSurveyList()
+        val participatedSurveyIds = surveyService.getParticipatedSurveyIds(userLoginId)
+        model.addAttribute("postList", surveyPostList)
+        model.addAttribute("participatedSurveyIds", participatedSurveyIds)
+
+        return "list"
     }
 }

@@ -135,12 +135,13 @@
             bottom: 0;
         }
 
-        .username-welcome{
+        .username-welcome {
             font-size: 20px;
             color: #fff;
             margin-right: 20px;
         }
-        tbody{
+
+        tbody {
             text-align: center;
         }
     </style>
@@ -148,13 +149,13 @@
 <body>
 <header>
     <a onclick="location.href='/home/'">
-    <div class="logo" >SurveyBay</div>
+        <div class="logo">SurveyBay</div>
     </a>
     <div class="menu">
         <div class="user-info">
             <span class="username"></span>
             <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
-            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"> </span>
+            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
         </div>
     </div>
 </header>
@@ -171,35 +172,30 @@
                 <th scope="col">결과</th>
             </tr>
             <tbody>
-            <tr class="text-center" th:each="post, iterState : ${postList}"> <!-- postList 에 있는 원소 하나씩 post 에 대입해서 반복 -->
+            <tr class="text-center" th:each="post, iterState : ${postList}">
                 <th scope="row">
-                    <span th:text="${post.surveyId}"></span> <!-- post  id 출력 -->
+                    <span th:text="${post.surveyId}"></span>
                 </th>
-
                 <td>
-                    <span th:text="${post.title}"></span>  <!-- post  제목 출력 -->
+                    <span th:text="${post.title}"></span>
                 </td>
-
                 <td>
-                    <span th:text="${post.user.name}"></span>  <!-- post 작성자 출력 -->
+                    <span th:text="${post.user.name}"></span>
                 </td>
-
                 <td>
-                    <span th:text="${#temporals.format(post.startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(post.endDate, 'yyyy-MM-dd')}"></span> <!-- post 응답 기한 출력 -->
+                    <span th:text="${#temporals.format(post.startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(post.endDate, 'yyyy-MM-dd')}"></span>
                 </td>
-
                 <td>
-                    <a th:href="@{/home/list/participate/{surveyId}(surveyId=${post.surveyId})}">
+                    <a th:if="${!#lists.contains(participatedSurveyIds, post.surveyId)}" th:href="@{/home/list/participate/{surveyId}(surveyId=${post.surveyId})}">
                         <button class="btn_post">참여</button>
                     </a>
+                    <span th:if="${#lists.contains(participatedSurveyIds, post.surveyId)}">참여 완료</span>
                 </td>
-
                 <td>
                     <a th:href="@{/home/list/statistic/{surveyId}(surveyId=${post.surveyId})}">
                         <button class="btn_post">결과</button>
                     </a>
                 </td>
-
             </tr>
             </tbody>
         </table>

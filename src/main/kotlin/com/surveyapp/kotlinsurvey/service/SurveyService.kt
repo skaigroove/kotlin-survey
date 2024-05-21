@@ -114,5 +114,7 @@ class SurveyService(
         return survey.endDate!!.toEpochDay() - LocalDate.now().toEpochDay()
 
     }
-
+    fun getParticipatedSurveyIds(loginId: String): List<Long> {
+        return surveyRepository.findParticipatedSurveysByLoginId(loginId)
+    }
 }

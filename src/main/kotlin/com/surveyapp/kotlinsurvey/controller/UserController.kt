@@ -5,7 +5,6 @@ import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.domain.user.UserType
-import com.surveyapp.kotlinsurvey.repository.UserRepository
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
 import jakarta.validation.Valid
@@ -16,21 +15,19 @@ import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import java.time.LocalDate
 
-@RequestMapping("/") // endpoint
 @Controller
 class UserController(
     @Autowired private val userService: UserService,
 ) {
-    @GetMapping("user/new")
+    @GetMapping("/user/new")
     fun createForm(model: Model): String {
         model.addAttribute("userForm", UserForm("", "", "", LocalDate.now(), GenderType.FEMALE, "")) // 기본값으로 초기화
         return "createUserForm"
     }
 
-    @PostMapping("user/new")
+    @PostMapping("/user/new")
     fun createUser(@Valid userForm: UserForm, result: BindingResult): String {
 
         if (result.hasErrors())
@@ -66,14 +63,13 @@ class UserController(
     }
 
     @PostMapping("/")
-    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession,model:Model): String {
+    fun login(@ModelAttribute loginForm: LoginForm, session: HttpSession, model: Model): String {
         val loginResult: LoginForm? = userService.login(loginForm)
-        val loginUserName: String = userService.findUserByLoginId(loginForm.loginId)!!.name
-
-        model.addAttribute("username", loginUserName)
 
         if (loginResult != null) {
             // login 성공
+            val loginUserName: String = userService.findUserByLoginId(loginForm.loginId)!!.name
+            model.addAttribute("username", loginUserName)
             session.setAttribute("loginId", loginResult.loginId)
             session.setAttribute("username", loginUserName)
 
@@ -83,10 +79,10 @@ class UserController(
 
             val user = userService.findUserByLoginId(loginForm.loginId)
 
-            if (user != null && user.userType == UserType.ADMIN) {
-                return "home-admin"
-            } else if (user != null && user.userType == UserType.CLIENT) {
-                return "home"
+            return when (user?.userType) {
+                UserType.ADMIN -> "home-admin"
+                UserType.CLIENT -> "home"
+                else -> "redirect:/"
             }
 
         } else {
@@ -94,6 +90,5 @@ class UserController(
             println("로그인에 실패하였습니다")
             return "redirect:/?error=true"
         }
-        return "redirect:/"
     }
 }
