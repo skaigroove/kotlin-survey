@@ -1,0 +1,36 @@
+<div id="inquiryList">
+    <table class="table"> <!-- table 생성 -->
+        <tr class="text-center"> <!-- 텍스트 중앙 정렬 -->
+            <th scope="col">문의 번호</th> <!-- table 제목 셀 설정 : 문의 번호 -->
+            <th scope="col">제목</th> <!-- table 제목 셀 설정 : 제목 -->
+            <th scope="col">작성자</th> <!-- table 제목 셀 설정 : 작성자 -->
+            <th scope="col">작성 일자</th> <!-- table 제목 셀 설정 : 작성 일자 -->
+            <th scope="col">답변 여부</th> <!-- table 제목 셀 설정 : 답변 여부 -->
+        </tr>
+
+        <tbody>
+        <tr class="text-center" th:each="inquiryPost, iterState : ${adminInquiryList}"> <!-- inquiryList 에 있는 원소 하나씩 inquiryPost 에 대입해서 반복 -->
+            <th scope="row">
+                    <span th:text="${inquiryPost.id}"></span> <!-- inquiryPost - id(inquiryId) 출력 -->
+            </th>
+
+            <td>
+                <a href="javascript:void(0);" th:text="${inquiryPost.title}" th:onclick="'loadInquiryDetail(' + ${inquiryPost.id} + '); showPage(\'inquiryDetail\');'"></a>
+            </td>
+
+            <td>
+                <span th:text="${inquiryPost.user.name}"></span>  <!-- inquiryPost 작성자 출력 -->
+            </td>
+
+            <td>
+                <span th:text="${#temporals.format(inquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span> <!-- inquiryPost 작성 일자 출력 -->
+            </td>
+
+            <td>
+                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}" th:text="'완료'"></span>
+                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}" th:text="'미완료'"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

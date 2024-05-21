@@ -1,0 +1,45 @@
+<div id="inquiryDetail">
+    <h2 th:text="${adminInquiryPost.title}"></h2>
+    <p><strong>작성자 :</strong> <span th:text="${adminInquiryPost.user.name}"></span></p>
+    <p><strong>작성 일자 :</strong> <span th:text="${#temporals.format(adminInquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    <p th:text="${adminInquiryPost.content}"></p>
+
+    <!-- thymeleaf 조건문 if : 답변 작성 x (답변 안 적은 것) -->
+    <div class="reply-Inquiry" th:if="${adminInquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}">
+        <form id="reply-Inquiry" th:action="@{/home/admin/inquiry/{id}(id=${inquiryPost.id})}" method="POST" th:object="${replyInquiryForm}">
+            <label for="reply">답변</label>
+            <textarea class="content" id="reply" th:field="*{replyInquiryForm.reply}" placeholder="답변 내용을 입력하세요." required></textarea><br>
+            <button class="btn_submit" type="submit">답변 등록</button>
+        </form>
+    </div>
+
+    <!-- thymeleaf 조건문 if : 답변 작성 o (답변 적은 것) -->
+    <div class="answered-Inquiry" th:if="${adminInquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}">
+        <div class="card">
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>답변:</strong>
+                    <small class="text-muted" th:text="${adminInquiryPost.reply}"></small>
+                    <small class="text-muted" th:text="${#temporals.format(adminInquiryPost.answerDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                </p>
+                <button class="btn_submit" type="button" onclick="openEditForm()">수정</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 수정 버튼 눌렀을 때만 뜨도록 설정함 -->
+<div id="editForm" style="display: none;">
+    <form th:action="@{/home/admin/inquiry/edit/{id}(id=${inquiryPost.id})}" method="POST">
+        <label for="reply">답변 수정</label>
+        <textarea class="content" id="replyEdit" name="replyEdit" th:text="${adminInquiryPost.reply}"></textarea><br>
+        <button class="btn_submit" type="submit">답변 등록</button>
+    </form>
+</div>
+
+
+<script>
+    function openEditForm() { // 답변 수정 버튼 눌렀을 때 실행되는 함수 : 답변 수정란 생김
+        document.getElementById('editForm').style.display = 'block';
+    }
+</script>

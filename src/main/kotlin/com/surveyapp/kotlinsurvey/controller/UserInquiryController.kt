@@ -88,76 +88,19 @@ class UserInquiryController(
     }
 
     @GetMapping("/{inquiryId}")
-    fun detailInquiry(@PathVariable inquiryId: Long, model: Model): String{
+    fun detailInquiry(@PathVariable inquiryId: Long, model: Model): String{ // 문의 글 상세 보기 관련 처리
 
         val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
 
         println("Status: ${inquiryPost.status}")
 
+        // 속성 추가
         model.addAttribute("inquiryPost", inquiryPost)
-        model.addAttribute("replyInquiryForm", ReplyInquiryForm())
+        //model.addAttribute("replyInquiryForm", ReplyInquiryForm())
 
         return "inquiryPost"
     }
 
-    @PostMapping("/{inquiryId}")
-    fun replyInquiry(
-        @PathVariable inquiryId: Long,
-        @Valid @ModelAttribute("replyInquiryForm") replyInquiryForm: ReplyInquiryForm,
-        session: HttpSession,
-        result: BindingResult,
-        redirectAttributes: RedirectAttributes,
-    ): String {
-
-        // replyInquiryForm : binding 오류 확인
-        if (result.hasErrors())
-        {
-            result.allErrors.forEach { error -> println("Error: ${error.defaultMessage}")}
-        }
-
-        // login 여부 확인
-        val user = userService.checkLogin(session)
-        if (user == null) // 로그인 안 되었음 => null 반환됨
-            return "redirect:/user/login"
-
-        /*
-        if (replyInquiryForm.reply.isEmpty())
-            return "redirect:/home/inquiry/{inquiryId}?replyEmptyError=true"
-        */
-
-        val inquiry = userInquiryService.getInquiryById(inquiryId)
-
-        userInquiryService.saveReplyInquiry(inquiry,replyInquiryForm)
-
-        return "redirect:/home/inquiry/{inquiryId}"
-
-    }
-
-
-    // 문의 답변 수정 처리 함수
-    @PostMapping("/edit/{inquiryId}")
-    fun editReply(
-        @PathVariable inquiryId: Long,
-        @RequestParam("replyEdit") reply: String,
-        session: HttpSession,
-        redirectAttributes: RedirectAttributes
-    ): String {
-        // login 여부 확인
-        val user = userService.checkLogin(session)
-        if (user == null) // 로그인 안 되었음 => null 반환됨
-            return "redirect:/user/login"
-
-        userInquiryService.editReplyInquiry(inquiryId, reply)
-        redirectAttributes.addFlashAttribute("message", "답변이 수정되었습니다.")
-
-        return "redirect:/home/inquiry/{inquiryId}"
-
-
-
-
-
-
-    }
 
 
 
