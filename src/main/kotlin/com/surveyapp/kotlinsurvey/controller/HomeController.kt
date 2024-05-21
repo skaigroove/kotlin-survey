@@ -21,7 +21,7 @@ class HomeController {
         return "home"
     }
 
-    @GetMapping("/admin")
+    @GetMapping("/adminㅗ")
     fun adminHome(session: HttpSession, model:Model): String {
 
         // 세션에서 사용자 이름 가져오기
