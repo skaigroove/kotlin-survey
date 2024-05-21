@@ -109,7 +109,7 @@ class UserInquiryController(
         redirectAttributes: RedirectAttributes,
     ): String {
 
-        // userInquiryFrom : binding 오류 확인
+        // replyInquiryForm : binding 오류 확인
         if (result.hasErrors())
         {
             result.allErrors.forEach { error -> println("Error: ${error.defaultMessage}")}
@@ -132,6 +132,33 @@ class UserInquiryController(
         return "redirect:/home/inquiry/{inquiryId}"
 
     }
+
+
+    // 문의 답변 수정 처리 함수
+    @PostMapping("/edit/{inquiryId}")
+    fun editReply(
+        @PathVariable inquiryId: Long,
+        @RequestParam("replyEdit") reply: String,
+        session: HttpSession,
+        redirectAttributes: RedirectAttributes
+    ): String {
+        // login 여부 확인
+        val user = userService.checkLogin(session)
+        if (user == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/user/login"
+
+        userInquiryService.editReplyInquiry(inquiryId, reply)
+        redirectAttributes.addFlashAttribute("message", "답변이 수정되었습니다.")
+
+        return "redirect:/home/inquiry/{inquiryId}"
+
+
+
+
+
+
+    }
+
 
 
 

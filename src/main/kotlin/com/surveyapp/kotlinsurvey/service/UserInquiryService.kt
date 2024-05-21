@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 @Transactional
@@ -33,5 +34,15 @@ class UserInquiryService(
         inquiry.answerDate = replyInquiryForm.answerDate
         inquiry.reply = replyInquiryForm.reply
         inquiry.status = InquiryState.COMPLETE
+    }
+
+    // 문의 답변 수정
+    fun editReplyInquiry(inquiryId: Long, reply: String)
+    {
+        val inquiry = userInquiryRepository.getInquiryById(inquiryId)
+        inquiry.reply = reply // 답변 수정
+        inquiry.answerDate = LocalDateTime.now()  // 답변 수정 날짜 변경
+
+        userInquiryRepository.saveInquiry(inquiry) // 저장
     }
 }
