@@ -231,11 +231,11 @@
     </div>
     <div class="form-group">
       <label for="password">Password:</label>
-      <input type="password" id="password" name="password" th:value="${loginUser.password}">
+      <input type="password" id="password" name="password" th:value="${loginUser.password}" required>
     </div>
     <div class="form-group">
       <label for="name">Name:</label>
-      <input type="text" id="name" name="name"th:value="${loginUser.name}">
+      <input type="text" id="name" name="name" th:value="${loginUser.name}" required>
     </div>
     <div class="form-group">
       <label for="birthDate">Birth Date:</label>
@@ -250,13 +250,22 @@
     </div>
     <div class="form-group">
       <label for="phoneNumber">Phone Number:</label>
-      <input type="text" id="phoneNumber" name="phoneNumber" th:value="${loginUser.phoneNumber}" placeholder="'-'없이 입력해 주세요.">
+      <input type="text" id="phoneNumber" name="phoneNumber" th:value="${loginUser.phoneNumber}" placeholder="'-'없이 입력해 주세요." required>
     </div>
     <button type="submit" class="btn_post">Submit</button>
   </form>
 </main>
 
 <script>
+  window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const phoneNumberDuplicatedError = urlParams.get('phoneNumberDuplicatedError');
+
+    if (phoneNumberDuplicatedError) {
+      alert('이미 가입한 전화번호입니다.');
+    }
+  }
+
   const navbar = document.querySelector('.navbar');
   const mainContent = document.getElementById('mainContent');
 
