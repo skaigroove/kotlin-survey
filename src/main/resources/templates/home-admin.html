@@ -121,12 +121,14 @@
 
         .content {
             flex-grow: 1;
-            background-color: #ecf0f1;
+            background-color: white;
+            color: black;
             box-sizing: border-box;
         }
 
         .page {
             display: none;
+            color : black;
         }
 
         .page:target, .page.active {
@@ -282,9 +284,9 @@
     <nav class="sidebar">
         <h2>SurveyBay</h2>
         <ul>
-            <li><a href="#" onclick="showPage('surveyManagement')">설문 관리</a></li>
-            <li><a href="#" onclick="showPage('userManagement')">사용자 관리</a></li>
-            <li><a href="#" onclick="showPage('inquiryManagement'); loadInquiryList()">1:1 문의 관리</a></li>
+            <li><a onclick="showPage('surveyManagement')">설문 관리</a></li>
+            <li><a onclick="showPage('userManagement')">사용자 관리</a></li>
+            <li><a onclick="showPage('inquiryManagement'); loadInquiryList()">1:1 문의 관리</a></li>
         </ul>
     </nav>
     <main class="content">
@@ -312,35 +314,35 @@
     </div>
 </div>
 <script>
-    function showPage(pageId) { // 설문, 사용자, 1:1 문의 관리 중 하나를 눌렀을 때 해당 페이지가 보이도록 처리
+    function showPage(pageId) {
         const pages = document.querySelectorAll('.page');
         pages.forEach(page => {
-            page.style.display = 'none'; // 안 보이도록
+            page.style.display = 'none';
         });
-        document.getElementById(pageId).style.display = 'block'; // 보이도록
+        document.getElementById(pageId).style.display = 'block';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        showPage('dashboard');
+        showPage('surveyManagement');
     });
 
-    function loadInquiryList() { // 모든 문의 글 목록 -> inquiryManagement 에 동적 삽입
+    function loadInquiryList() {
         fetch('/admin/inquiry')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('inquiryManagement').innerHTML = html;
             })
-            .catch(error => console.error('Error:', error)); // 오류 발생 시 확인용
+            .catch(error => console.error('Error:', error));
     }
 
-    function loadInquiryDetail(inquiryId) { // 해당 문의 글 -> inquiryDetail 에 동적 삽입 + 표시
-        fetch('/admin/inquiry/{inquiryId}')
+    function loadInquiryDetail(inquiryId) {
+        fetch(`/admin/inquiry/${inquiryId}`)
             .then(response => response.text())
             .then(html => {
                 document.getElementById('inquiryDetail').innerHTML = html;
-                document.getElementById('inquiryDetail').style.display = 'block'; // 보이도록
+                showPage('inquiryDetail');
             })
-            .catch(error => console.error('Error:', error)); // 오류 발생 시 확인용
+            .catch(error => console.error('Error:', error));
     }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>

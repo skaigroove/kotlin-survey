@@ -1,0 +1,7 @@
+<div id="inquiryDetail">
+    <h2 th:text="${adminInquiryPost.title}"></h2>
+    <p><strong>작성자 :</strong> <span th:text="${adminInquiryPost.user.name}"></span></p>
+    <p><strong>작성 일자 :</strong> <span
+            th:text="${#temporals.format(adminInquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+    <p th:text="${adminInquiryPost.content}"></p>
+</div>
