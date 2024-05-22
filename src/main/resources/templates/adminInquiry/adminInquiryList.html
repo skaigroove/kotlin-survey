@@ -49,15 +49,12 @@
             </td>
 
             <td>
-                <span th:text="${#temporals.format(inquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span>
-                <!-- inquiryPost 작성 일자 출력 -->
+                <span th:text="${#temporals.format(inquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span> <!-- inquiryPost 작성 일자 출력 -->
             </td>
 
             <td>
-                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}"
-                      th:text="'완료'"></span>
-                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}"
-                      th:text="'미완료'"></span>
+                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}" th:text="'완료'"></span>
+                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}" th:text="'미완료'"></span>
             </td>
         </tr>
         </tbody>

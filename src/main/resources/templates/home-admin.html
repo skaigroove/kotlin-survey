@@ -350,6 +350,10 @@
             })
             .catch(error => console.error('Error:', error));
     }
+
+    function openEditForm() { // 답변 수정 버튼 눌렀을 때 실행되는 함수 : 답변 수정란 생김
+        document.getElementById('editForm').style.display = 'block';
+    }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>

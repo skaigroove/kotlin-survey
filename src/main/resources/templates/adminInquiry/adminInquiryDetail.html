@@ -1,7 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 글 상세 보기</title>
+    <style>
+        body {
+            background-color: white; /* 페이지 전체 배경색을 흰색으로 설정 */
+            color: black; /* 텍스트 색상을 검정으로 설정 */
+        }
+        .btn_submit {
+            margin-top: 10px;
+        }
+        .reply-card, .inquiry-card {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: white; /* 카드 배경색 : 흰색 */
+        }
+        .card-body {
+            margin: 10px 0;
+        }
+        .content {
+            width: 100%;
+            height: 100px;
+        }
+        .reply-Inquiry, .answered-Inquiry {
+            background-color: white; /* 답변 섹션 배경색을 흰색으로 설정 */
+        }
+    </style>
+</head>
+<body>
 <div id="inquiryDetail">
-    <h2 th:text="${adminInquiryPost.title}"></h2>
-    <p><strong>작성자 :</strong> <span th:text="${adminInquiryPost.user.name}"></span></p>
-    <p><strong>작성 일자 :</strong> <span
-            th:text="${#temporals.format(adminInquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
-    <p th:text="${adminInquiryPost.content}"></p>
+    <div class="inquiry-card">
+        <div class="card-body">
+            <h2 th:text="${adminInquiryPost.title}"></h2>
+            <p><strong>작성자 :</strong> <span th:text="${adminInquiryPost.user.name}"></span></p>
+            <p><strong>작성 일자 :</strong>
+                <span th:text="${#temporals.format(adminInquiryPost.writeDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+            <p>
+                <strong>문의 내용 :</strong><br><br>
+                <span th:text="${adminInquiryPost.content}"></span>
+            </p>
+        </div>
+    </div>
+
+    <!-- 답변이 달리지 않은 상태 -->
+    <div class="reply-Inquiry" th:if="${adminInquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}">
+        <div class="reply-card">
+            <form id="reply-Inquiry" th:action="@{/admin/inquiry/{id}(id=${adminInquiryPost.id})}" method="POST" th:object="${replyInquiryForm}">
+                <label for="reply"><b>답변</b></label>
+                <textarea class="content" id="reply" th:field="*{reply}" placeholder="답변 내용을 입력하세요." required></textarea><br>
+                <button class="btn_submit" type="submit">답변 등록</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 답변이 달린 상태 -->
+    <div class="answered-Inquiry" th:if="${adminInquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}">
+        <div class="reply-card">
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>답변 내용 :</strong><br><br> <!-- 한 줄 띄우기 -->
+                    <small class="text-muted" th:text="${adminInquiryPost.reply}"></small>
+                </p>
+                <p class="card-text">
+                    <small class="text-muted" th:text="${#temporals.format(adminInquiryPost.answerDate, 'yyyy-MM-dd HH:mm:ss')}"></small>
+                </p>
+                <button class="btn_submit" type="button" onclick="openEditForm()">수정</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 수정 버튼 눌렀을 때만 뜨도록 설정함 -->
+    <div id="editForm" style="display: none;">
+        <form th:action="@{/admin/inquiry/edit/{id}(id=${adminInquiryPost.id})}" method="POST">
+            <label for="replyEdit">답변 수정</label>
+            <textarea class="content" id="replyEdit" name="replyEdit" th:text="${adminInquiryPost.reply}"></textarea><br>
+            <button class="btn_submit" type="submit">답변 등록</button>
+        </form>
+    </div>
 </div>
+</body>
+</html>
