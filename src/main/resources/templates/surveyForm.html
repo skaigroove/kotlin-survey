@@ -4,16 +4,82 @@
     <meta charset="UTF-8">
     <title>SurveyBay</title>
     <style>
-        html, body {
-            height: 100%;
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+        body {
+            font-family: 'IBM Plex Sans KR', Arial, sans-serif;
+            background-color: #1f1f1f;
+            color: #fff;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header {
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            font-weight: bold;
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-animation 5s ease infinite;
+            margin-left: 20px;
+            padding-top: 10px;
+        }
+
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu a {
+            color: #fff;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .username {
+            margin-right: 10px;
+        }
+
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
         }
 
         main {
-            min-height: 100vh; /* 뷰포트 높이의 100% */
+            min-height: 80vh;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .container {
@@ -24,368 +90,181 @@
             align-items: center;
         }
 
-        /* 전체 페이지의 기본 스타일 */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #e7e2d1;
-        }
-
-        /* 헤더 영역 */
-        header {
-            background: linear-gradient(180deg, white, #f1eee3, #e7e2d1);
-            color: white;
-            position: relative;
-        }
-
-        .banner h1 {
-            margin: 0;
-            padding: 10px 20px;
-        }
-
-        /* 네비게이션 바 초기 상태: 투명하고 높이가 0 */
-        .navbar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-            background: linear-gradient(180deg, #e7e2d1, #efede4, white);
-            padding: 0 20px;
-            width: 100%;
-            position: absolute;
-            top: 100%; /* 배너 아래 위치 */
-            left: 0;
-            transition: all 0.5s ease; /* 부드러운 전환 효과 */
-        }
-
-        .navbar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            width: 100%;
-            justify-content: space-around;
-            align-items: center;
-            height: 100%;
-        }
-
-        .navbar ul li {
-            padding: 10px;
-        }
-
-        .navbar ul li a {
-            color: black;
-            text-decoration: none;
-        }
-
-        /* 주요 내용 */
-        main {
-            text-align: center;
-            transition: margin-top 0.5s ease; /* 부드러운 전환 효과 */
-        }
-
-        /* 푸터 */
-        footer {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-        }
-
-        .h1 {
-            font-family: 'League Spartan';
-            font-size: 30px;
-            font-weight: 700;
-            margin-top: 100px; /* margin-left, margin-right 제거 */
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            color: transparent;
-            background: linear-gradient(45deg, #003366, #00CCFF, #003366, #00CCFF);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent; /* Webkit 브라우저를 위한 설정 */
-            animation: gradient-animation 5s ease infinite;
-            display: inline-block; /* 백그라운드 클립이 적용되도록 display 속성 변경 */
-        }
-
-        @keyframes gradient-animation {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* 버튼 스타일 조정 */
-        .btn_transparent {
-            background: none;
-            color: black; /* 링크 색상과 일치 */
-            border: none; /* 기본 테두리 제거 */
-            padding: 10px; /* 통일된 패딩 */
-            font-family: inherit; /* 상속받은 폰트 스타일 사용 */
-            font-size: inherit; /* 상속받은 폰트 크기 사용 */
-            cursor: pointer; /* 클릭 가능한 항목으로 표시 */
-            transition: color 0.3s ease; /* 색상 변경 애니메이션 */
-        }
-
-        /* 버튼 호버 효과 */
-        .btn:hover {
-            color: #005f99; /* 호버 시 색상 변경 */
-        }
-
-        /* 서베이 폼 디자인*/
         .survey-form {
-            width: 100%;
-            background: #e7e2d1;
-            justify-content: center;
+            width: 80%;
+            background: #1f1f1f;
+            flex-direction: column;
             align-items: center;
+        }
+
+        .title, .description {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #000;
         }
 
         .title {
-            width: calc(50% - 50px);
+            width: calc(100% - 50px);
             height: 50px; /* 높이를 200px로 설정 */
             padding: 10px;
-            margin-top: 100px;
+            margin-top: 50px;
             font-size: 30px;
         }
 
         .description {
-            width: calc(50% - 30px); /* 기존 설정 유지 */
-            height: 200px; /* 높이를 200px로 설정 */
-            padding: 15px; /* 패딩 추가로 입력 영역 내부 여백 제공 */
-            border: 1px solid #ccc; /* 테두리 설정 유지 */
-            box-sizing: border-box; /* 박스 크기 계산 방식을 경계 박스 기준으로 설정 */
-            resize: vertical; /* 사용자가 수직으로만 크기 조정 가능하도록 설정 */
-            margin-bottom: 20px;
-            margin-top: 20px;
+            height: 130px;
+            width: 92.3%;
             font-size: 20px;
         }
 
         .date {
-            width: calc(23.5% - 30px); /* 기존 설정 유지 */
-            height: 40px;
-            margin-left: 5px;
-            margin-bottom: 5px;
-        }
-
-        .div-row {
-            display: flex; /* Flexbox 레이아웃 적용 */
-            align-items: center; /* 요소들을 수직 중앙 정렬 */
-            margin-bottom: 10px; /* 여백 추가 */
-            text-align: center;
-            justify-content: center;
-        }
-
-        .space {
-            margin: 30px;
-        }
-
-        .btn {
-            background: #f6f3ee;
-            border: 0px solid #d5d1d1; /* 세밀한 경계선 */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
-            width: 150px;
-            padding: 10px 16px;
-            margin: 10px 20px;
-            color: #333;
-            border-radius: 5px;
-
-            font-family: 'Quicksand';
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center; /* 텍스트 중앙 정렬 */
-            letter-spacing: 0.1em;
-
-        }
-
-        .btn_submit {
-            background: #f6f3ee;
-            border: 0px solid #d5d1d1; /* 세밀한 경계선 */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), /* 하단 그림자 */ 0 2px 3px rgba(0, 0, 0, 0.2); /* 더 짙은 하단 그림자 */
-            width: 150px;
-            padding: 10px 16px;
-            margin: 10px 20px;
-            margin-bottom: 200px;
-            color: #333;
-            border-radius: 5px;
-
-            font-family: 'Quicksand';
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center; /* 텍스트 중앙 정렬 */
-            letter-spacing: 0.1em;
+            width: 20%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background: #fff;
+            color: #000;
         }
 
         .select {
-            width: calc(10% - 30px); /* 기존 설정 유지 */
-            height: 40px;
-            margin-left: 5px;
-            margin-bottom: 5px;
+            width: 10%;
+            padding: 10px;
+            margin: 20px;
         }
 
         .questionContext {
-            width: calc(50% - 30px); /* 기존 설정 유지 */
-            height: 50px; /* 높이를 200px로 설정 */
-            padding: 15px; /* 패딩 추가로 입력 영역 내부 여백 제공 */
-            border: 1px solid #ccc; /* 테두리 설정 유지 */
-            box-sizing: border-box; /* 박스 크기 계산 방식을 경계 박스 기준으로 설정 */
-            resize: vertical; /* 사용자가 수직으로만 크기 조정 가능하도록 설정 */
-            margin-bottom: 20px;
-            margin-top: 20px;
-            font-size: 15px;
+            height: 50px;
+            width: 92.3%;
+            font-size: 14px;
+            padding: 10px ;
         }
 
-        .select_option {
-            width: calc(35% - 30px); /* 기존 설정 유지 */
-            height: 30px;
-            margin-left: 5px;
-            margin-bottom: 5px;
+        .select_option{
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .btn, .btn_submit {
+            background: #f9f9f9;
+            border: none;
+            padding: 10px 20px;
+            color: #000;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 20px;
+        }
+
+        .btn:hover, .btn_submit:hover {
+            background: #e0e0e0;
+        }
+
+        .optionsContainer {
+            flex-direction: column;
+        }
+
+        .option-div {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 중앙 정렬 */
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .option-div input {
+            flex-grow: 1;
+            margin-right: 10px;
+            width: 70%;
+        }
+
+        .option-div button {
+            flex-shrink: 0;
+            height: 40px; /* 버튼 높이를 입력 필드와 맞춤 */
+        }
+
+        footer {
+            background-color: #2c2c2c;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        .username-welcome {
+            font-size: 20px;
+            color: #fff;
+            margin-right: 20px;
+        }
+
+        .div-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .space {
+            margin: 0 10px;
+            color: #fff;
+        }
+
+        #questionsContainer {
+            width: 100%;
+        }
+
+        .form-column {
+            width: 100%;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 <header>
-    <div class="banner">
-        <h1 class="h1">SurveyBay</h1>
+    <a onclick="location.href='/home/'">
+        <div class="logo">SurveyBay</div>
+    </a>
+    <div class="menu">
+        <div class="user-info">
+            <span class="username"></span>
+            <img src="/profile.jpg" alt="User Profile" class="profile-img">
+            <span class="username-welcome">사용자님 환영합니다.</span>
+        </div>
     </div>
-    <nav class="navbar">
-        <ul>
-            <li><a>
-                <button class="btn_transparent" onclick="location.href='/home/list'">설문 목록</button>
-            </a></li>
-            <li><a>
-                <button class="btn_transparent" onclick="location.href='/home/post'">설문 생성</button>
-            </a></li>
-            <li><a>
-                <button class="btn_transparent" onclick="location.href='/user/profile'">마이 페이지</button>
-            </a></li>
-            <li><a href="#">고객 문의</a></li>
-            <li><a>
-                <button class="btn_transparent" onclick="location.href='/home/logout'">로그아웃</button>
-            </a></li>
-        </ul>
-    </nav>
 </header>
-<main class="mainContent">
+
+<main>
     <div class="survey-form">
-        <form id="createSurveyForm" action="/home/post" method="POST" th:action="@{/home/post}"
-              th:object="${surveyForm}">
-            <label for="title"></label>
-            <input class="title" type="text" id="title" th:field="*{title}" placeholder="제목을 입력하세요." required><br>
-
-            <label for="description"></label>
-            <textarea class="description" id="description" th:field="*{description}" placeholder="설명을 입력하세요."
-                      required></textarea><br>
-
-            <div class=" div-row">
-                <label for="startDate"></label>
-                <input class="date" type="date" id="startDate" th:field="*{startDate}" required><br>
-                <div class="space"> ~</div>
-                <label for="endDate"></label>
-                <input class="date" type="date" id="endDate" th:field="*{endDate}" required><br>
+        <form id="createSurveyForm" action="/home/post" method="POST">
+            <input class="title" type="text" id="title" name="title" placeholder="제목을 입력하세요." required><br>
+            <textarea class="description" id="description" name="description" placeholder="설명을 입력하세요." required></textarea><br>
+            <div class="div-row">
+                <input class="date" type="date" id="startDate" name="startDate" required>
+                <span class="space"> ~ </span>
+                <input class="date" type="date" id="endDate" name="endDate" required>
             </div>
-
-            <div class="questionContainer" id="questionsContainer">
-            </div>
-
+            <div id="questionsContainer"></div>
             <button class="btn" type="button" onclick="addQuestion()">질문 추가</button>
-            <br><br>
-
-            <button class="btn_submit" type="submit">생성</button>
+            <button class="btn_submit" type="submit"> 설문 생성</button>
         </form>
     </div>
 </main>
+
 <footer>
     <p>© 2024 SurveyBay. All rights reserved.</p>
 </footer>
+
 <script>
-
-    // 설문 문항이 하나라도 존재하지 않으면 에러 반환하고 리다이렉션
-    window.onload = function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const questionEmptyError = urlParams.get('questionEmptyError');
-        const dateSettingError1 = urlParams.get('dateSettingError1');
-        const dateSettingError2 = urlParams.get('dateSettingError2');
-
-        if (questionEmptyError) {
-            alert('설문 생성 에러: 적어도 하나의 설문 문항이 필요합니다.');
-        } else if (dateSettingError1) {
-            alert('설문 생성 에러: 설문 종료 날짜가 설문 시작 날짜보다 빠릅니다.');
-        } else if (dateSettingError2) {
-            alert('설문 생성 에러: 설문 시작 날짜가 현재 날짜보다 빠릅니다.');
-        }
-    }
-
-    /**
-     * 배너 관련 애니메이션 처리*/
-    const navbar = document.querySelector('.navbar');
-    const mainContent = document.getElementById('mainContent');
-
-    document.querySelector('.banner').addEventListener('mouseover', function () {
-        navbar.style.opacity = '1';
-        navbar.style.height = '50px'; // 네비게이션 바의 높이 설정
-        mainContent.style.marginTop = '50px'; // 메인 콘텐츠 밀림 조정
-    });
-
-    document.querySelector('.banner').addEventListener('mouseout', function () {
-        setTimeout(() => {
-            navbar.style.opacity = '0';
-            navbar.style.height = '0px';
-            mainContent.style.marginTop = '20px';
-        }, 3000); // 2초 후에 실행
-    });
-
-
-    /**
-     *  필드 입력 검사 */
-    document.getElementById('createSurveyForm').onsubmit = function () {
-        // 모든 입력 필드 검사
-        const inputs = this.querySelectorAll('input[type="text"], textarea');
-        for (let input of inputs) {
-            if (input.value.trim() === '') {
-                alert('모든 필드를 채워주세요.');
-                input.focus(); // 누락된 입력 필드에 포커스 설정
-                return false; // 폼 제출 중단
-            }
-        }
-
-        // 객관식 옵션 검사
-        const allOptions = document.querySelectorAll('.select_option');
-        for (let option of allOptions) {
-            if (option.value.trim() === '') {
-                alert('모든 선지를 입력해주세요.');
-                option.focus(); // 누락된 선지에 포커스 설정
-                return false; // 폼 제출 중단
-            }
-        }
-        return true; // 모든 검사를 통과한 경우, 폼 제출 허용
-    };
-
-
-    /**
-     *  설문조사 관련 애니메이션 처리 */
-    let questions = [];  // 질문들을 관리하는 배열
+    let questions = [];
 
     function addQuestion() {
         const questionIndex = questions.length;
         questions.push({
             type: null,
             context: '',
-            options: []  // 옵션들을 저장하는 배열을 추가
+            options: []
         });
 
         const questionsContainer = document.getElementById('questionsContainer');
@@ -394,7 +273,7 @@
         newQuestionDiv.id = `question${questionIndex}`;
         newQuestionDiv.innerHTML = `
             <div>
-                <p id="questionLabel${questionIndex}">${questionIndex + 1}번 질문</p>
+                <p id="questionLabel${questionIndex}">🐼 ${questionIndex + 1}번 질문</p>
                 <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
                     <option value="NONE">유형 선택</option>
                     <option value='SUBJECTIVE'>주관식</option>
@@ -415,14 +294,14 @@
     function removeQuestion(questionIndex) {
         const questionDiv = document.getElementById(`question${questionIndex}`);
         questionDiv.remove();
-        questions.splice(questionIndex, 1); // 배열에서 해당 질문 삭제
-        updateQuestionLabels(); // 질문 번호를 업데이트하는 함수 호출
+        questions.splice(questionIndex, 1);
+        updateQuestionLabels();
     }
 
     function updateQuestionLabels() {
         const questionLabels = document.querySelectorAll('[id^="questionLabel"]');
         questionLabels.forEach((label, index) => {
-            label.textContent = `${index + 1}번 질문`; // 질문 번호 업데이트
+            label.textContent = `${index + 1}번 질문`;
         });
     }
 
@@ -434,15 +313,14 @@
             addOption(questionIndex);
         } else {
             optionsContainer.style.display = 'none';
-            questions[questionIndex].options = []; // 옵션 데이터 초기화
+            questions[questionIndex].options = [];
         }
     }
 
-    // 옵션 추가 함수
     function addOption(questionIndex) {
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
         const optionIndex = questions[questionIndex].options.length;
-        questions[questionIndex].options.push(''); // 옵션 배열에 빈 문자열을 추가
+        questions[questionIndex].options.push('');
 
         const optionDiv = document.createElement('div');
         optionDiv.className = 'option-div';
@@ -451,23 +329,20 @@
         <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}"
                name="questions[${questionIndex}].questionOptions[${optionIndex}].optionText"
                placeholder="${optionIndex + 1}번 선지를 입력하세요" required>
-        <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})">선지 삭제</button><br>
+        <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})"> 삭제</button><br>
     `;
         optionsContainer.appendChild(optionDiv);
     }
 
-    // 옵션 삭제 함수
     function removeOption(questionIndex, optionIndex) {
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
-        if (questions[questionIndex].options.length > 2) {  // 최소 2개의 옵션 유지
+        if (questions[questionIndex].options.length > 2) {
             const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
-            optionDiv.remove(); // 선택한 옵션을 DOM에서 제거
-            questions[questionIndex].options.splice(optionIndex, 1); // 배열에서 해당 옵션 삭제
-
-            // 모든 옵션의 ID와 placeholder를 업데이트
-            updateOptionIndexes(questionIndex);  // 모든 선지의 번호를 업데이트하는 함수 호출
+            optionDiv.remove();
+            questions[questionIndex].options.splice(optionIndex, 1);
+            updateOptionIndexes(questionIndex);
         } else {
-            alert("최소 2개의 선지가 필요합니다."); // 최소 옵션 수 미만인 경우 경고
+            alert("최소 2개의 선지가 필요합니다.");
         }
     }
 
@@ -480,6 +355,5 @@
         });
     }
 </script>
-
 </body>
 </html>

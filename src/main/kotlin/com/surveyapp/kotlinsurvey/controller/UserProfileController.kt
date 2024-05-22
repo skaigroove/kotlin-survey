@@ -4,6 +4,7 @@ import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
+import com.surveyapp.kotlinsurvey.repository.UserRepository
 import org.springframework.ui.Model
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
@@ -18,6 +19,7 @@ import java.time.LocalDate
 @RequestMapping("/user")
 class UserProfileController(
     @Autowired private val userService: UserService,
+    @Autowired private val userRepository: UserRepository
 ) {
 
     @GetMapping("/profile")
@@ -74,10 +76,18 @@ class UserProfileController(
             return "userProfile"
         }
 
+        val sessionUser = userService.findUserByLoginId(session.getAttribute("loginId") as String)
+        val formUser = userRepository.findByPhoneNumber(userForm.phoneNumber)
+
+        if (formUser != null && userService.validateDuplicateUserByPhoneNum(formUser) && userForm.phoneNumber != sessionUser?.phoneNumber) {
+            return "redirect:/user/profile/edit?phoneNumberDuplicatedError=true"
+        }
+
         val loginId = session.getAttribute("loginId") as String
         val user = userService.updateUser(loginId, userForm)
 
         return "redirect:/user/profile"
     }
+
 
 }

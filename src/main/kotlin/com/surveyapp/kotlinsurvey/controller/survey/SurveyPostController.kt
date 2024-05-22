@@ -3,6 +3,7 @@ package com.surveyapp.kotlinsurvey.controller.survey
 import com.surveyapp.kotlinsurvey.controller.form.QuestionForm
 import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
 import com.surveyapp.kotlinsurvey.domain.survey.*
+import com.surveyapp.kotlinsurvey.repository.UserRepository
 import com.surveyapp.kotlinsurvey.service.SurveyService
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
@@ -21,13 +22,19 @@ import java.time.LocalDate
 class SurveyPostController(
     @Autowired private val surveyService: SurveyService,
     @Autowired private val userService: UserService,
+    @Autowired private val userRepository: UserRepository
 ) {
     @GetMapping("/post")
-    fun createForm(model: Model): String {
+    fun createForm(model: Model, session:HttpSession): String {
 
         // 모델에 surveyForm 초기화하여 추가
         model.addAttribute("surveyForm", SurveyForm())
         model.addAttribute("questionForm", QuestionForm())
+
+        // 세션에서 사용자 이름 가져와서 헤더애 사용자 이름 정보 추가
+        val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/login"
+        val user = userRepository.findByLoginId(userLoginId)
+        model.addAttribute("user", user)
 
         return "surveyForm"
     }
