@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SurveyBay::Admin Page</title>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            text-align: center; /* 수평 중앙 정렬 */
+            vertical-align: middle; /* 수직 중앙 정렬 */
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+
+
 <div id="inquiryList">
     <table class="table"> <!-- table 생성 -->
         <tr class="text-center"> <!-- 텍스트 중앙 정렬 -->
@@ -16,8 +40,7 @@
             </th>
 
             <td>
-                <a href="javascript:void(0);" th:text="${inquiryPost.title}"
-                   th:onclick="'loadInquiryDetail('+${inquiryPost.id}+');'"></a>
+                <a href="javascript:void(0);" th:text="${inquiryPost.title}" th:onclick="'loadInquiryDetail('+${inquiryPost.id}+');'"></a>
             </td>
 
 
@@ -40,3 +63,5 @@
         </tbody>
     </table>
 </div>
+</body>
+</html>

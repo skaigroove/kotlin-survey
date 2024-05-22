@@ -314,7 +314,7 @@
     </div>
 </div>
 <script>
-    function showPage(pageId) {
+    function showPage(pageId) { // 해당 페이지 보여 줌
         const pages = document.querySelectorAll('.page');
         pages.forEach(page => {
             page.style.display = 'none';
@@ -326,7 +326,13 @@
         showPage('surveyManagement');
     });
 
-    function loadInquiryList() {
+    function loadInquiryList() { // 1:1 문의 클릭 : 문의 목록 출력
+        console.log('Click - 1:1 문의 => Loading inquiryList...'); // log 출력
+
+        // 만약 이전에 문의 글 열람 => 그 글 출력 안 되게 처리하는 것
+        document.getElementById('inquiryDetail').style.display = 'none'; // 안 보이도록 처리
+        document.getElementById('inquiryDetail').innerHTML = '';
+
         fetch('/admin/inquiry')
             .then(response => response.text())
             .then(html => {
@@ -335,7 +341,7 @@
             .catch(error => console.error('Error:', error));
     }
 
-    function loadInquiryDetail(inquiryId) {
+    function loadInquiryDetail(inquiryId) { // 문의 글 제목 클릭 : 상세 보기
         fetch(`/admin/inquiry/${inquiryId}`)
             .then(response => response.text())
             .then(html => {
