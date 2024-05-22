@@ -39,9 +39,15 @@
         }
 
         @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .menu {
@@ -75,11 +81,12 @@
             flex: 1;
             display: flex;
             padding: 20px;
+            flex-direction: column; /* 기본 방향을 열로 설정 */
         }
 
         .content {
             display: flex;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
             gap: 20px;
             width: 100%;
         }
@@ -99,14 +106,21 @@
         }
 
         .option {
+            display: flex; /* 플렉스박스 사용 */
+            flex-direction: column; /* 세로 정렬 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            text-align: center; /* 텍스트 중앙 정렬 */
             background-color: #ffffff; /* 기본 색상 - 흰색 */
             border-radius: 10px;
             padding: 60px; /* 버튼 크기 확대 */
-            text-align: center;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            flex: 1 1 calc(70% - 20px); /* 1열 당 2개 배치 */
+            flex: 1 1 calc(50% - 20px); /* 1열 당 2개 배치 */
+            height: 300px; /* 버튼 높이 설정 */
         }
+
+
 
         .option:hover {
             background-color: #f0f0f0; /* 마우스 오버 시 색상 */
@@ -144,8 +158,14 @@
             color: black; /* 텍스트 색상 변경 */
         }
 
+        .logout-text {
+            font-size: 20px; /* 텍스트 크기 확대 */
+            color: white; /* 텍스트 색상 변경 */
+            margin-right: 30px;
+            text-decoration: underline;
+        }
+
         .chat-container {
-            flex-grow: 1;
             display: flex;
             flex-direction: column;
             background-color: #fff;
@@ -154,6 +174,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             min-width: 400px; /* 채팅창 최소 너비 설정 */
             max-width: 1500px; /* 채팅창 최대 너비 설정 */
+            flex-grow: 1;
         }
 
         .chat-header {
@@ -300,23 +321,60 @@
             text-align: center;
             padding: 10px 0;
         }
-        .username-welcome{
+
+        .username-welcome {
             font-size: 20px;
             color: #fff;
             margin-right: 20px;
+        }
+
+        /* 모바일 환경에서의 스타일 조정 */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column; /* 세로로 배치 */
+            }
+
+            .survey-options-row {
+                flex-direction: column; /* 세로로 배치 */
+            }
+
+            .option {
+                flex: 1 1 100%; /* 전체 너비 차지 */
+            }
+
+            .chat-container {
+                min-width: 100%; /* 채팅창 전체 너비 차지 */
+                max-width: 100%;
+            }
+
+            /* 모바일 환경에서 로고 두께를 얇게 조정 */
+            .logo {
+                font-weight: 100; /* 로고 두께를 얇게 설정 */
+            }
+
+            .chat-container {
+                height: 800px; /* 채팅창 높이를 2배로 설정 */
+            }
+
+            .messages {
+                height: calc(800px - 120px); /* 헤더와 입력 폼 높이를 제외한 영역 */
+            }
         }
     </style>
 </head>
 <body>
 <header>
     <a onclick="location.href='/home/'">
-        <div class="logo" >SurveyBay</div>
+        <div class="logo">SurveyBay</div>
     </a>
     <div class="menu">
         <div class="user-info">
             <span class="username"></span>
             <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
-                <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"> </span>
+            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"> </span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
         </div>
     </div>
 </header>
@@ -355,12 +413,6 @@
                     <div class="option-text">고객 문의</div>
                 </div>
             </div>
-            <div class="survey-options-row">
-                <div class="option option5" onclick="location.href='/home/logout'">
-                    <div class="option-icon">🚪</div>
-                    <div class="option-text">로그아웃</div>
-                </div>
-            </div>
         </div>
         <div class="chat-container" id="chat-page">
             <div class="chat-header">
@@ -371,7 +423,7 @@
             </div>
             <ul id="messageArea" class="messages"></ul>
             <form id="messageForm" class="message-form">
-                <input type="text" id="message" placeholder="Type a message..." autocomplete="off" />
+                <input type="text" id="message" placeholder="Type a message..." autocomplete="off"/>
                 <button type="submit">보내기</button>
             </form>
         </div>
