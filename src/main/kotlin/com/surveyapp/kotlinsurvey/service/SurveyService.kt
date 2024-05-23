@@ -37,6 +37,8 @@ class SurveyService(
 
     fun getQuestionList(): List<Question>? { return surveyRepository.getQuestionList() }
 
+    fun getUserSurveyList(loginId: String): List<Survey>? { return surveyRepository.getUserSurveyList(loginId) }
+
     fun createSurvey(surveyForm: SurveyForm, user: User): Survey { // 설문 조사 생성 함수
 
         // 받아 온 surveyForm 의 값을 Survey 생성자에 넣어 survey 생성
@@ -116,5 +118,10 @@ class SurveyService(
     }
     fun getParticipatedSurveyIds(loginId: String): List<Long> {
         return surveyRepository.findParticipatedSurveysByLoginId(loginId)
+    }
+
+    fun deleteSurvey(surveyId: Long) {
+        val survey = surveyRepository.getSurveyById(surveyId) ?: throw IllegalArgumentException("Survey not found")
+        surveyRepository.deleteSurvey(survey)
     }
 }

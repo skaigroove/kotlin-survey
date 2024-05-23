@@ -4,7 +4,9 @@ import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.controller.form.UserForm
 import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
+import com.surveyapp.kotlinsurvey.repository.SurveyRepository
 import com.surveyapp.kotlinsurvey.repository.UserRepository
+import com.surveyapp.kotlinsurvey.service.SurveyService
 import org.springframework.ui.Model
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
@@ -19,7 +21,9 @@ import java.time.LocalDate
 @RequestMapping("/user")
 class UserProfileController(
     @Autowired private val userService: UserService,
-    @Autowired private val userRepository: UserRepository
+    @Autowired private val userRepository: UserRepository,
+    @Autowired private val surveyService: SurveyService,
+    @Autowired private val surveyRepository: SurveyRepository
 ) {
 
     @GetMapping("/profile")
@@ -36,6 +40,11 @@ class UserProfileController(
             user.password
         }
 
+        // 세션에서 사용자 이름 가져오기
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username);
+
         val userCopy = User(
             userId = user.userId,
             loginId = user.loginId,
@@ -48,6 +57,10 @@ class UserProfileController(
         )
 
         model.addAttribute("loginUser", userCopy)
+
+        /* 내가 작성한 surveylist 조회를 위한 부분*/
+        val surveyList = surveyService.getUserSurveyList(sessionLoginId)
+        model.addAttribute("surveyList", surveyList)
 
         return "userProfile"
     }
@@ -89,5 +102,37 @@ class UserProfileController(
         return "redirect:/user/profile"
     }
 
+    @PostMapping("/survey/delete/{surveyId}")
+    fun deleteSurvey(@PathVariable surveyId: Long, session: HttpSession): String {
+        val sessionLoginId = session.getAttribute("loginId") as String
+        val survey = surveyService.getSurveyById(surveyId)
+
+        // Check if the user owns the survey
+        if (survey?.user?.loginId == sessionLoginId) {
+            surveyService.deleteSurvey(surveyId)
+        }
+
+        return "redirect:/user/profile"
+    }
+
+    @GetMapping("/survey/view/{surveyId}")
+    fun viewSurvey(@PathVariable surveyId: Long, model: Model, session: HttpSession): String {
+        val sessionLoginId = session.getAttribute("loginId") as String
+        val survey = surveyService.getSurveyById(surveyId)
+
+        model.addAttribute("survey", survey)
+
+        // 세션에서 사용자 이름 가져오기
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username);
+
+        if (survey != null && survey.user.loginId == sessionLoginId) {
+            model.addAttribute("survey", survey)
+            return "surveyView" // 여기에 surveyView.html 파일을 작성해야 합니다.
+        }
+
+        return "redirect:/user/profile"
+    }
 
 }

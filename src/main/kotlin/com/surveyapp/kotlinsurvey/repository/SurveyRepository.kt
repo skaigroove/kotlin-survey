@@ -28,6 +28,15 @@ class SurveyRepository(
         return em.createQuery("select m from Survey m", Survey::class.java).resultList
     }
 
+    fun getUserSurveyList(loginId: String): List<Survey>? {
+        return em.createQuery(
+            "select s from Survey s where s.user.loginId = :loginId",
+            Survey::class.java
+        )
+            .setParameter("loginId", loginId)
+            .resultList
+    }
+
     fun getQuestionList(): List<Question>? {
         return em.createQuery("select m from Question m", Question::class.java).resultList
     }
@@ -48,5 +57,9 @@ class SurveyRepository(
             .setParameter("loginId", loginId)
             .resultList
             .map { it.toLong() }
+    }
+
+    fun deleteSurvey(survey: Survey) {
+        em.remove(survey)
     }
 }

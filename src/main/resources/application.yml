@@ -1,5 +1,5 @@
 server:
-  address: 192.168.45.193
+ # address: 192.168.45.193
   port: 8080
   servlet:
     context-path: /

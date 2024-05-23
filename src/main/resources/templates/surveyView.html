@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>SurveyBay :: Survey View</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+    body {
+      font-family: 'IBM Plex Sans KR', Arial, sans-serif;
+      background-color: #1f1f1f;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: #2c2c2c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logout-text {
+      font-size: 20px;
+      color: white;
+      margin-right: 30px;
+      text-decoration: underline;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      font-weight: bold;
+      background: white;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradient-animation 5s ease infinite;
+      margin-left: 20px;
+      padding-top: 10px;
+    }
+
+    @keyframes gradient-animation {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .menu {
+      display: flex;
+      align-items: center;
+    }
+
+    .menu a {
+      color: #fff;
+      margin-right: 15px;
+      text-decoration: none;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .username {
+      margin-right: 10px;
+    }
+
+    .profile-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      padding: 20px;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-direction: column;
+    }
+
+    .column {
+      text-align: center;
+      font-weight: bold;
+      padding: 10px;
+      font-size: 20px;
+    }
+
+    .about {
+      padding-top: 100px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #444;
+    }
+
+    td {
+      background-color: #555;
+    }
+
+    .question-container {
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #444;
+      border-radius: 5px;
+    }
+
+    .question-header {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .options-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .options-list li {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <a onclick="location.href='/home/'">
+    <div class="logo">SurveyBay</div>
+  </a>
+  <div class="menu">
+    <div class="user-info">
+      <span class="username"></span>
+      <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
+      <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
+      <div class="logout" onclick="location.href='/home/logout'">
+        <div class="logout-text">로그아웃</div>
+      </div>
+    </div>
+  </div>
+</header>
+<main id="mainContent">
+  <div class="container">
+    <h2>Survey Details</h2>
+    <table>
+      <tr>
+        <th>Survey ID</th>
+        <td th:text="${survey.surveyId}">Survey ID</td>
+      </tr>
+      <tr>
+        <th>Title</th>
+        <td th:text="${survey.title}">Survey Title</td>
+      </tr>
+      <tr>
+        <th>Start Date</th>
+        <td th:text="${survey.startDate}">Start Date</td>
+      </tr>
+      <tr>
+        <th>End Date</th>
+        <td th:text="${survey.endDate}">End Date</td>
+      </tr>
+    </table>
+
+    <h2>Survey Questions</h2>
+    <div th:each="question : ${survey.questions}">
+      <div class="question-container">
+        <div class="question-header">
+          <span th:text="'Question ID: ' + ${question.questionId}"></span>
+          <br>
+          <span th:text="${question.context}"></span>
+        </div>
+        <div th:if="${question.questionType.name()} == 'MULTIPLE_CHOICE'">
+          <ul class="options-list">
+            <li th:each="option, iterStat : ${question.questionOptions}" th:text="${iterStat.index + 1} + '. ' + ${option.questionOptionText}"></li>
+          </ul>
+        </div>
+        <div th:if="${question.questionType.name()} == 'SUBJECTIVE'">
+          <p>주관식 답변란</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2024 SurveyBay. All rights reserved.</p>
+</footer>
+</body>
+</html>
