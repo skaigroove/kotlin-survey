@@ -28,6 +28,9 @@ class UserProfileController(
 
     @GetMapping("/profile")
     fun userProfile(session: HttpSession, model: Model): String {
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/"
 
         // session으로부터 loginId를 받아와, 해당 유저를 찾는다.
         val sessionLoginId = session.getAttribute("loginId") as String
@@ -67,6 +70,9 @@ class UserProfileController(
 
     @GetMapping("/profile/edit")
     fun editForm(model: Model, session: HttpSession):String{
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/"
 
         // session으로부터 loginId를 받아와, 해당 유저를 찾는다.
         val sessionLoginId = session.getAttribute("loginId") as String
@@ -104,6 +110,10 @@ class UserProfileController(
 
     @PostMapping("/survey/delete/{surveyId}")
     fun deleteSurvey(@PathVariable surveyId: Long, session: HttpSession): String {
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/"
+
         val sessionLoginId = session.getAttribute("loginId") as String
         val survey = surveyService.getSurveyById(surveyId)
 
@@ -117,6 +127,10 @@ class UserProfileController(
 
     @GetMapping("/survey/view/{surveyId}")
     fun viewSurvey(@PathVariable surveyId: Long, model: Model, session: HttpSession): String {
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/"
+
         val sessionLoginId = session.getAttribute("loginId") as String
         val survey = surveyService.getSurveyById(surveyId)
 
