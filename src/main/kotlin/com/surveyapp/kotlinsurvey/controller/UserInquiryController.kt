@@ -31,6 +31,11 @@ class UserInquiryController(
         if (userService.checkLogin(session) == null) // login 안 된 것
             return "redirect:/"
 
+        // 세션에서 사용자 이름 가져오기
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username);
+
         val inquiryList = userInquiryService.getInquiryList()
 
         model.addAttribute("inquiryList", inquiryList)
@@ -46,6 +51,11 @@ class UserInquiryController(
 
         // model 에 UserInquiryForm 추가
         model.addAttribute("userInquiryForm", UserInquiryForm())
+
+        // 세션에서 사용자 이름 가져오기
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username);
 
         return "createInquiryForm" // 경로 반환 : createInquiryForm.html
     }
@@ -104,6 +114,11 @@ class UserInquiryController(
         val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
 
         println("Status: ${inquiryPost.status}")
+
+        // 세션에서 사용자 이름 가져오기
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username);
 
         // 속성 추가
         model.addAttribute("inquiryPost", inquiryPost)
