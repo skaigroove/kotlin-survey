@@ -20,7 +20,7 @@ class SurveyListController(
         val username = session.getAttribute("username")
         model.addAttribute("username", username)
 
-        val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/login"
+        val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/"
         val user = userRepository.findByLoginId(userLoginId)
         model.addAttribute("user", user)
 

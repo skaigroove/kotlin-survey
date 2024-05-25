@@ -26,28 +26,26 @@ class UserInquiryController(
     @Autowired private val userService: UserService,
 ) {
     @GetMapping("")
-    fun listInquiry(model: Model,session: HttpSession): String { // 문의 게시 글 목록
+    fun listInquiry(model: Model, session: HttpSession): String { // 문의 게시 글 목록
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // login 안 된 것
+            return "redirect:/"
 
         val inquiryList = userInquiryService.getInquiryList()
-        model.addAttribute("inquiryList", inquiryList)
 
-        // 세션에서 사용자 이름 가져오기
-        val username = session.getAttribute("username")
-        print("username: $username")
-        model.addAttribute("username", username);
+        model.addAttribute("inquiryList", inquiryList)
 
         return "inquiry" // 경로 반환 : inquiry.html
     }
 
     @GetMapping("/post")
-    fun createInquiryForm(model: Model, session: HttpSession): String {
+    fun createInquiryForm(model: Model, session:HttpSession): String {
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // login 안 된 것
+            return "redirect:/"
+
         // model 에 UserInquiryForm 추가
         model.addAttribute("userInquiryForm", UserInquiryForm())
-
-        // 세션에서 사용자 이름 가져오기
-        val username = session.getAttribute("username")
-        print("username: $username")
-        model.addAttribute("username", username);
 
         return "createInquiryForm" // 경로 반환 : createInquiryForm.html
     }
@@ -69,7 +67,7 @@ class UserInquiryController(
         // login 여부 확인
         val user = userService.checkLogin(session)
         if (user == null) // 로그인 안 되었음 => null 반환됨
-            return "redirect:/user/login"
+            return "redirect:/"
 
         // inquiry 생성
         val inquiry = createInquiry(userInquiryForm, user)
@@ -98,16 +96,14 @@ class UserInquiryController(
     }
 
     @GetMapping("/{inquiryId}")
-    fun detailInquiry(@PathVariable inquiryId: Long, model: Model,session: HttpSession): String{ // 문의 글 상세 보기 관련 처리
+    fun detailInquiry(@PathVariable inquiryId: Long, model: Model, session: HttpSession): String{ // 문의 글 상세 보기 관련 처리
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // login 안 된 것
+            return "redirect:/"
 
         val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
 
         println("Status: ${inquiryPost.status}")
-
-        // 세션에서 사용자 이름 가져오기
-        val username = session.getAttribute("username")
-        print("username: $username")
-        model.addAttribute("username", username);
 
         // 속성 추가
         model.addAttribute("inquiryPost", inquiryPost)

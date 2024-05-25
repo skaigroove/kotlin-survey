@@ -32,7 +32,7 @@ class SurveyPostController(
         model.addAttribute("questionForm", QuestionForm())
 
         // 세션에서 사용자 이름 가져와서 헤더애 사용자 이름 정보 추가
-        val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/login"
+        val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/"
         val user = userRepository.findByLoginId(userLoginId)
         model.addAttribute("user", user)
 

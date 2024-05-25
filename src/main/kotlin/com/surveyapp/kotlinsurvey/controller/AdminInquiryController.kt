@@ -57,8 +57,7 @@ class AdminInquiryController(
             // login 여부 확인
             val user = userService.checkLogin(session)
             if (user == null) // 로그인 안 되었음 => null 반환됨
-                return "redirect:/user/login"
-
+                return "redirect:/"
             /*
             if (replyInquiryForm.reply.isEmpty())
                 return "redirect:/home/inquiry/{inquiryId}?replyEmptyError=true"
@@ -81,7 +80,7 @@ class AdminInquiryController(
         // login 여부 확인
         val user = userService.checkLogin(session)
         if (user == null) // 로그인 안 되었음 => null 반환됨
-            return "redirect:/user/login"
+            return "redirect:/"
 
         userInquiryService.editReplyInquiry(inquiryId, reply)
         redirectAttributes.addFlashAttribute("message", "답변이 수정되었습니다.")

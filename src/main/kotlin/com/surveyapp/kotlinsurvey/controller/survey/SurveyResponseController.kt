@@ -51,8 +51,8 @@ class SurveyResponseController(
             } // binding 에 에러가 있을 경우 에러 매세지 출력
         }
 
-        val loginId = session.getAttribute("loginId") as? String ?: return "redirect:/login"
-        val user = userRepository.findByLoginId(loginId) ?: return "redirect:/login"
+        val loginId = session.getAttribute("loginId") as? String ?: return "redirect:/"
+        val user = userRepository.findByLoginId(loginId) ?: return "redirect:/"
         val survey = surveyService.getSurveyById(surveyId) ?: return "redirect:/home/list"
 
         surveyService.participateSurvey(survey,loginId, answerListForm) // 설문 참여
