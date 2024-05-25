@@ -18,4 +18,13 @@ class SurveyParticipationRepository(
         em.persist(surveyParticipation)
     }
 
+    fun getSurveyParticipationListByUserId(userId: Long): List<SurveyParticipation>? { // 해당 사용자가 참여한 설문 조사 목록 조회
+        return em.createQuery(
+            "SELECT s FROM SurveyParticipation s WHERE s.user.id = :userId",
+            SurveyParticipation::class.java
+        )
+            .setParameter("userId", userId)
+            .resultList
+    }
+
 }
