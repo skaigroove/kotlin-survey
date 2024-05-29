@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SurveyBay::Admin Page</title>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            text-align: center; /* 수평 중앙 정렬 */
+            vertical-align: middle; /* 수직 중앙 정렬 */
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .btn_action {
+            background: #ff4d4d;
+            border: 0px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), 0 2px 3px rgba(0, 0, 0, 0.2);
+            width: 60px;
+            padding: 5px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="surveyList">
+    <table class="table"> <!-- table 생성 -->
+        <tr class="text-center"> <!-- 텍스트 중앙 정렬 -->
+            <th scope="col">설문 번호</th> <!-- table 제목 셀 설정 : 문의 번호 -->
+            <th scope="col">제목</th> <!-- table 제목 셀 설정 : 제목 -->
+            <th scope="col">작성자</th> <!-- table 제목 셀 설정 : 작성자 -->
+            <th scope="col">응답 기간</th> <!-- table 제목 셀 설정 : 응답 기간 -->
+            <th scope="col">삭제</th> <!-- table 제목 셀 설정 : 삭제 (설문 삭제 버튼) -->
+        </tr>
+
+        <tbody>
+        <tr class="text-center" th:each="surveyPost, iterState : ${adminSurveyList}">
+            <!-- adminSurveyList 에 있는 원소 하나씩 surveyPost 에 대입해서 반복 -->
+            <th scope="row">
+                <span th:text="${surveyPost.surveyId}"></span> <!-- surveyPost - id(surveyId) 출력 -->
+            </th>
+
+            <td>
+                <a href="javascript:void(0);" th:text="${surveyPost.title}" th:onclick="'loadSurveyDetail('+${surveyPost.surveyId}+');'"></a>
+            </td>
+
+
+            <td>
+                <span th:text="${surveyPost.user.name}"></span>  <!-- surveyPost 작성자 출력 -->
+            </td>
+
+            <td>
+                <span th:text="${#temporals.format(surveyPost.startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(surveyPost.endDate, 'yyyy-MM-dd')}"></span> <!-- surveyPost 응답 기간 출력 -->
+            </td>
+
+            <td>
+                <form th:action="@{/admin/survey/delete/{surveyId}(surveyId=${surveyPost.surveyId})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                    <button type="submit" class="btn_action">삭제</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
