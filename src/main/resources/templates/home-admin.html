@@ -263,6 +263,18 @@
             margin-left: 10px;
             cursor: pointer;
         }
+        #firstPage {
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+        }
+        .admin-message {
+            font-size: 1.5em;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -284,16 +296,27 @@
     <nav class="sidebar">
         <h2>SurveyBay</h2>
         <ul>
-            <li><a onclick="showPage('surveyManagement')">설문 관리</a></li>
+            <li><a onclick="showPage('surveyManagement'); loadSurveyList()">설문 관리</a></li>
             <li><a onclick="showPage('userManagement')">사용자 관리</a></li>
             <li><a onclick="showPage('inquiryManagement'); loadInquiryList()">1:1 문의 관리</a></li>
         </ul>
     </nav>
     <main class="content">
-        <div id="surveyManagement" class="page">설문 조사 관리 페이지 내용</div>
+        <div id="firstPage" class="page">
+            <p class="admin-message">
+                SurveyBay Admin Page: <br>
+                관리자 전용 창
+            </p>
+        </div>
+        <div id="surveyManagement" class="page" style="display: none;">
+            <!--<h2>설문 조사 관리</h2>-->
+        </div>
         <div id="userManagement" class="page" style="display: none;">사용자 관리 페이지 내용</div>
         <div id="inquiryManagement" class="page" style="display: none;">
-            <h2>1:1 문의 관리 </h2>
+            <!--<h2>1:1 문의 관리 </h2>-->
+        </div>
+        <div id="surveyDetail" style="display:none">
+            <!-- 설문 열람 시 상세 내용이 여기 표시됨 -->
         </div>
         <div id="inquiryDetail" style="display:none;">
             <!-- 문의 글 상세 내용이 여기 표시됨 -->
@@ -323,9 +346,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        showPage('surveyManagement');
+        showPage('firstPage');
     });
 
+    // adminInquiry 관련 함수
     function loadInquiryList() { // 1:1 문의 클릭 : 문의 목록 출력
         console.log('Click - 1:1 문의 => Loading inquiryList...'); // log 출력
 
@@ -354,6 +378,37 @@
     function openEditForm() { // 답변 수정 버튼 눌렀을 때 실행되는 함수 : 답변 수정란 생김
         document.getElementById('editForm').style.display = 'block';
     }
+
+    // adminSurvey 관련 함수
+    function loadSurveyList() { // 설문 관리 클릭 : 설문 목록 출력
+        console.log('Click - 설문 관리 => Loading surveyList...'); // log 출력
+
+        // 만약 이전에 설문 열람 => 그 설문 출력 안 되게 처리하는 것
+        document.getElementById('surveyDetail').style.display = 'none'; // 안 보이도록 처리
+        document.getElementById('surveyDetail').innerHTML = '';
+
+        fetch('/admin/survey')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('surveyManagement').innerHTML = html;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function loadSurveyDetail(surveyId) { // 설문 글 제목 클릭 : 상세 보기
+        fetch(`/admin/survey/${surveyId}`)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('surveyDetail').innerHTML = html;
+                showPage('surveyDetail');
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function confirmDelete() { // 설문 삭제 여부 확인
+        return confirm('설문을 삭제하시겠습니까?');
+    }
+
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
