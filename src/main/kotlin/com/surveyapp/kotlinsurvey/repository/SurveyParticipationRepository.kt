@@ -27,4 +27,14 @@ class SurveyParticipationRepository(
             .resultList
     }
 
+    fun getSurveyParticipationListBySurveyId(surveyId: Long): List<SurveyParticipation> { // surveyId 이용 => SurveyParticipationList (참여자 관련 목록) 얻음 // 참여 x => 빈 리스트 반환
+        return em.createQuery(
+            "SELECT s FROM SurveyParticipation s WHERE s.survey.id = :surveyId",
+            SurveyParticipation::class.java
+        )
+            .setParameter("surveyId", surveyId)
+            .resultList
+    }
+
+
 }
