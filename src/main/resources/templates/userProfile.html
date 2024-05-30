@@ -295,6 +295,29 @@
                 </tr>
                 </tbody>
             </table>
+
+            <h2>Participated Surveys</h2>
+            <table class="survey-table">
+                <thead>
+                <tr>
+                    <th>Survey ID</th>
+                    <th>Title</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Check</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="surveyParticipation : ${participatedSurveyList}">
+                    <td th:text="${surveyParticipation.survey.surveyId}">Survey ID</td>
+                    <td th:text="${surveyParticipation.survey.title}">Survey Title</td>
+                    <td th:text="${surveyParticipation.survey.startDate}">Start Date</td>
+                    <td th:text="${surveyParticipation.survey.endDate}">End Date</td>
+                    <td><button class="btn_action_check"><a th:href="@{/user/participation/view/{participationId}(participationId=${surveyPaticipation.participationId})}">조회</a></button></td>
+                </tr>
+                </tbody>
+            </table>
+
         </div>
     </div>
 </main>

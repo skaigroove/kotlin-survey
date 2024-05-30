@@ -32,11 +32,11 @@ class Survey(
     val endDate : LocalDate, // 설문 종료일
 
 ) {
-    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     var questions: MutableList<Question> = mutableListOf() // 하나의 설문 조사가 담고 있는 질문 리스트
 
     // Survey에서 SurveyParticipation으로의 일대다 매핑
-    @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "survey", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val participations: List<SurveyParticipation> = mutableListOf()
 
     fun findQuestion(questionId: Long?): Question? {

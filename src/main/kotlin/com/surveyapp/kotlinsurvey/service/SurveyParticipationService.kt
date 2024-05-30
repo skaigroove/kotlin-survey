@@ -1,19 +1,23 @@
 package com.surveyapp.kotlinsurvey.service
 
-import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.repository.SurveyParticipationRepository
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
-class SurveyParticipationService(
-    @Autowired private val surveyParticipationRepository: SurveyParticipationRepository,
-    ) {
-    fun addParticipation(surveyParticipation: SurveyParticipation) {
-       surveyParticipationRepository.saveParticipation(surveyParticipation)
+@Service
+class SurveyParticipationService(private val surveyParticipationRepository: SurveyParticipationRepository) {
+
+    @Transactional
+    fun saveParticipation(surveyParticipation: SurveyParticipation) {
+        surveyParticipationRepository.save(surveyParticipation)
     }
 
-    fun getSurveyParticipationListByUserId(userId: Long): List<SurveyParticipation>? { // userId 를 가진 사용자가 참여한 설문 조사 목록을 반환함
-        return surveyParticipationRepository.getSurveyParticipationListByUserId(userId)
+    fun getSurveyParticipationListByUserId(userId: Long): List<SurveyParticipation>? {
+        return surveyParticipationRepository.findByUserId(userId)
     }
 
+    fun findParticipationById(participationId: Long): SurveyParticipation? {
+        return surveyParticipationRepository.findById(participationId).orElse(null)
+    }
 }

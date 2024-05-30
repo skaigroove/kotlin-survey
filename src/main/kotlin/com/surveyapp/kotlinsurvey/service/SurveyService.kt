@@ -9,35 +9,79 @@ import com.surveyapp.kotlinsurvey.domain.answer.TextAnswer
 import com.surveyapp.kotlinsurvey.domain.question.Question
 import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.question.QuestionType
-import com.surveyapp.kotlinsurvey.domain.survey.*
+import com.surveyapp.kotlinsurvey.domain.survey.Survey
+import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.domain.user.User
-import com.surveyapp.kotlinsurvey.repository.SurveyParticipationRepository
-import com.surveyapp.kotlinsurvey.repository.SurveyRepository
-import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Autowired
+import com.surveyapp.kotlinsurvey.repository.*
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
-import java.util.*
 
 @Service
-@Transactional
 class SurveyService(
-    @Autowired private val surveyRepository: SurveyRepository,
-    @Autowired private val surveyParticipationRepository: SurveyParticipationRepository,
-    @Autowired private val userService: UserService,
+    private val surveyRepository: SurveyRepository,
+    private val questionRepository: QuestionRepository,
+    private val questionOptionRepository: QuestionOptionRepository,
+    private val surveyParticipationRepository: SurveyParticipationRepository,
+    private val userRepository: UserRepository,
+    private val userService: UserService
 ) {
 
+    @Transactional
     fun saveSurvey(survey: Survey) {
-        surveyRepository.saveSurvey(survey)
+        surveyRepository.save(survey)
     }
 
-    fun getSurveyById(surveyId: Long): Survey? { return surveyRepository.getSurveyById(surveyId) }
+    fun getSurveyById(id: Long): Survey? {
+        return surveyRepository.findById(id).orElse(null)
+    }
 
-    fun getSurveyList(): List<Survey>? { return surveyRepository.getSurveyList() }
+    fun getAllSurveys(): List<Survey>? {
+        return surveyRepository.findAllSurveys()
+    }
 
-    fun getQuestionList(): List<Question>? { return surveyRepository.getQuestionList() }
+    fun getUserSurveys(loginId: String): List<Survey>? {
+        return surveyRepository.findByUserLoginId(loginId)
+    }
 
-    fun getUserSurveyList(loginId: String): List<Survey>? { return surveyRepository.getUserSurveyList(loginId) }
+    fun getQuestions(): List<Question>? {
+        return questionRepository.findAll()
+    }
+
+    fun mergeSurvey(survey: Survey) {
+        surveyRepository.save(survey)
+    }
+
+    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
+        return questionOptionRepository.findById(questionOptionId).orElse(null)
+    }
+
+    fun findParticipatedSurveysByLoginId(loginId: String): List<Survey> {
+        return surveyRepository.findParticipatedSurveyByLoginId(loginId)
+    }
+
+    @Transactional
+    fun deleteSurvey(survey: Survey) {
+        surveyRepository.delete(survey)
+    }
+
+    fun getSurveyParticipationList(sessionLoginId: String): List<SurveyParticipation> {
+        val user = userRepository.findByLoginId(sessionLoginId) ?: throw IllegalArgumentException("User not found")
+        val userId = user.userId ?: throw IllegalArgumentException("User ID not found")
+        return surveyParticipationRepository.findByUserId(userId)
+    }
+
+    fun getParticipationBySurveyId(surveyId: Long): SurveyParticipation {
+        return surveyParticipationRepository.findBySurveyId(surveyId)
+    }
+
+    fun getParticipationById(participationId: Long): SurveyParticipation {
+        return surveyParticipationRepository.findById(participationId).orElse(null)
+    }
+
+    fun getQuestionsBySurveyId(surveyId: Long?): List<Question> {
+        return questionRepository.findBySurveyId(surveyId)
+    }
 
     fun createSurvey(surveyForm: SurveyForm, user: User): Survey { // 설문 조사 생성 함수
 
@@ -94,21 +138,18 @@ class SurveyService(
             val question = survey.findQuestion(alf.questionId) // questionId를 통해 question을 찾음
 
             val answer : Answer = when(question?.questionType) { // questionType에 따라 다른 Answer 객체 생성
-                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,AnswerType.MULTIPLE_CHOICE,findQuestionOptionById(alf.selectedOption!!))
+                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,
+                    AnswerType.MULTIPLE_CHOICE,findQuestionOptionById(alf.selectedOption!!))
                 QuestionType.SUBJECTIVE -> TextAnswer(null,user,question,surveyParticipation,AnswerType.SUBJECTIVE,alf.text)
                 else -> { throw IllegalArgumentException("Invalid Question Type")}
             }
             question.answers.add(answer) // 각 question에 answer 추가
         }
 
-        surveyParticipationRepository.saveParticipation(surveyParticipation) // SurveyParticipation 저장
-        surveyRepository.mergeSurvey(survey) // mergeSurvey()를 통해 survey 업데이트
+        surveyParticipationRepository.save(surveyParticipation) // SurveyParticipation 저장
+       // surveyRepository.merge(survey) // mergeSurvey()를 통해 survey 업데이트
 
         return survey
-    }
-
-    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
-        return surveyRepository.findQuestionOptionById(questionOptionId)
     }
 
     fun getRemainingDays(survey: Survey?): Any {
@@ -116,12 +157,5 @@ class SurveyService(
         return survey.endDate!!.toEpochDay() - LocalDate.now().toEpochDay()
 
     }
-    fun getParticipatedSurveyIds(loginId: String): List<Long> {
-        return surveyRepository.findParticipatedSurveysByLoginId(loginId)
-    }
 
-    fun deleteSurvey(surveyId: Long) {
-        val survey = surveyRepository.getSurveyById(surveyId) ?: throw IllegalArgumentException("Survey not found")
-        surveyRepository.deleteSurvey(survey)
-    }
 }

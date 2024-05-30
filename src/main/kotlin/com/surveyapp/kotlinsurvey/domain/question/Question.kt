@@ -2,6 +2,7 @@ package com.surveyapp.kotlinsurvey.domain.question
 
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.domain.answer.Answer
+import com.surveyapp.kotlinsurvey.domain.answer.TextAnswer
 import jakarta.persistence.*
 
 @Entity
@@ -25,11 +26,15 @@ class Question(
 
 ) {
     // 1:n = question: answers
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     val answers: MutableList<Answer> = mutableListOf() // 질문 하나 당 여러개의 답변을 가질 수 있다.
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     var questionOptions : MutableList<QuestionOption> = mutableListOf() // 질문 하나 당 여러개의 선택지를 가질 수 있다.
+
+    fun getTextAnswer(): String? {
+        return answers.filterIsInstance<TextAnswer>().first().text
+    }
 
     fun addAnswer(answer: Answer) {
         answers.add(answer)

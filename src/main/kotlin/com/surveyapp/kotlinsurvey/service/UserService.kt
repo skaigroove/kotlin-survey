@@ -6,42 +6,54 @@ import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.domain.user.UserType
 import com.surveyapp.kotlinsurvey.repository.UserRepository
 import jakarta.servlet.http.HttpSession
-import jakarta.transaction.Transactional
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-
+import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
-class UserService(@Autowired private val userRepository: UserRepository) {
+class UserService(private val userRepository: UserRepository) {
 
-    /* userRepository에 받은 user 정보로 회원가입*/
     @Transactional
-    fun join(user: User): User {
-        validateDuplicateUserByLoginId(user) // 중복이면 에러를 반환한다
+    fun saveUser(user: User) {
         userRepository.save(user)
-        return user
     }
 
-    fun validateAdmin(user: User): Boolean {
+    fun findUserById(userId: Long): User? {
+        return userRepository.findById(userId).orElse(null)
+    }
 
-        if (user.userType == UserType.ADMIN) {
-            return true
+    fun findAllUsers(): List<User>? {
+        return userRepository.findAll()
+    }
+
+    fun findUserByLoginId(loginId: String): User? {
+        return userRepository.findByLoginId(loginId)
+    }
+
+    fun findUserByPhoneNumber(phoneNumber: String): User? {
+        return userRepository.findByPhoneNumber(phoneNumber)
+    }
+
+    fun checkLogin(session: HttpSession): User? {
+        val loginId = session.getAttribute("loginId") as? String // 사용자 - loginId get
+        if (loginId == null) { // 로그인 안 된 상황
+            println("사용자 로그인 정보가 없습니다.")
+            return null
+        } else { // 로그인 된 상황
+            val user = userRepository.findByLoginId(loginId)
+            return user
         }
-        return false
     }
 
-
-    /* loginId를 기준으로 저장소의 유저가 중복되는지 검사*/
-    fun validateDuplicateUserByLoginId(user: User) : Boolean{
-        val findMember: User? = userRepository.findByLoginId(user.loginId)
+    fun validateDuplicateUserByPhoneNum(user: User) : Boolean{
+        val findMember: User? = userRepository.findByPhoneNumber(user.phoneNumber)
         if (findMember != null) // 레포지토리에 멤버가 존재한다면
             return true
         return false
     }
 
-    fun validateDuplicateUserByPhoneNum(user: User) : Boolean{
-        val findMember: User? = userRepository.findByPhoneNumber(user.phoneNumber)
+    /* loginId를 기준으로 저장소의 유저가 중복되는지 검사*/
+    fun validateDuplicateUserByLoginId(user: User) : Boolean{
+        val findMember: User? = userRepository.findByLoginId(user.loginId)
         if (findMember != null) // 레포지토리에 멤버가 존재한다면
             return true
         return false
@@ -69,25 +81,20 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         }
     }
 
-    fun checkLogin(session: HttpSession): User? {
-        val loginId = session.getAttribute("loginId") as? String // 사용자 - loginId get
-        if (loginId == null) { // 로그인 안 된 상황
-            println("사용자 로그인 정보가 없습니다.")
-            return null
-        }
-        else { // 로그인 된 상황
-            val user = userRepository.findByLoginId(loginId)
-            return user
-        }
+    /* userRepository에 받은 user 정보로 회원가입*/
+    @Transactional
+    fun join(user: User): User {
+        validateDuplicateUserByLoginId(user) // 중복이면 에러를 반환한다
+        userRepository.save(user)
+        return user
     }
 
-    /* userId(Long)으로 회원 한 명 조회*/
-    fun findOne(userId: Long): User {
-        return userRepository.findOne(userId)
-    }
+    fun validateAdmin(user: User): Boolean {
 
-    fun findUserByLoginId(loginId:String):User?{
-        return userRepository.findByLoginId(loginId)
+        if (user.userType == UserType.ADMIN) {
+            return true
+        }
+        return false
     }
 
     fun updateUser(loginId: String, userForm: UserForm) {
@@ -102,5 +109,6 @@ class UserService(@Autowired private val userRepository: UserRepository) {
             userRepository.save(it)
         }
     }
+
 
 }

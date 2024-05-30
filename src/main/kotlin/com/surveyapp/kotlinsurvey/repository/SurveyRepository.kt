@@ -1,65 +1,20 @@
 package com.surveyapp.kotlinsurvey.repository
 
-import com.surveyapp.kotlinsurvey.domain.answer.AnswerType
-import com.surveyapp.kotlinsurvey.domain.question.Question
-import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
-import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
-import jakarta.persistence.EntityManager
-import jakarta.persistence.PersistenceContext
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@Transactional
-class SurveyRepository(
-    @PersistenceContext private val em: EntityManager
-) {
-    @Transactional
-    fun saveSurvey(survey: Survey) {
-        em.persist(survey)
-    }
+interface SurveyRepository : JpaRepository<Survey, Long> {
 
-    fun getSurveyById(id: Long): Survey? {
-        return em.find(Survey::class.java, id)
-    }
+    @Query("select s from Survey s where s.user.loginId = :loginId")
+    fun findByUserLoginId(@Param("loginId") loginId: String): List<Survey>?
 
-    fun getSurveyList(): List<Survey>? {
-        return em.createQuery("select m from Survey m", Survey::class.java).resultList
-    }
+    @Query("select s from Survey s")
+    fun findAllSurveys(): List<Survey>?
 
-    fun getUserSurveyList(loginId: String): List<Survey>? {
-        return em.createQuery(
-            "select s from Survey s where s.user.loginId = :loginId",
-            Survey::class.java
-        )
-            .setParameter("loginId", loginId)
-            .resultList
-    }
-
-    fun getQuestionList(): List<Question>? {
-        return em.createQuery("select m from Question m", Question::class.java).resultList
-    }
-
-    fun mergeSurvey(survey: Survey) {
-        em.merge(survey)
-    }
-
-    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
-        return em.find(QuestionOption::class.java, questionOptionId)
-    }
-
-    fun findParticipatedSurveysByLoginId(loginId: String): List<Long> {
-        return em.createQuery(
-            "select p.survey.surveyId from SurveyParticipation p where p.user.loginId = :loginId",
-            java.lang.Long::class.java
-        )
-            .setParameter("loginId", loginId)
-            .resultList
-            .map { it.toLong() }
-    }
-
-    fun deleteSurvey(survey: Survey) {
-        em.remove(survey)
-    }
+    @Query("select p.survey from SurveyParticipation p where p.user.loginId = :loginId")
+    fun findParticipatedSurveyByLoginId(@Param("loginId") loginId: String): List<Survey>
 }

@@ -24,8 +24,8 @@ class SurveyListController(
         val user = userRepository.findByLoginId(userLoginId)
         model.addAttribute("user", user)
 
-        val surveyPostList = surveyService.getSurveyList()
-        val participatedSurveyIds = surveyService.getParticipatedSurveyIds(userLoginId)
+        val surveyPostList = surveyService.getAllSurveys()
+        val participatedSurveyIds = surveyService.findParticipatedSurveysByLoginId(userLoginId)
         model.addAttribute("postList", surveyPostList)
         model.addAttribute("participatedSurveyIds", participatedSurveyIds)
 

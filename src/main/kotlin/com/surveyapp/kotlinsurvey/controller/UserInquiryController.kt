@@ -111,9 +111,9 @@ class UserInquiryController(
         if (userService.checkLogin(session) == null) // login 안 된 것
             return "redirect:/"
 
-        val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
+        val inquiryPost: UserInquiry? = userInquiryService.getInquiryById(inquiryId)
 
-        println("Status: ${inquiryPost.status}")
+        println("Status: ${inquiryPost?.status}")
 
         // 세션에서 사용자 이름 가져오기
         val username = session.getAttribute("username")

@@ -1,6 +1,7 @@
 package com.surveyapp.kotlinsurvey.domain.answer
 
 import com.surveyapp.kotlinsurvey.domain.question.Question
+import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.domain.user.User
@@ -20,16 +21,41 @@ abstract class Answer(
     open val answerType: AnswerType, // 답변 유형
 
     @ManyToOne
-    @JoinColumn(name="user_id", foreignKey = ForeignKey(name = "fk_user_id"))
-    open val user : User, // 멤버 하나당 여러개의 답변이 있을 수 있다.
+    @JoinColumn(name = "user_id", nullable = false , foreignKey = ForeignKey(name = "fk_user_id"))
+    open val user: User, // 멤버 하나당 여러개의 답변이 있을 수 있다.
 
     @ManyToOne
-    @JoinColumn(name = "question_id", foreignKey = ForeignKey(name = "fk_question_id"))
+    @JoinColumn(name = "question_id", nullable = false , foreignKey = ForeignKey(name = "fk_question_id"))
     open val question: Question, // 질문 하나당 여러 개의 답변이 있을 수 있다.
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participation_id", nullable = false)
-    open val surveyParticipation: SurveyParticipation // 양방향 매핑
-){
+    open val surveyParticipation: SurveyParticipation, // 양방향 매핑
+) {
+    val textAnswer: String?
+        get() = (this as? TextAnswer)?.text
 
+    val selectedOptionText: String?
+        get() = (this as? ChoiceAnswer)?.selectedOption?.questionOptionText
+
+    // 선택된 답변
+    val choiceAnswer: QuestionOption
+        get() = (this as? ChoiceAnswer)?.selectedOption
+            ?: throw IllegalStateException("This answer is not a choice answer")
+
+    fun getAnswer(type : AnswerType) : String?
+    {
+        if(type == AnswerType.SUBJECTIVE)
+        {
+            return textAnswer
+        }
+        else if(type == AnswerType.MULTIPLE_CHOICE)
+        {
+            return selectedOptionText
+        }
+        else
+        {
+            return null
+        }
+    }
 }

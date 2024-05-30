@@ -31,7 +31,7 @@ class AdminInquiryController(
 
     @GetMapping("/inquiry/{inquiryId}")
     fun adminDetailInquiry(@PathVariable inquiryId: Long, model: Model): String{ // 관리자 (admin) - 문의 글 상세 보기 관련 처리
-        val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
+        val inquiryPost: UserInquiry? = userInquiryService.getInquiryById(inquiryId)
 
         model.addAttribute("adminInquiryPost", inquiryPost)
         model.addAttribute("replyInquiryForm", ReplyInquiryForm()) // 답변 양식
@@ -65,7 +65,9 @@ class AdminInquiryController(
 
             val inquiry = userInquiryService.getInquiryById(inquiryId)
 
+        if (inquiry != null) {
             userInquiryService.saveReplyInquiry(inquiry,replyInquiryForm)
+        }
 
             return "redirect:/admin/inquiry/{inquiryId}"
     }

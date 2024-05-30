@@ -22,6 +22,6 @@ class QuestionOption(
     val question: Question
 
 ) {
-    @OneToMany(mappedBy = "selectedOption", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "selectedOption", fetch = FetchType.EAGER)
     val choiceAnswers: MutableList<ChoiceAnswer> = mutableListOf()
 }

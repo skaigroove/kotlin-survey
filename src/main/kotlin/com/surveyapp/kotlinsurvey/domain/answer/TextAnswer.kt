@@ -13,22 +13,22 @@ class TextAnswer(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     override val answerId: Long? = null, // 객관식 질문 번호
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_user_id"))
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = ForeignKey(name = "fk_user_id"))
     override val user: User,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", foreignKey = ForeignKey(name = "fk_question_id"))
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "question_id", nullable = false, foreignKey = ForeignKey(name = "fk_question_id"))
     override val question: Question,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "participation_id", nullable = false)
     override val surveyParticipation: SurveyParticipation, // 양방향 매핑
 
-    @Column
+    @Column(nullable = false)
     override val answerType: AnswerType = AnswerType.SUBJECTIVE, // 답변 유형
 
-    @Column
+    @Column(nullable = false)
     val text: String? // 주관식 답변 내용
 
 ) : Answer(answerId,AnswerType.SUBJECTIVE, user, question, surveyParticipation)

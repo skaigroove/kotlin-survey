@@ -15,11 +15,11 @@ data class SurveyParticipation(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val participationId: Long?,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     val user: User,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "survey_id", nullable = false)
     val survey: Survey,
 
@@ -33,7 +33,7 @@ data class SurveyParticipation(
 
     @OneToMany(
         mappedBy = "surveyParticipation",
-        fetch = FetchType.LAZY,
+        fetch = FetchType.EAGER,
         cascade = [CascadeType.ALL],
         orphanRemoval = true
     )
