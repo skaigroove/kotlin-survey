@@ -13,7 +13,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        h3 {
+        .h3 {
             font-size: 1.2em;
             color: #007bff;
             border-bottom: 2px solid #007bff;
@@ -21,21 +21,35 @@
             margin-top: 0;
         }
 
-        table {
+        .table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
 
-        table th, table td {
+        .table th, table td {
             padding: 10px;
             border: 1px solid #ddd;
             text-align: left;
         }
 
-        table th {
+        .table th {
             background-color: #f8f8f8;
             color: #333;
+        }
+
+        .t1 {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .t2 {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
         }
 
         .section {
@@ -71,26 +85,24 @@
     </style>
 </head>
 <body>
-<div id="inquiryDetail">
+<div id="surveyDetail">
     <div class="surveyContainer">
         <div class="section">
             <h3>Survey Details</h3>
             <table>
                 <tr>
-                    <th>Survey ID</th>
-                    <td th:text="${adminSurveyPost.surveyId}">Survey ID</td>
+                    <th class="t1">설문 번호</th>
+                    <td class="t2" th:text="${adminSurveyPost.surveyId}"></td>
                 </tr>
+
                 <tr>
-                    <th>Title</th>
-                    <td th:text="${adminSurveyPost.title}">Survey Title</td>
+                    <th class="t1">제목</th>
+                    <td class="t2" th:text="${adminSurveyPost.title}"></td>
                 </tr>
+
                 <tr>
-                    <th>Start Date</th>
-                    <td th:text="${adminSurveyPost.startDate}">Start Date</td>
-                </tr>
-                <tr>
-                    <th>End Date</th>
-                    <td th:text="${adminSurveyPost.endDate}">End Date</td>
+                    <th class="t1">응답 기한</th>
+                    <td class="t2" th:text="${#temporals.format(adminSurveyPost.startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(adminSurveyPost.endDate, 'yyyy-MM-dd')}"></td>
                 </tr>
             </table>
         </div>
