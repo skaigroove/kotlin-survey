@@ -68,7 +68,7 @@
             </td>
 
             <td>
-                <form th:action="@{/admin/survey/delete/{surveyId}(surveyId=${surveyPost.surveyId})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
+                <form th:action="@{/admin/survey/delete/{surveyId}(surveyId=${surveyPost.surveyId})}" method="post" style="display:inline;" onsubmit="return confirmSurveyDelete();">
                     <button type="submit" class="btn_action">삭제</button>
                 </form>
             </td>
