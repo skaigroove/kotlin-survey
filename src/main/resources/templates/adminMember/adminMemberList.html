@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SurveyBay::Admin Page</title>
+    <style>
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            text-align: center; /* 수평 중앙 정렬 */
+            vertical-align: middle; /* 수직 중앙 정렬 */
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .btn_action {
+            background: #ff4d4d;
+            border: 0px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), 0 2px 3px rgba(0, 0, 0, 0.2);
+            width: 60px;
+            padding: 5px;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            margin: 2px;
+        }
+    </style>
+</head>
+<body>
+
+
+<div id="memberList">
+    <table class="table"> <!-- table 생성 -->
+        <tr class="text-center"> <!-- 텍스트 중앙 정렬 -->
+            <th scope="col">회원 번호</th> <!-- table 제목 셀 설정 : 회원 번호 -->
+            <th scope="col">이름</th> <!-- table 제목 셀 설정 : 이름 -->
+            <th scope="col">계정</th> <!-- table 제목 셀 설정 : 계정 -->
+            <th scope="col">유형</th> <!-- table 제목 셀 설정 : 유형 -->
+            <th scope="col">탈퇴</th> <!-- table 제목 셀 설정 : 탈퇴 (회원 삭제 버튼) -->
+        </tr>
+
+        <tbody>
+        <tr class="text-center" th:each="member, iterState : ${adminMemberList}">
+            <!-- adminMemberList 에 있는 원소 하나씩 member 에 대입해서 반복 -->
+            <th scope="row">
+                <span th:text="${member.userId}"></span> <!-- member - id(userId) 출력 -->
+            </th>
+
+            <td>
+                <a href="javascript:void(0);" th:text="${member.name}" th:onclick="'loadMemberDetail('+${member.userId}+');'"></a> <!-- member - 이름 출력 -->
+            </td>
+
+
+            <td>
+                <span th:text="${member.loginId}"></span>  <!-- member - 계정 출력 -->
+            </td>
+
+            <td>
+                <!-- user 유형 : 관리자, 회원 -->
+                <span th:if="${member.userType == T(com.surveyapp.kotlinsurvey.domain.user.UserType).ADMIN}" th:text="'관리자'"></span>
+                <span th:if="${member.userType == T(com.surveyapp.kotlinsurvey.domain.user.UserType).CLIENT}" th:text="'회원'"></span>
+            </td>
+
+            <td>
+                <form th:action="@{/admin/member/delete/{userId}(userId=${member.userId})}" method="post" style="display:inline;" onsubmit="return confirmMemberDelete();">
+                    <button type="submit" class="btn_action">탈퇴</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -103,4 +103,14 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         }
     }
 
+    fun getUserList(): List<User>? { // 모든 회원 목록을 List 로 반환
+        return userRepository.findAll()
+    }
+
+    fun deleteUserByUserId(userId: Long) { // userId 에 해당하는 user 정보 삭제
+        val user = userRepository.findOne(userId)
+
+        userRepository.deleteUser(user)
+    }
+
 }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey Details</title>
+    <style>
+        .memberContainer {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .h3 {
+            font-size: 1.2em;
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table th, table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .t1 {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .t2 {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .options-list li {
+            margin-bottom: 5px;
+        }
+
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="memberDetail">
+    <div class="memberContainer">
+        <div class="section">
+            <h3>회원 정보</h3>
+            <table>
+                <tr>
+                    <th class="t1">회원 번호</th>
+                    <td class="t2" th:text="${adminMember.userId}"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">이름</th>
+                    <td class="t2" th:text="${adminMember.name}"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">계정</th>
+                    <td class="t2" th:text="${adminMember.loginId}"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">비밀번호</th>
+                    <td class="t2" th:text="${adminMember.password}"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">생년월일</th>
+                    <td class="t2" th:text="${adminMember.birthDate}"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">전화번호</th>
+                    <td class="t2" th:text="${adminMember.phoneNumber}"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">성별</th>
+                    <td class="t2" th:if="${adminMember.genderType == T(com.surveyapp.kotlinsurvey.domain.user.GenderType).MALE}" th:text="'남성'"></td>
+                    <td class="t2" th:if="${adminMember.genderType == T(com.surveyapp.kotlinsurvey.domain.user.GenderType).FEMALE}" th:text="'여성'"></td>
+                </tr>
+
+                <tr>
+                    <th class="t1">유형</th>
+                    <td class="t2" th:if="${adminMember.userType == T(com.surveyapp.kotlinsurvey.domain.user.UserType).ADMIN}" th:text="'관리자'"></td>
+                    <td class="t2" th:if="${adminMember.userType == T(com.surveyapp.kotlinsurvey.domain.user.UserType).CLIENT}" th:text="'회원'"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>1:1 문의 작성 목록</h3>
+            <table>
+                <tr>
+                    <th class="t1">문의 번호</th>
+                    <th class="t1">제목</th>
+                    <th class="t1">작성 일자</th>
+                </tr>
+
+                <tbody>
+                <tr th:each="inquiry : ${adminMember.userInquiries}">
+                    <td class="t2" th:text="${inquiry.id}"></td>
+                    <td class="t2" th:text="${inquiry.title}"></td>
+                    <td class="t2" th:text="${#temporals.format(inquiry.writeDate, 'yyyy-MM-dd')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>설문 생성 목록</h3>
+            <table>
+                <tr>
+                    <th class="t1">설문 번호</th>
+                    <th class="t1">제목</th>
+                    <th class="t1">응답 기한</th>
+                </tr>
+
+                <tbody>
+                <tr th:each="survey : ${adminMember.surveys}">
+                    <td class="t2" th:text="${survey.surveyId}"></td>
+                    <td class="t2" th:text="${survey.title}"></td>
+                    <td class="t2" th:text="${#temporals.format(survey.startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(survey.endDate, 'yyyy-MM-dd')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>설문 참여 목록</h3>
+            <table>
+                <tr>
+                    <th class="t1">설문 번호</th>
+                    <th class="t1">제목</th>
+                    <th class="t1">참여 일자</th>
+                </tr>
+
+                <tbody>
+                <tr th:each="participation : ${adminMember.participations}">
+                    <td class="t2" th:text="${participation.survey.surveyId}"></td>
+                    <td class="t2" th:text="${participation.survey.title}"></td>
+                    <td class="t2" th:text="${participation.participationDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

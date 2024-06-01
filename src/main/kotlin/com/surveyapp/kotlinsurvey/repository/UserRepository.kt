@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.repository
 
+import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.EntityManager
 import jakarta.persistence.NoResultException
@@ -53,4 +54,10 @@ class UserRepository(
             null
         }
     }
+
+
+    fun deleteUser(user: User) { // User 정보 삭제 함수
+        em.remove(user)
+    }
+
 }
