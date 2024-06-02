@@ -1,14 +1,15 @@
 package com.surveyapp.kotlinsurvey.controller
 
+import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.orm.ObjectOptimisticLockingFailureException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 
 @Controller
@@ -38,12 +39,20 @@ class AdminMemberController (
         val member = userService.findOne(userId) // userId 에 해당하는 사용자 get
 
         model.addAttribute("adminMember", member) // 해당 회원을 model 속성으로 추가
+        model.addAttribute("adminMemberPhoneNumber", formatPhoneNumber(member.phoneNumber, "-"))
 
         return "adminMember/adminMemberDetail" // 경로 반환
     }
 
+    fun formatPhoneNumber(phoneNumber: String, separator: String = "."): String { // 전화번호 010.0000.0000 형식으로 변환하는 함수 // . 은 default, separator 에 따라 달라짐
+        val regex = "(\\d{3})(\\d{4})(\\d{4})".toRegex()
+        return regex.replace(phoneNumber, "$1$separator$2$separator$3")
+    }
+
+
+
     @PostMapping("/member/delete/{userId}")
-    fun adminSurveyDelete(@PathVariable userId: Long, session: HttpSession): String { // 관리자 (admin) - 회원 탈퇴 관련 처리
+    fun adminMemberDelete(@PathVariable userId: Long, session: HttpSession): String { // 관리자 (admin) - 회원 탈퇴 관련 처리
         // login 여부 확인
         if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/"
@@ -51,5 +60,24 @@ class AdminMemberController (
         userService.deleteUserByUserId(userId) // 해당 회원 정보 삭제 => 탈퇴
 
         return "redirect:/admin/member"
+        //return ""
     }
+
+
+
+/*
+    @PostMapping("/member/delete/{userId}")
+    fun adminMemberDelete(@PathVariable userId: Long, model: Model, session: HttpSession): ResponseEntity<String> {
+        if (userService.checkLogin(session) == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized")
+
+        userService.deleteUserByUserId(userId)
+        val updatedMemberList = adminMemberList(model, session)
+
+        return ResponseEntity.ok("User deleted successfully")
+    }
+
+
+ */
+
 }
