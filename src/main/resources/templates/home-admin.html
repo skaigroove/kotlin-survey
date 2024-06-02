@@ -358,13 +358,25 @@
         showPage('firstPage');
     });
 
+    function cleanPage() { // 이전에 열람한 것 안 보이게 처리하는 함수
+        // 만약 이전에 문의 글 열람 => 그 글 출력 안 되게 처리하는 것
+        document.getElementById('inquiryDetail').style.display = 'none'; // 안 보이도록 처리
+        document.getElementById('inquiryDetail').innerHTML = '';
+
+        // 만약 이전에 설문 열람 => 그 설문 출력 안 되게 처리하는 것
+        document.getElementById('surveyDetail').style.display = 'none'; // 안 보이도록 처리
+        document.getElementById('surveyDetail').innerHTML = '';
+
+        //만약 이전에 회원 정보 열람 => 그 회원 정보 출력 안 되게 처리하는 것
+        document.getElementById('memberDetail').style.display = 'none'; // 안 보이도록 처리
+        document.getElementById('memberDetail').innerHTML = '';
+    }
+
     // adminInquiry 관련 함수
     function loadInquiryList() { // 1:1 문의 클릭 : 문의 목록 출력
         console.log('Click - 1:1 문의 => Loading inquiryList...'); // log 출력
 
-        // 만약 이전에 문의 글 열람 => 그 글 출력 안 되게 처리하는 것
-        document.getElementById('inquiryDetail').style.display = 'none'; // 안 보이도록 처리
-        document.getElementById('inquiryDetail').innerHTML = '';
+        cleanPage(); // 이전에 열람한 것 출력 안 되게 처리
 
         fetch('/admin/inquiry')
             .then(response => response.text())
@@ -392,9 +404,7 @@
     function loadSurveyList() { // 설문 관리 클릭 : 설문 목록 출력
         console.log('Click - 설문 관리 => Loading surveyList...'); // log 출력
 
-        // 만약 이전에 설문 열람 => 그 설문 출력 안 되게 처리하는 것
-        document.getElementById('surveyDetail').style.display = 'none'; // 안 보이도록 처리
-        document.getElementById('surveyDetail').innerHTML = '';
+        cleanPage(); // 이전에 열람한 것 출력 안 되게 처리
 
         fetch('/admin/survey')
             .then(response => response.text())
@@ -422,9 +432,7 @@
     function loadMemberList() { // 회원 관리 클릭 : 회원 목록 출력
         console.log('Click - 회원 관리 => Loading memberList...'); // log 출력
 
-        // 만약 이전에 회원 정보 열람 => 그 회원 정보 출력 안 되게 처리하는 것
-        document.getElementById('memberDetail').style.display = 'none'; // 안 보이도록 처리
-        document.getElementById('memberDetail').innerHTML = '';
+        cleanPage(); // 이전에 열람한 것 출력 안 되게 처리
 
         fetch('/admin/member')
             .then(response => response.text())
@@ -442,6 +450,30 @@
                 showPage('memberDetail');
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function deleteMember(userId) {
+        if (confirm('정말 삭제하시겠습니까?')) {
+            fetch(`/member/delete/${userId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    alert('회원 탈퇴 처리가 완료되었습니다.');
+                    loadMemberList(); // 회원 목록 갱신
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
     }
 
     function confirmMemberDelete() { // 회원 삭제 여부 확인
