@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.global
 
 import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.controller.form.UserForm
@@ -24,14 +24,14 @@ class UserController(
     @GetMapping("/user/new")
     fun createForm(model: Model): String {
         model.addAttribute("userForm", UserForm("", "", "", LocalDate.now(), GenderType.FEMALE, "")) // 기본값으로 초기화
-        return "createUserForm"
+        return "sign-up"
     }
 
     @PostMapping("/user/new")
     fun createUser(@Valid userForm: UserForm, result: BindingResult): String {
 
         if (result.hasErrors())
-            return "createUserForm"
+            return "sign-up"
 
         val user = User(
             null,
@@ -59,7 +59,7 @@ class UserController(
     @GetMapping("/")
     fun loginForm(model: Model): String {
         model.addAttribute("loginForm", LoginForm("", "")) // 초기화한 폼을 모델에 추가
-        return "login"
+        return "sign-in"
     }
 
     @PostMapping("/")
@@ -80,8 +80,8 @@ class UserController(
             val user = userService.findUserByLoginId(loginForm.loginId)
 
             return when (user?.userType) {
-                UserType.ADMIN -> "home-admin"
-                UserType.CLIENT -> "home"
+                UserType.ADMIN -> "admin-auth/home-admin"
+                UserType.CLIENT -> "user-auth/home-user"
                 else -> "redirect:/"
             }
 

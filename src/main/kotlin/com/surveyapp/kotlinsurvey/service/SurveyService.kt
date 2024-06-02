@@ -4,8 +4,6 @@ import com.surveyapp.kotlinsurvey.controller.form.AnswerListForm
 import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
 import com.surveyapp.kotlinsurvey.domain.answer.Answer
 import com.surveyapp.kotlinsurvey.domain.answer.AnswerType
-import com.surveyapp.kotlinsurvey.domain.answer.ChoiceAnswer
-import com.surveyapp.kotlinsurvey.domain.answer.TextAnswer
 import com.surveyapp.kotlinsurvey.domain.question.Question
 import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
 import com.surveyapp.kotlinsurvey.domain.question.QuestionType
@@ -35,15 +33,13 @@ class SurveyService(
 
     fun getSurveyList(): List<Survey>? { return surveyRepository.getSurveyList() }
 
-    fun getQuestionList(): List<Question>? { return surveyRepository.getQuestionList() }
-
     fun getUserSurveyList(loginId: String): List<Survey>? { return surveyRepository.getUserSurveyList(loginId) }
 
     fun createSurvey(surveyForm: SurveyForm, user: User): Survey { // 설문 조사 생성 함수
 
         // 받아 온 surveyForm 의 값을 Survey 생성자에 넣어 survey 생성
         val survey = Survey(
-            null, user, surveyForm.title, surveyForm.description, surveyForm.startDate, surveyForm.endDate
+            0, user, surveyForm.title, surveyForm.description, surveyForm.startDate, surveyForm.endDate
         )
 
         val questions = createQuestions(surveyForm, survey) // 질문을 surveyForm의 questionForm으로부터 생성하고 Repository에 저장
@@ -57,7 +53,7 @@ class SurveyService(
     private fun createQuestions(form: SurveyForm, survey: Survey): MutableList<Question> {
         return form.questions.map { questionForm ->
             val question = Question(
-                questionId = null,  // 신규 생성이므로 ID는 null
+                questionId = 0,  // 신규 생성이므로 ID는 null
                 survey = survey,    // 부모 설문조사 객체 연결
                 context = questionForm.context,  // 질문 내용
                 questionType = questionForm.questionType  // 질문 유형
@@ -66,7 +62,7 @@ class SurveyService(
             var index = 1
 
             // 객관식 질문일 경우 선택지를 추가
-            if (questionForm.questionType == QuestionType.MULTIPLE_CHOICE) {
+            if (questionForm.questionType == QuestionType.OBJECTIVE) {
                 question.questionOptions = questionForm.questionOptions.map { optionForm ->
                     QuestionOption(
                         questionOptionId = null,
@@ -94,8 +90,8 @@ class SurveyService(
             val question = survey.findQuestion(alf.questionId) // questionId를 통해 question을 찾음
 
             val answer : Answer = when(question?.questionType) { // questionType에 따라 다른 Answer 객체 생성
-                QuestionType.MULTIPLE_CHOICE -> ChoiceAnswer(null,user,question,surveyParticipation,AnswerType.MULTIPLE_CHOICE,findQuestionOptionById(alf.selectedOption!!))
-                QuestionType.SUBJECTIVE -> TextAnswer(null,user,question,surveyParticipation,AnswerType.SUBJECTIVE,alf.text)
+                QuestionType.OBJECTIVE -> Answer(null,AnswerType.OBJECTIVE,user,question,surveyParticipation,findQuestionOptionById(alf.selectedOption!!),null)
+                QuestionType.SUBJECTIVE -> Answer(null,AnswerType.SUBJECTIVE,user,question,surveyParticipation,null,alf.text!!)
                 else -> { throw IllegalArgumentException("Invalid Question Type")}
             }
             question.answers.add(answer) // 각 question에 answer 추가
@@ -123,5 +119,14 @@ class SurveyService(
     fun deleteSurvey(surveyId: Long) {
         val survey = surveyRepository.getSurveyById(surveyId) ?: throw IllegalArgumentException("Survey not found")
         surveyRepository.deleteSurvey(survey)
+    }
+
+    fun getParticipationById(participationId: Long): SurveyParticipation? {
+        return surveyParticipationRepository.getParticipationById(participationId)
+
+    }
+
+    fun getQuestionOptionByQuestionId(questionId: Long): QuestionOption? {
+        return surveyRepository.getQuestionOptionByQuestionId(questionId)
     }
 }

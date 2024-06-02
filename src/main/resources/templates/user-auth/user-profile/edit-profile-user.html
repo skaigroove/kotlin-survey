@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SurveyBay :: Edit Profile</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+
+        body {
+            font-family: 'IBM Plex Sans KR', Arial, sans-serif;
+            background-color: #1f1f1f;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            font-weight: bold;
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-animation 5s ease infinite;
+            margin-left: 20px;
+            padding-top: 10px;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .menu a {
+            color: #fff;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .username {
+            margin-right: 10px;
+        }
+
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+            color: #333;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #333;
+        }
+
+        .btn_post {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .btn_post:hover {
+            background-color: #218838;
+        }
+
+        .gender-group {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .gender-group label {
+            flex: 1;
+            margin: 0 5px;
+            text-align: center;
+        }
+
+        .gender-group input {
+            display: none;
+        }
+
+        .gender-group .gender-option {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .gender-group input:checked + .gender-option {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                font-size: 20px;
+            }
+        }
+
+        .logout-text {
+            font-size: 20px;
+            margin-right: 30px;
+        }
+
+        .username-welcome {
+            font-size: 20px;
+            margin-right: 20px;
+        }
+        .contain{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <a onclick="location.href='/home/'">
+        <div class="logo">SurveyBay</div>
+    </a>
+    <div class="menu">
+        <div class="user-info">
+            <span class="username"></span>
+            <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
+            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"> </span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="contain">
+    <div class="container">
+        <h1>프로필 설정</h1>
+        <form role="form" action="/user/profile/edit" th:object="${userForm}" method="post">
+            <div class="form-group">
+                <label for="loginId">아이디</label>
+                <input type="text" id="loginId" name="loginId" th:value="${loginUser.loginId}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="password">패스워드</label>
+                <input type="password" id="password" name="password" th:value="${loginUser.password}" required>
+            </div>
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" th:value="${loginUser.name}" required>
+            </div>
+            <div class="form-group">
+                <label for="birthDate">생년월일</label>
+                <input type="date" id="birthDate" name="birthDate" th:value="${loginUser.birthDate}">
+            </div>
+            <div class="form-group">
+                <label>성별</label>
+                <div class="gender-group">
+                    <label>
+                        <input type="radio" name="genderType" value="MALE"
+                               th:checked="${loginUser.genderType == 'MALE'}">
+                        <div class="gender-option">남성</div>
+                    </label>
+                    <label>
+                        <input type="radio" name="genderType" value="FEMALE"
+                               th:checked="${loginUser.genderType == 'FEMALE'}">
+                        <div class="gender-option">여성</div>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">연락처</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" th:value="${loginUser.phoneNumber}"
+                       placeholder="'-'없이 입력해 주세요." required>
+            </div>
+            <button type="submit" class="btn_post">수정</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

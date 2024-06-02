@@ -36,5 +36,18 @@ class SurveyParticipationRepository(
             .resultList
     }
 
+    fun getParticipationById(participationId: Long): SurveyParticipation? {
+        return em.find(SurveyParticipation::class.java, participationId)
+    }
+
+    fun getSurveyParticipationListByLoginId(sessionLoginId: String): List<SurveyParticipation>? {
+        return em.createQuery(
+            "SELECT s FROM SurveyParticipation s WHERE s.user.loginId = :loginId",
+            SurveyParticipation::class.java
+        )
+            .setParameter("loginId", sessionLoginId)
+            .resultList
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package com.surveyapp.kotlinsurvey.domain.question
 
-import com.surveyapp.kotlinsurvey.domain.answer.ChoiceAnswer
+import com.surveyapp.kotlinsurvey.domain.answer.Answer
 import jakarta.persistence.*
 
 @Entity
@@ -22,6 +22,6 @@ class QuestionOption(
     val question: Question
 
 ) {
-    @OneToMany(mappedBy = "selectedOption", fetch = FetchType.LAZY)
-    val choiceAnswers: MutableList<ChoiceAnswer> = mutableListOf()
+    @OneToMany(mappedBy = "objectiveAnswer", fetch = FetchType.LAZY)
+    val objectiveAnswers: MutableList<Answer> = mutableListOf()
 }

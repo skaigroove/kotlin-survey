@@ -4,7 +4,9 @@ import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
 import com.surveyapp.kotlinsurvey.repository.SurveyParticipationRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
+@Service
 class SurveyParticipationService(
     @Autowired private val surveyParticipationRepository: SurveyParticipationRepository,
     ) {
@@ -18,6 +20,10 @@ class SurveyParticipationService(
     
     fun getSurveyParticipationListBySurveyId(surveyId: Long): List<SurveyParticipation> {
         return surveyParticipationRepository.getSurveyParticipationListBySurveyId(surveyId)
+    }
+
+    fun getUserParticipatedSurveyList(sessionLoginId: String): List<SurveyParticipation>? {
+        return surveyParticipationRepository.getSurveyParticipationListByLoginId(sessionLoginId)
     }
 
 

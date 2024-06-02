@@ -230,7 +230,7 @@
         <div class="user-info">
             <span class="username"></span>
             <img src="/profile.jpg" alt="User Profile" class="profile-img">
-            <span class="username-welcome">사용자님 환영합니다.</span>
+            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
         </div>
     </div>
 </header>
@@ -277,7 +277,7 @@
                 <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
                     <option value="NONE">유형 선택</option>
                     <option value='SUBJECTIVE'>주관식</option>
-                    <option value='MULTIPLE_CHOICE'>객관식</option>
+                    <option value='OBJECTIVE'>객관식</option>
                 </select>
                 <button class="btn" type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
             </div>
@@ -301,13 +301,13 @@
     function updateQuestionLabels() {
         const questionLabels = document.querySelectorAll('[id^="questionLabel"]');
         questionLabels.forEach((label, index) => {
-            label.textContent = `${index + 1}번 질문`;
+            label.textContent = `🐼 ${index + 1}번 질문`;
         });
     }
 
     function toggleOptions(select, questionIndex) {
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
-        if (select.value === 'MULTIPLE_CHOICE') {
+        if (select.value === 'OBJECTIVE') {
             optionsContainer.style.display = 'block';
             addOption(questionIndex);
             addOption(questionIndex);
@@ -335,15 +335,10 @@
     }
 
     function removeOption(questionIndex, optionIndex) {
-        const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
-        if (questions[questionIndex].options.length > 2) {
-            const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
-            optionDiv.remove();
-            questions[questionIndex].options.splice(optionIndex, 1);
-            updateOptionIndexes(questionIndex);
-        } else {
-            alert("최소 2개의 선지가 필요합니다.");
-        }
+        const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
+        optionDiv.remove();
+        questions[questionIndex].options.splice(optionIndex, 1);
+        updateOptionIndexes(questionIndex);
     }
 
     function updateOptionIndexes(questionIndex) {

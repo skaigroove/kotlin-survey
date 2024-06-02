@@ -1,8 +1,7 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.admin
 
 
 import com.surveyapp.kotlinsurvey.repository.SurveyParticipationRepository
-import com.surveyapp.kotlinsurvey.service.SurveyParticipationService
 import com.surveyapp.kotlinsurvey.service.SurveyService
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession

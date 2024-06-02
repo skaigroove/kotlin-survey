@@ -29,8 +29,8 @@
         .logout-text {
             font-size: 20px;
             color: white;
-            margin-right: 30px;
             text-decoration: underline;
+            cursor: pointer;
         }
 
         .logo {
@@ -89,56 +89,90 @@
             display: flex;
             padding: 20px;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
         }
 
         .container {
             display: flex;
+            flex-direction: column;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1500px;
             margin: 0 auto;
-        }
-
-        .left-column, .right-column {
-            flex: 1;
             padding: 20px;
+            background-color: #fff;
+            color: #333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .column {
-            text-align: center;
-            font-weight: bold;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .column h2 {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
             padding: 10px;
-            font-size: 20px;
+            border: 1px solid #ccc;
+            text-align: left;
         }
 
-        .about {
-            padding-top: 100px;
-        }
-
-        td {
-            width: calc(15% - 30px);
-            height: 30px;
-            margin-left: 5px;
-            margin-bottom: 5px;
+        th {
+            background-color: #f4f4f4;
         }
 
         .btn_post {
-            background: #f6f3ee;
-            border: 0px solid #d5d1d1;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), 0 2px 3px rgba(0, 0, 0, 0.2);
-            width: 140px;
-            padding: 10px 16px;
-            margin: 10px 20px;
-            color: #333;
-            border-radius: 5px;
-            margin-top: 30px;
-
-            font-family: 'Noto Sans KR', sans-serif;
-            font-weight: bold;
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: all 0.3s ease;
             text-align: center;
-            letter-spacing: 0.1em;
+            margin-top: 20px;
+        }
+
+        .btn_post:hover {
+            background-color: #0056b3;
+        }
+
+        .btn_action {
+            background: #ff4d4d;
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn_action_check {
+            background: #28a745;
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn_action:hover {
+            background: #cc0000;
+        }
+
+        .btn_action_check:hover {
+            background: #218838;
+        }
+
+        .btn_group {
+            display: flex;
+            flex-direction: column;
         }
 
         footer {
@@ -147,84 +181,20 @@
             text-align: center;
             padding: 10px 0;
             width: 100%;
-            position: fixed;
-            bottom: 0;
         }
-
+        .logout-text {
+            font-size: 20px;
+            margin-right: 30px;
+        }
         .username-welcome {
             font-size: 20px;
-            color: #fff;
             margin-right: 20px;
         }
-
-        .survey-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .survey-table th, .survey-table td {
-            border: 1px solid #ccc;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .survey-table th {
-            background-color: #444;
-        }
-
-        .survey-table td {
-            background-color: #555;
-        }
-
-        .btn_action {
-            background: #ff4d4d;
-            border: 0px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), 0 2px 3px rgba(0, 0, 0, 0.2);
-            width: 60px;
-            padding: 5px;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            margin: 2px;
-        }
-
-        .btn_action_check {
-            background: #ffffff;
-            border: 0px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.01), 0 2px 3px rgba(0, 0, 0, 0.2);
-            width: 60px;
-            padding: 5px;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            margin: 2px;
-
-        }
-
-        .btn_action:hover {
-            background: #ff1a1a;
-        }
-
-        .btn_group {
-            display: flex;
-            flex-direction: column;
-        }
-
     </style>
 </head>
 <body>
 <header>
-    <a onclick="location.href='/home/'">
-        <div class="logo">SurveyBay</div>
-    </a>
+    <div class="logo" onclick="location.href='/home/'">SurveyBay</div>
     <div class="menu">
         <div class="user-info">
             <span class="username"></span>
@@ -236,40 +206,41 @@
         </div>
     </div>
 </header>
-<main id="mainContent">
+<main>
     <div class="container">
-        <div class="left-column">
+        <div class="column">
+            <h2>사용자 정보</h2>
             <table>
                 <tr>
-                    <th class="column">아이디</th>
+                    <th>아이디</th>
                     <td th:text="${loginUser.loginId}"></td>
                 </tr>
                 <tr>
-                    <th class="column">패스워드</th>
+                    <th>패스워드</th>
                     <td th:text="${loginUser.password}"></td>
                 </tr>
                 <tr>
-                    <th class="column">이름</th>
+                    <th>이름</th>
                     <td th:text="${loginUser.name}"></td>
                 </tr>
                 <tr>
-                    <th class="column">생년월일</th>
+                    <th>생년월일</th>
                     <td th:text="${loginUser.birthDate}"></td>
                 </tr>
                 <tr>
-                    <th class="column">연락처</th>
+                    <th>연락처</th>
                     <td th:text="${loginUser.phoneNumber}"></td>
                 </tr>
                 <tr>
-                    <th class="column">성별</th>
+                    <th>성별</th>
                     <td th:text="${loginUser.genderType}"></td>
                 </tr>
             </table>
             <button class="btn_post" onclick="location.href='/user/profile/edit'">정보 수정</button>
         </div>
-        <div class="right-column survey-container">
+        <div class="column">
             <h2>My Surveys</h2>
-            <table class="survey-table">
+            <table>
                 <thead>
                 <tr>
                     <th>Survey ID</th>
@@ -286,11 +257,42 @@
                     <td th:text="${survey.title}">Survey Title</td>
                     <td th:text="${survey.startDate}">Start Date</td>
                     <td th:text="${survey.endDate}">End Date</td>
-                    <td><button class="btn_action_check"><a th:href="@{/user/survey/view/{surveyId}(surveyId=${survey.surveyId})}">조회</a></button></td>
+                    <td>
+                        <button class="btn_action_check">
+                            <a th:href="@{/user/survey/view/{surveyId}(surveyId=${survey.surveyId})}" style="color: white; text-decoration: none;">조회</a>
+                        </button>
+                    </td>
                     <td>
                         <form th:action="@{/user/survey/delete/{surveyId}(surveyId=${survey.surveyId})}" method="post" style="display:inline;" onsubmit="return confirmDelete();">
                             <button type="submit" class="btn_action">삭제</button>
                         </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="column">
+            <h2>Participated Surveys</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th>Survey ID</th>
+                    <th>Title</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Check</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="surveyParticipation : ${participatedSurveyList}">
+                    <td th:text="${surveyParticipation.survey.surveyId}">Survey ID</td>
+                    <td th:text="${surveyParticipation.survey.title}">Survey Title</td>
+                    <td th:text="${surveyParticipation.survey.startDate}">Start Date</td>
+                    <td th:text="${surveyParticipation.survey.endDate}">End Date</td>
+                    <td>
+                        <button class="btn_action_check">
+                            <a th:href="@{/user/participation/view/{participationId}(participationId=${surveyParticipation.participationId})}" style="color: white; text-decoration: none;">조회</a>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -304,23 +306,6 @@
 </footer>
 
 <script>
-    const navbar = document.querySelector('.navbar');
-    const mainContent = document.getElementById('mainContent');
-
-    document.querySelector('.banner').addEventListener('mouseover', function () {
-        navbar.style.opacity = '1';
-        navbar.style.height = '50px'; // 네비게이션 바의 높이 설정
-        mainContent.style.marginTop = '50px'; // 메인 콘텐츠 밀림 조정
-    });
-
-    document.querySelector('.banner').addEventListener('mouseout', function () {
-        setTimeout(() => {
-            navbar.style.opacity = '0';
-            navbar.style.height = '0px';
-            mainContent.style.marginTop = '20px';
-        }, 3000); // 2초 후에 실행
-    });
-
     function confirmDelete() {
         return confirm('정말 삭제하시겠습니까?');
     }

@@ -1,11 +1,9 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.user
 
-import com.surveyapp.kotlinsurvey.controller.form.LoginForm
 import com.surveyapp.kotlinsurvey.controller.form.UserForm
-import com.surveyapp.kotlinsurvey.domain.user.GenderType
 import com.surveyapp.kotlinsurvey.domain.user.User
-import com.surveyapp.kotlinsurvey.repository.SurveyRepository
 import com.surveyapp.kotlinsurvey.repository.UserRepository
+import com.surveyapp.kotlinsurvey.service.SurveyParticipationService
 import com.surveyapp.kotlinsurvey.service.SurveyService
 import org.springframework.ui.Model
 import com.surveyapp.kotlinsurvey.service.UserService
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
 
 @Controller
 @RequestMapping("/user")
@@ -23,11 +20,11 @@ class UserProfileController(
     @Autowired private val userService: UserService,
     @Autowired private val userRepository: UserRepository,
     @Autowired private val surveyService: SurveyService,
-    @Autowired private val surveyRepository: SurveyRepository
+    @Autowired private val surveyParticipationService: SurveyParticipationService
 ) {
 
     @GetMapping("/profile")
-    fun userProfile(session: HttpSession, model: Model): String {
+    fun viewUserProfile(session: HttpSession, model: Model): String {
         // login 여부 확인
         if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/"
@@ -65,11 +62,14 @@ class UserProfileController(
         val surveyList = surveyService.getUserSurveyList(sessionLoginId)
         model.addAttribute("surveyList", surveyList)
 
-        return "userProfile"
+        val participatedSurveyList = surveyParticipationService.getUserParticipatedSurveyList(sessionLoginId)
+        model.addAttribute("participatedSurveyList", participatedSurveyList)
+
+        return "user-auth/user-profile/profile-main-user"
     }
 
     @GetMapping("/profile/edit")
-    fun editForm(model: Model, session: HttpSession):String{
+    fun createUserForm(model: Model, session: HttpSession):String{
         // login 여부 확인
         if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/"
@@ -82,17 +82,18 @@ class UserProfileController(
         model.addAttribute("userForm", UserForm(user!!.loginId, user.password, user.name, user.birthDate, user.genderType, user.phoneNumber)) // 초기화한 폼을 모델에 추가
         model.addAttribute("loginUser",user)
 
-        return "editProfile"
+        return "user-auth/user-profile/edit-profile-user"
     }
 
     @PostMapping("/profile/edit")
-    fun editUserProfile(
+    fun editUserInformation(
         @Valid @ModelAttribute("user") userForm: UserForm,
+        model: Model,
         result: BindingResult,
         session: HttpSession,
     ): String {
         if (result.hasErrors()) {
-            return "userProfile"
+            return "user-auth/user-profile/profile-main-user"
         }
 
         val sessionUser = userService.findUserByLoginId(session.getAttribute("loginId") as String)
@@ -105,11 +106,16 @@ class UserProfileController(
         val loginId = session.getAttribute("loginId") as String
         val user = userService.updateUser(loginId, userForm)
 
+        // 세션에서 사용자 이름 가져오기 -> 헤더의 사용자 정보 표시
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username)
+
         return "redirect:/user/profile"
     }
 
     @PostMapping("/survey/delete/{surveyId}")
-    fun deleteSurvey(@PathVariable surveyId: Long, session: HttpSession): String {
+    fun deleteCreatedSurvey(@PathVariable surveyId: Long, session: HttpSession): String {
         // login 여부 확인
         if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/"
@@ -126,7 +132,7 @@ class UserProfileController(
     }
 
     @GetMapping("/survey/view/{surveyId}")
-    fun viewSurvey(@PathVariable surveyId: Long, model: Model, session: HttpSession): String {
+    fun viewCreatedSurvey(@PathVariable surveyId: Long, model: Model, session: HttpSession): String {
         // login 여부 확인
         if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/"
@@ -143,7 +149,33 @@ class UserProfileController(
 
         if (survey != null && survey.user.loginId == sessionLoginId) {
             model.addAttribute("survey", survey)
-            return "surveyView" // 여기에 surveyView.html 파일을 작성해야 합니다.
+            return "user-auth/user-profile/self-created-survey-view" // 여기에 self-created-survey-view.html 파일을 작성해야 합니다.
+        }
+
+        return "redirect:/user/profile"
+    }
+
+    @GetMapping("/participation/view/{participationId}")
+    fun viewSurveyParticipation(@PathVariable participationId: Long, model: Model, session: HttpSession): String {
+        // login 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
+            return "redirect:/"
+
+        val sessionLoginId = session.getAttribute("loginId") as String
+
+        // 참여 정보를 가져온다
+        val participation = surveyService.getParticipationById(participationId)
+
+        model.addAttribute("participation", participation)
+
+        // 세션에서 사용자 이름 가져오기 -> 헤더의 사용자 정보 표시
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username)
+
+        if (participation?.user?.loginId == sessionLoginId) {
+            model.addAttribute("participationId", participationId) // participationId를 모델에 추가
+            return "user-auth/user-profile/view-participate-user"
         }
 
         return "redirect:/user/profile"

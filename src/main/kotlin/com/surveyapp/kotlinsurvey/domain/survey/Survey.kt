@@ -11,7 +11,7 @@ class Survey(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increasement
-    val surveyId: Long?, // 설문 ID
+    val surveyId: Long, // 설문 ID
 
     @ManyToOne
     @JoinColumn(name="user_id")

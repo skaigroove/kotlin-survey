@@ -143,13 +143,12 @@
         }
 
         input[type="text"] {
-            width: 200%; /* 너비를 2배로 늘림 */
+            width: 100%; /* 너비를 2배로 늘림 */
             font-size: 1.2em; /* 텍스트 크기를 1.5배로 늘림 */
             margin-right: 10px;
             padding: 5px; /* 패딩 추가 */
             box-sizing: border-box; /* 패딩을 포함하여 전체 너비를 계산 */
         }
-
 
         input[type="radio"] {
             margin-right: 10px;
@@ -176,7 +175,6 @@
         button:hover {
             background-color: #007bff;
         }
-
 
         footer {
             background-color: #2c2c2c;
@@ -215,10 +213,10 @@
     </div>
     <div class="questions">
         <form th:action="@{/home/list/participate/{surveyId}(surveyId=${surveyId})}" th:object="${answerListForm}" method="post">
-            <div class="questions" th:each="question, idx : ${questions}">
+            <div class="questions" th:each="question, idx : ${survey.questions}">
                 <div class="question">
                     <p th:text="${question.context}"></p>
-                    <th:block th:if="${question.questionType.name() == 'MULTIPLE_CHOICE'}">
+                    <div th:if="${question.questionType.name() == 'OBJECTIVE'}">
                         <div th:each="option, optionIdx : ${question.questionOptions}">
                             <label th:for="${'question' + idx.index + 'option' + optionIdx.index}">
                                 <input type="radio" th:id="${'question' + idx.index + 'option' + optionIdx.index}"
@@ -227,12 +225,12 @@
                                 <span th:text="${option.questionOptionText}"></span>
                             </label>
                         </div>
-                    </th:block>
-                    <th:block th:if="${question.questionType.name() == 'SUBJECTIVE'}">
+                    </div>
+                    <div th:if="${question.questionType.name() == 'SUBJECTIVE'}">
                         <label th:for="${'question' + idx.index}">
                             <input type="text" th:id="${'question' + idx.index}" th:name="${'answerList[' + idx.index + '].text'}"/>
                         </label>
-                    </th:block>
+                    </div>
                     <input type="hidden" th:name="${'answerList[' + idx.index + '].questionId'}" th:value="${question.questionId}"/>
                     <input type="hidden" th:name="${'answerList[' + idx.index + '].answerType'}" th:value="${question.questionType}"/>
                 </div>

@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.admin
 
 import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry

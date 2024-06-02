@@ -1,4 +1,5 @@
 server:
+ # address: 192.168.0.14
  # address: 192.168.45.193
   port: 8080
   servlet:

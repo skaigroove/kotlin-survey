@@ -62,4 +62,13 @@ class SurveyRepository(
     fun deleteSurvey(survey: Survey) {
         em.remove(survey)
     }
+
+    fun getQuestionOptionByQuestionId(questionId: Long): QuestionOption? {
+        return em.createQuery(
+            "select qo from QuestionOption qo JOIN Answer a where a.question.questionId= :questionId and  qo.questionOptionId == a.objectiveAnswer.questionOptionId",
+            QuestionOption::class.java
+        )
+            .setParameter("questionId", questionId)
+            .singleResult
+    }
 }

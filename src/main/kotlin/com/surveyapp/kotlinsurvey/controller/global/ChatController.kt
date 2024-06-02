@@ -1,4 +1,4 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.global
 
 import com.surveyapp.kotlinsurvey.chat.domain.ChatMessage
 import com.surveyapp.kotlinsurvey.chat.domain.MessageType

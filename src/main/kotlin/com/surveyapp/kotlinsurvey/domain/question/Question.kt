@@ -10,7 +10,7 @@ class Question(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val questionId: Long?,
+    val questionId: Long,
 
     @ManyToOne
     @JoinColumn(name = "survey_id")

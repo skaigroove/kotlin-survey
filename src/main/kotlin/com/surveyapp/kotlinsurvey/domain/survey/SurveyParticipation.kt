@@ -1,7 +1,6 @@
 package com.surveyapp.kotlinsurvey.domain.survey
 
 import com.surveyapp.kotlinsurvey.domain.answer.Answer
-import com.surveyapp.kotlinsurvey.domain.answer.TextAnswer
 import com.surveyapp.kotlinsurvey.domain.user.User
 import jakarta.persistence.*
 import java.time.LocalDate

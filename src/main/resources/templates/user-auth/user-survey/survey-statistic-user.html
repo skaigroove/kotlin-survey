@@ -178,16 +178,16 @@
         <div class="user-info">
             <span class="username"></span>
             <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
-            <span class="username-welcome"></span>
+            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
         </div>
     </div>
 </header>
 <main>
     <input type="hidden" id="surveyId" th:value="${surveyId}">
     <div class="survey-details">
-        <h1></h1>
-        <p>설문 기간: <span id="surveyPeriod"></span></p>
-        <h4></h4>
+        <h1 th:text="${survey.title}"></h1>
+        <p>설문 기간: <span id="surveyPeriod" th:text="${survey.startDate} + ' ~ ' + ${survey.endDate}"></span></p>
+        <h4 th:text="${survey.description}"></h4>
     </div>
     <div id="chartsContainer"></div>
     <div id="subjectiveContainer"></div>
@@ -217,19 +217,19 @@
             // 객관식 데이터 처리
             if (data.objective) {
                 const groupedData = data.objective.reduce((acc, stat) => {
-                    if (!acc[stat.question]) {
-                        acc[stat.question] = [];
+                    if (!acc[stat.questionId]) {
+                        acc[stat.questionId] = { question: stat.question, options: [] };
                     }
-                    acc[stat.question].push({ optionText: stat.option, count: stat.count });
+                    acc[stat.questionId].options.push({ optionText: stat.option, count: stat.count });
                     return acc;
                 }, {});
 
-                Object.entries(groupedData).forEach(([questionText, options], index) => {
+                Object.entries(groupedData).forEach(([questionId, { question, options }], index) => {
                     const chartGroupDiv = document.createElement('div');
                     chartGroupDiv.className = 'chart-group';
 
                     const title = document.createElement('h3');
-                    title.textContent = questionText;
+                    title.textContent = question;
                     chartGroupDiv.appendChild(title);
 
                     // 바 차트와 파이 차트를 같은 행에 배치
@@ -237,11 +237,11 @@
                     chartsRowDiv.className = 'charts-row';
 
                     const barCanvas = document.createElement('canvas');
-                    barCanvas.id = 'barChart' + index;
+                    barCanvas.id = 'barChart' + questionId;
                     chartsRowDiv.appendChild(barCanvas);
 
                     const pieCanvas = document.createElement('canvas');
-                    pieCanvas.id = 'pieChart' + index;
+                    pieCanvas.id = 'pieChart' + questionId;
                     chartsRowDiv.appendChild(pieCanvas);
 
                     chartGroupDiv.appendChild(chartsRowDiv);
@@ -338,8 +338,8 @@
             // 주관식 데이터 처리
             if (data.subjective) {
                 subjectiveData = data.subjective;
-                Object.keys(subjectiveData).forEach(questionText => {
-                    currentPages[questionText] = 1;
+                Object.keys(subjectiveData).forEach(questionId => {
+                    currentPages[questionId] = 1;
                 });
                 renderAllSubjectiveData();
             }
@@ -350,16 +350,16 @@
         const subjectiveContainer = document.getElementById('subjectiveContainer');
         subjectiveContainer.innerHTML = ''; // Clear existing subjective data
 
-        Object.entries(subjectiveData).forEach(([questionText, answers]) => {
+        Object.entries(subjectiveData).forEach(([questionId, answers]) => {
             const subjectiveDiv = document.createElement('div');
             subjectiveDiv.className = 'subjective';
 
             const title = document.createElement('h3');
-            title.textContent = questionText;
+            title.textContent = `Question ID: ${questionId}`;
             subjectiveDiv.appendChild(title);
 
             const ul = document.createElement('ul');
-            const startIndex = (currentPages[questionText] - 1) * itemsPerPage;
+            const startIndex = (currentPages[questionId] - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
 
             answers.slice(startIndex, endIndex).forEach(answer => {
@@ -376,8 +376,8 @@
             prevBtn.className = 'page-btn';
             prevBtn.textContent = 'Previous';
             prevBtn.onclick = () => {
-                if (currentPages[questionText] > 1) {
-                    currentPages[questionText]--;
+                if (currentPages[questionId] > 1) {
+                    currentPages[questionId]--;
                     renderAllSubjectiveData();
                 }
             };
@@ -387,8 +387,8 @@
             nextBtn.textContent = 'Next';
             nextBtn.onclick = () => {
                 const totalPages = Math.ceil(answers.length / itemsPerPage);
-                if (currentPages[questionText] < totalPages) {
-                    currentPages[questionText]++;
+                if (currentPages[questionId] < totalPages) {
+                    currentPages[questionId]++;
                     renderAllSubjectiveData();
                 }
             };
@@ -399,20 +399,20 @@
             subjectiveDiv.appendChild(paginationDiv);
             subjectiveContainer.appendChild(subjectiveDiv);
 
-            updatePaginationButtons(questionText, answers.length);
+            updatePaginationButtons(questionId, answers.length);
         });
     }
 
-    function updatePaginationButtons(questionText, totalAnswers) {
+    function updatePaginationButtons(questionId, totalAnswers) {
         const totalPages = Math.ceil(totalAnswers / itemsPerPage);
-        const prevBtn = document.querySelector(`.subjective:nth-child(${Object.keys(subjectiveData).indexOf(questionText) + 1}) .page-btn:nth-child(1)`);
-        const nextBtn = document.querySelector(`.subjective:nth-child(${Object.keys(subjectiveData).indexOf(questionText) + 1}) .page-btn:nth-child(2)`);
+        const prevBtn = document.querySelector(`.subjective:nth-child(${Object.keys(subjectiveData).indexOf(questionId) + 1}) .page-btn:nth-child(1)`);
+        const nextBtn = document.querySelector(`.subjective:nth-child(${Object.keys(subjectiveData).indexOf(questionId) + 1}) .page-btn:nth-child(2)`);
 
-        prevBtn.classList.toggle('disabled', currentPages[questionText] === 1);
-        nextBtn.classList.toggle('disabled', currentPages[questionText] === totalPages);
+        prevBtn.classList.toggle('disabled', currentPages[questionId] === 1);
+        nextBtn.classList.toggle('disabled', currentPages[questionId] === totalPages);
 
-        prevBtn.disabled = currentPages[questionText] === 1;
-        nextBtn.disabled = currentPages[questionText] === totalPages;
+        prevBtn.disabled = currentPages[questionId] === 1;
+        nextBtn.disabled = currentPages[questionId] === totalPages;
     }
 </script>
 </body>

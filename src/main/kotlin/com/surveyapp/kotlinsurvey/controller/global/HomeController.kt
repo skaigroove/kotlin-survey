@@ -1,17 +1,9 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.global
 
-import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
-import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
-import com.surveyapp.kotlinsurvey.service.UserInquiryService
-import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
-import jakarta.validation.Valid
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.mvc.support.RedirectAttributes
 
 @RequestMapping("/home") // endpoint
 @Controller
@@ -24,9 +16,8 @@ class HomeController() {
         print("username: $username")
         model.addAttribute("username", username);
 
-        return "home"
+        return "user-auth/home-user"
     }
-
 
     @GetMapping("/logout")
     fun logout(session: HttpSession): String{ // 로그아웃
@@ -49,7 +40,7 @@ class HomeController() {
         print("username: $username")
         model.addAttribute("username", username);
 
-        return "home-admin"
+        return "admin-auth/home-admin"
     }
 
 }

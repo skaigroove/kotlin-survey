@@ -1,10 +1,7 @@
-package com.surveyapp.kotlinsurvey.controller
+package com.surveyapp.kotlinsurvey.controller.user
 
-import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
-import com.surveyapp.kotlinsurvey.controller.form.SurveyForm
 import com.surveyapp.kotlinsurvey.controller.form.UserInquiryForm
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
-import com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState
 import com.surveyapp.kotlinsurvey.domain.user.User
 import com.surveyapp.kotlinsurvey.service.UserInquiryService
 import com.surveyapp.kotlinsurvey.service.UserService
@@ -16,7 +13,6 @@ import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.mvc.support.RedirectAttributes
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Controller
@@ -40,7 +36,7 @@ class UserInquiryController(
 
         model.addAttribute("inquiryList", inquiryList)
 
-        return "inquiry" // 경로 반환 : inquiry.html
+        return "user-auth/user-inquiry/inquiry-list-user" // 경로 반환 : inquiry-list-user.html
     }
 
     @GetMapping("/post")
@@ -57,7 +53,7 @@ class UserInquiryController(
         print("username: $username")
         model.addAttribute("username", username);
 
-        return "createInquiryForm" // 경로 반환 : createInquiryForm.html
+        return "user-auth/user-inquiry/inquiry-create" // 경로 반환 : create-inquiry-list-user.html
     }
 
     @PostMapping("/post")
@@ -124,7 +120,7 @@ class UserInquiryController(
         model.addAttribute("inquiryPost", inquiryPost)
         //model.addAttribute("replyInquiryForm", ReplyInquiryForm())
 
-        return "inquiryPost"
+        return "user-auth/user-inquiry/inquiry-view-user"
     }
 
 
