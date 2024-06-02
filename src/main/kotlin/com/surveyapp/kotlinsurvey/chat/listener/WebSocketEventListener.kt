@@ -25,7 +25,7 @@ class WebSocketEventListener(
 
     @EventListener
     fun handleWebSocketDisconnectListener(event: SessionDisconnectEvent) {
-        val headerAccessor = event.message.headers[SimpMessageHeaderAccessor::class.java.name] as SimpMessageHeaderAccessor
+        val headerAccessor = SimpMessageHeaderAccessor.wrap(event.message)
         val username = headerAccessor.sessionAttributes?.get("username") as String?
 
         if (username != null) {
@@ -34,6 +34,8 @@ class WebSocketEventListener(
             val chatMessage = ChatMessage(sender = username, content = "", type = MessageType.LEAVE)
             messagingTemplate.convertAndSend("/topic/public", chatMessage)
             messagingTemplate.convertAndSend("/topic/onlineUsers", onlineUsers)
+        } else {
+            logger.warn("Session disconnect event received with no username")
         }
     }
 

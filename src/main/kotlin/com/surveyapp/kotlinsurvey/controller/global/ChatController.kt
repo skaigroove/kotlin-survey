@@ -5,6 +5,7 @@ import com.surveyapp.kotlinsurvey.chat.domain.MessageType
 import com.surveyapp.kotlinsurvey.chat.listener.WebSocketEventListener
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
 
@@ -21,9 +22,11 @@ class ChatController(
     }
 
     @MessageMapping("/chat.addUser")
-    fun addUser(message: ChatMessage) {
-        webSocketEventListener.addUser(message.sender)
-        val chatMessage = ChatMessage(sender = message.sender, content = "", type = MessageType.JOIN)
+    fun addUser(message: ChatMessage, headerAccessor: SimpMessageHeaderAccessor) {
+        val username = message.sender
+        headerAccessor.sessionAttributes?.put("username", username)  // 세션에 사용자 이름 저장
+        webSocketEventListener.addUser(username)
+        val chatMessage = ChatMessage(sender = username, content = "", type = MessageType.JOIN)
         messagingTemplate.convertAndSend("/topic/public", chatMessage)
     }
 
