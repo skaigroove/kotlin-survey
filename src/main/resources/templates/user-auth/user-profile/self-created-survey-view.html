@@ -199,10 +199,10 @@
     </table>
 
     <h2>Survey Questions</h2>
-    <div th:each="question : ${survey.questions}">
+    <div th:each="question, iterStat : ${survey.questions}">
       <div class="question-container">
         <div class="question-header">
-          <span th:text="'Question ID: ' + ${question.questionId}"></span>
+          <span th:text="'Question ' + ${iterStat.index + 1} + '.'"></span>
           <br>
           <span th:text="${question.context}"></span>
         </div>
