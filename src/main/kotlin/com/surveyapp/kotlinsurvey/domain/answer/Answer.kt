@@ -17,7 +17,7 @@ class Answer(
 
     @Column(name = "answer_type", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    val answerType: AnswerType, // 답변 유형
+    var answerType: AnswerType, // 답변 유형
 
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_user_id"))
@@ -36,6 +36,6 @@ class Answer(
     var objectiveAnswer: QuestionOption? = null, // 주관식 답변일 때, 선택된 선택지
 
     @Column
-    val subjectiveAnswer: String? = null // 주관식 답변 내용
+    var subjectiveAnswer: String? = null // 주관식 답변 내용
 ){
 }

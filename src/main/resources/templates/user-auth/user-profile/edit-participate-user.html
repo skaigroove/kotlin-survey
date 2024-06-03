@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Survey Participation Edit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="password"],
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+
+        .answer-group {
+            margin-bottom: 20px;
+        }
+
+        .answer-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .answer-group input[type="text"],
+        .answer-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .answer-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>설문 참여 수정</h1>
+
+    <form th:action="@{/user/participation/edit/{participationId}(participationId=${participationId})}" th:object="${answerListForm}"  method="post">
+        <div th:if="${#fields.hasErrors()}">
+            <p style="color: red;">입력한 내용에 오류가 있습니다. 다시 확인해 주세요.</p>
+        </div>
+
+        <div th:each="answerForm, iterStat : ${answerListForm.editAnswerList}">
+            <div class="answer-group">
+                <label th:text="${answerForm.question.context}">Question Text</label>
+                <input type="hidden" th:field="*{editAnswerList[__${iterStat.index}__].questionId}" />
+                <input type="hidden" th:field="*{editAnswerList[__${iterStat.index}__].answerType}" />
+                <div th:if="${answerForm.answerType.name() == 'SUBJECTIVE'}">
+                    <label>
+                        <textarea th:field="*{editAnswerList[__${iterStat.index}__].subjectiveAnswer}" placeholder="Enter your answer"></textarea>
+                    </label>
+                </div>
+                <div th:if="${answerForm.answerType.name() == 'OBJECTIVE'}">
+                    <label>
+                        <select th:field="*{editAnswerList[__${iterStat.index}__].objectiveAnswer}">
+                            <option th:each="option : ${answerForm.question.questionOptions}"
+                                    th:value="${option.questionOptionId}"
+                                    th:text="${option.questionOptionText}"
+                                    th:selected="${option.questionOptionId == answerForm.objectiveAnswer}">
+                            </option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn-submit">수정</button>
+    </form>
+</div>
+</body>
+</html>

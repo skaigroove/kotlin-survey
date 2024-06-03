@@ -1,5 +1,6 @@
 package com.surveyapp.kotlinsurvey.repository
 
+import com.surveyapp.kotlinsurvey.domain.answer.Answer
 import com.surveyapp.kotlinsurvey.domain.answer.AnswerType
 import com.surveyapp.kotlinsurvey.domain.question.Question
 import com.surveyapp.kotlinsurvey.domain.question.QuestionOption
@@ -71,4 +72,28 @@ class SurveyRepository(
             .setParameter("questionId", questionId)
             .singleResult
     }
+
+    fun findAnswersByParticipation(surveyParticipation: SurveyParticipation): List<Answer> {
+        return em.createQuery(
+            "select a from Answer a where a.surveyParticipation.participationId = :participationId",
+            Answer::class.java
+        )
+            .setParameter("participationId", surveyParticipation.participationId)
+            .resultList
+
+    }
+
+    fun findQuestionById(questionId: Long?): Question? {
+        return em.find(Question::class.java, questionId)
+
+    }
+
+    fun saveAnswer(answer: Answer) {
+        if (answer.answerId == null) {
+            em.persist(answer)
+        } else {
+            em.merge(answer)
+        }
+    }
+
 }

@@ -97,7 +97,9 @@
             <hr>
         </div>
     </div>
-
+    <a th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}">
+        <button class="btn_post">Edit Participation</button>
+    </a>
     <a href="/user/profile" class="btn-back">Back to Profile</a>
 </div>
 </body>
