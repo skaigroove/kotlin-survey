@@ -85,6 +85,7 @@
     </style>
 </head>
 <body>
+<!-- <div id="surveyDetail" style="overflow-x: auto; white-space: nowrap;"> --> <!-- 이건 가로 스크롤 생성 ver. -->
 <div id="surveyDetail">
     <div class="surveyContainer">
         <div class="section">
@@ -109,23 +110,53 @@
 
         <div class="section">
             <h3>설문 질문</h3>
-            <div th:each="question : ${adminSurveyPost.questions}">
+            <div th:each="question, iterStat : ${adminSurveyPost.questions}">
                 <div class="question-container">
                     <div class="question-header">
-                        <span th:text="'Question ID: ' + ${question.questionId}"></span>
+                        <span th:text="'질문 ' + ${iterStat.index + 1} + ' (Question ID : ' + ${question.questionId} + ')'"></span>
                         <br>
                         <span th:text="${question.context}"></span>
                     </div>
-                    <div th:if="${question.questionType.name()} == 'MULTIPLE_CHOICE'">
+
+                    <div th:if="${question.questionType.name()} == 'OBJECTIVE'">
                         <ul class="options-list">
                             <li th:each="option, iterStat : ${question.questionOptions}" th:text="${iterStat.index + 1} + '. ' + ${option.questionOptionText}"></li>
                         </ul>
                     </div>
+
+                    <!-- 주관식 문제 밑에 주관식이라고 적는 부분
                     <div th:if="${question.questionType.name()} == 'SUBJECTIVE'">
                         <p>주관식</p>
-                    </div>
+                    </div> -->
                 </div>
             </div>
+        </div>
+
+        <div class="section" style="overflow-x: auto">
+            <h3>설문 응답</h3>
+            <table>
+                <tr>
+                    <th class="t1" scope="col">참여 번호</th>
+                    <th class="t1" scope="col">회원 번호</th>
+                    <th class="t1" scope="col">회원 이름</th>
+                    <th th:each="question, iterStat : ${adminSurveyPost.questions}" class="t1" scope="col">
+                        <span th:text="'질문 ' + ${iterStat.index + 1}"></span>
+                    </th>
+                </tr>
+
+                <tbody>
+                <tr th:each="participation : ${adminSurveyPost.participations}" >
+                    <td class="t2" th:text="${participation.participationId}"></td>
+                    <td class="t2" th:text="${participation.user.userId}"></td>
+                    <td class="t2" th:text="${participation.user.name}"></td>
+
+                    <td class="t2" th:each="answer : ${participation.answers}">
+                        <span th:if="${answer.answerType.name() == 'SUBJECTIVE'}" th:text="${answer.subjectiveAnswer}"></span>
+                        <span th:if="${answer.answerType.name() == 'OBJECTIVE'}" th:text="${answer.objectiveAnswer.questionOptionText}"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
