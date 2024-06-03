@@ -146,6 +146,7 @@
             min-width: 300px;
             max-width: 700px;
             min-height: 900px;
+            position: relative; /* 컨테이너를 상대적으로 위치시킴 */
         }
 
         .chat-header {
@@ -231,20 +232,7 @@
             display: flex;
             border-top: 1px solid #ececec;
             padding-top: 10px;
-        }
-
-        .message i {
-            background-color: #00c300;
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-width: 50px;
-            min-height: 50px;
-            max-width: 50px;
-            max-height: 50px;
-            margin-right: 10px;
+            position: relative; /* message-form을 상대적으로 위치시킴 */
         }
 
         .message-form input {
@@ -263,6 +251,7 @@
             margin-left: 10px;
             cursor: pointer;
         }
+
         #firstPage {
             text-align: center;
             border: 1px solid #ddd;
@@ -271,10 +260,50 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #f9f9f9;
         }
+
         .admin-message {
             font-size: 1.5em;
             color: #333;
         }
+
+        .users-online {
+            position: absolute;
+            right: 20px;
+            bottom: 80px;
+            background-color: #fff;
+            color: #000;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 20px;
+            z-index: 1000;
+            display: none; /* 기본적으로 숨김 */
+        }
+
+        .users-online.active {
+            display: block; /* 버튼 클릭 시 표시 */
+        }
+
+        .show-users-button {
+            position: absolute;
+            right: 30px;
+            bottom: 110px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #00c300;
+            color: #fff;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1001;
+        }
+
     </style>
 </head>
 <body>
@@ -339,6 +368,11 @@
             <input type="text" id="message" placeholder="Type a message..." autocomplete="off" />
             <button type="submit">보내기</button>
         </form>
+        <button class="show-users-button" id="showUsersButton">+</button>
+    </div>
+    <div class="users-online" id="usersOnline">
+        <h3>Online Users</h3>
+        <ul id="usersList"></ul>
     </div>
 </div>
 <script>
@@ -491,9 +525,13 @@
     var messageInput = document.querySelector('#message');
     var messageArea = document.querySelector('#messageArea');
     var connectingElement = document.querySelector('.connecting');
+    var usersOnline = document.querySelector('#usersOnline');
+    var showUsersButton = document.querySelector('#showUsersButton');
+    var usersList = document.querySelector('#usersList');
 
     var stompClient = null;
     var username = null;
+    var onlineUsers = [];
 
     var colors = [
         '#2196F3', '#32c787', '#00BCD4', '#ff5652',
@@ -521,6 +559,8 @@
 
     function onConnected() {
         stompClient.subscribe('/topic/public', onMessageReceived);
+
+        stompClient.subscribe('/topic/onlineUsers', onOnlineUsersReceived);
 
         stompClient.send("/app/chat.addUser",
             {},
@@ -558,6 +598,7 @@
         if (message.type === 'JOIN' || message.type === 'LEAVE') {
             messageElement.classList.add('event-message');
             messageElement.textContent = message.sender + (message.type === 'JOIN' ? ' joined!' : ' left!');
+            updateOnlineUsers(message.sender, message.type === 'JOIN');
         } else {
             messageElement.classList.add('message');
 
@@ -601,6 +642,36 @@
         return colors[index];
     }
 
+    function onOnlineUsersReceived(payload) {
+        var users = JSON.parse(payload.body);
+        onlineUsers = users;
+        updateUsersList();
+    }
+
+    function updateOnlineUsers(user, isJoining) {
+        if (isJoining) {
+            if (!onlineUsers.includes(user)) {
+                onlineUsers.push(user);
+            }
+        } else {
+            onlineUsers = onlineUsers.filter(u => u !== user);
+        }
+        updateUsersList();
+    }
+
+    function updateUsersList() {
+        usersList.innerHTML = '';
+        onlineUsers.forEach(user => {
+            var userElement = document.createElement('li');
+            userElement.textContent = user;
+            usersList.appendChild(userElement);
+        });
+    }
+
+    showUsersButton.addEventListener('click', function() {
+        usersOnline.classList.toggle('active');
+    });
+
     document.addEventListener('DOMContentLoaded', (event) => {
         connect();
     });
@@ -609,3 +680,4 @@
 </script>
 </body>
 </html>
+
