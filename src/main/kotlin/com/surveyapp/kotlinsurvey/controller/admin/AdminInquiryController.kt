@@ -26,7 +26,7 @@ class AdminInquiryController(
 
         model.addAttribute("adminInquiryList", inquiryList) // 속성 추가
 
-        return "adminInquiry/adminInquiryList";
+        return "admin-auth/admin-inquiry/admin-inquiry-list";
     }
 
     @GetMapping("/inquiry/{inquiryId}")
@@ -36,7 +36,7 @@ class AdminInquiryController(
         model.addAttribute("adminInquiryPost", inquiryPost)
         model.addAttribute("replyInquiryForm", ReplyInquiryForm()) // 답변 양식
 
-        return "adminInquiry/adminInquiryDetail";
+        return "admin-auth/admin-inquiry/admin-inquiry-detail";
     }
 
     @PostMapping("/inquiry/{inquiryId}")

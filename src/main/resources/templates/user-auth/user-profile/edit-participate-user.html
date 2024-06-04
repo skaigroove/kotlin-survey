@@ -209,7 +209,7 @@
 <div class="container">
     <h1>설문 참여 수정</h1>
 
-    <form th:action="@{/user/participation/edit/{participationId}(participationId=${participationId})}" th:object="${answerListForm}" method="post">
+    <form id="editParticipationForm" th:action="@{/user/participation/edit/{participationId}(participationId=${participationId})}" th:object="${answerListForm}" method="post" onsubmit="return validateForm()">
         <div th:if="${#fields.hasErrors()}">
             <p style="color: red;">입력한 내용에 오류가 있습니다. 다시 확인해 주세요.</p>
         </div>
@@ -238,5 +238,22 @@
         <button type="submit" class="btn-submit">수정</button>
     </form>
 </div>
+
+<script>
+    function validateForm() {
+        const form = document.getElementById('editParticipationForm');
+        const textareas = form.querySelectorAll('textarea');
+
+        for (let i = 0; i < textareas.length; i++) {
+            if (textareas[i].value.trim() === "") {
+                alert("모든 주관식 답변을 입력해 주세요.");
+                textareas[i].focus();
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+
 </body>
 </html>

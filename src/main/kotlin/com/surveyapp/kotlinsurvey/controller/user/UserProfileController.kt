@@ -234,7 +234,7 @@ class UserProfileController(
         if (participation?.user?.loginId == sessionLoginId) {
             // AnswerListForm을 통해 답변을 업데이트
             surveyService.updateAnswers(participation, editAnswerListForm)
-            return "redirect:/user/profile"
+            return "redirect:/user/participation/view/{participationId}"
         }
 
         return "redirect:/user/profile"

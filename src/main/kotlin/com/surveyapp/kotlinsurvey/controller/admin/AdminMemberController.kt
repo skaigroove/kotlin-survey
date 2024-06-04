@@ -23,7 +23,7 @@ class AdminMemberController (
 
         model.addAttribute("adminMemberList", memberList) // 모든 회원 목록을 model 속성으로 추가
 
-        return "adminMember/adminMemberList" // 경로 반환
+        return "admin-auth/admin-member/admin-member-list" // 경로 반환
     }
 
     @GetMapping("/member/{userId}")
@@ -37,7 +37,7 @@ class AdminMemberController (
         model.addAttribute("adminMember", member) // 해당 회원을 model 속성으로 추가
         model.addAttribute("adminMemberPhoneNumber", formatPhoneNumber(member.phoneNumber, "-"))
 
-        return "adminMember/adminMemberDetail" // 경로 반환
+        return "admin-auth/admin-member/admin-member-detail" // 경로 반환
     }
 
     fun formatPhoneNumber(phoneNumber: String, separator: String = "."): String { // 전화번호 010.0000.0000 형식으로 변환하는 함수 // . 은 default, separator 에 따라 달라짐

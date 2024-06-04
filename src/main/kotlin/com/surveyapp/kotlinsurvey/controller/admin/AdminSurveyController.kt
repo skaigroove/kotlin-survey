@@ -32,7 +32,7 @@ class AdminSurveyController(
 
         model.addAttribute("adminSurveyList", surveyList) // 모든 설문 목록을 model 속성으로 추가
 
-        return "adminSurvey/adminSurveyList" // 경로 반환
+        return "admin-auth/admin-survey/admin-survey-list" // 경로 반환
     }
 
     @GetMapping("/survey/{surveyId}")
@@ -47,7 +47,7 @@ class AdminSurveyController(
         model.addAttribute("adminSurveyPost", survey) // 해당 설문을 model 속성으로 추가
         model.addAttribute("adminSurveyParticipations", participations) // 해당 설문을 model 속성으로 추가
 
-        return "adminSurvey/adminSurveyDetail" // 경로 반환
+        return "admin-auth/admin-survey/admin-survey-detail" // 경로 반환
     }
 
     @PostMapping("/survey/delete/{surveyId}")
