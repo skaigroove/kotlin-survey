@@ -341,12 +341,12 @@
                 Object.keys(subjectiveData).forEach(questionId => {
                     currentPages[questionId] = 1;
                 });
-                renderAllSubjectiveData();
+                renderAllSubjectiveData(data);
             }
         })
         .catch(error => console.error('Error loading the charts:', error));
 
-    function renderAllSubjectiveData() {
+    function renderAllSubjectiveData(data) {
         const subjectiveContainer = document.getElementById('subjectiveContainer');
         subjectiveContainer.innerHTML = ''; // Clear existing subjective data
 
@@ -354,8 +354,11 @@
             const subjectiveDiv = document.createElement('div');
             subjectiveDiv.className = 'subjective';
 
+            // 질문 내용을 표시하도록 수정
+            const questionContext = data.subjectiveQuestions.find(q => q.questionId === parseInt(questionId)).question;
+
             const title = document.createElement('h3');
-            title.textContent = `Question ID: ${questionId}`;
+            title.textContent = questionContext;
             subjectiveDiv.appendChild(title);
 
             const ul = document.createElement('ul');
@@ -378,7 +381,7 @@
             prevBtn.onclick = () => {
                 if (currentPages[questionId] > 1) {
                     currentPages[questionId]--;
-                    renderAllSubjectiveData();
+                    renderAllSubjectiveData(data);
                 }
             };
 
@@ -389,7 +392,7 @@
                 const totalPages = Math.ceil(answers.length / itemsPerPage);
                 if (currentPages[questionId] < totalPages) {
                     currentPages[questionId]++;
-                    renderAllSubjectiveData();
+                    renderAllSubjectiveData(data);
                 }
             };
 

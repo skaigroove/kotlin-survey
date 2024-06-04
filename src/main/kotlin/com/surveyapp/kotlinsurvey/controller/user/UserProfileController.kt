@@ -83,6 +83,11 @@ class UserProfileController(
         model.addAttribute("userForm", UserForm(user!!.loginId, user.password, user.name, user.birthDate, user.genderType, user.phoneNumber)) // 초기화한 폼을 모델에 추가
         model.addAttribute("loginUser",user)
 
+        // 세션에서 사용자 이름 가져오기 -> 헤더의 사용자 정보 표시
+        val username = session.getAttribute("username")
+        print("username: $username")
+        model.addAttribute("username", username)
+
         return "user-auth/user-profile/edit-profile-user"
     }
 
@@ -106,11 +111,6 @@ class UserProfileController(
 
         val loginId = session.getAttribute("loginId") as String
         val user = userService.updateUser(loginId, userForm)
-
-        // 세션에서 사용자 이름 가져오기 -> 헤더의 사용자 정보 표시
-        val username = session.getAttribute("username")
-        print("username: $username")
-        model.addAttribute("username", username)
 
         return "redirect:/user/profile"
     }

@@ -4,21 +4,89 @@
     <meta charset="UTF-8">
     <title>Survey Participation Edit</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'DM Sans', sans-serif;
+            background-color: #1f1f1f;
+            color: #000000;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            font-weight: bold;
+            background: white;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-animation 5s ease infinite;
+            margin-left: 20px;
+            padding-top: 10px;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .username {
+            margin-right: 10px;
+        }
+
+        .profile-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .username-welcome {
+            font-size: 20px;
+            color: #fff;
+            margin-right: 20px;
+        }
+
+        .logout-text {
+            font-size: 20px;
+            color: white;
+            margin-right: 30px;
+            text-decoration: underline;
         }
 
         .container {
-            max-width: 800px;
+            min-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
+            background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         h1 {
@@ -38,32 +106,42 @@
         .form-group input[type="text"],
         .form-group input[type="date"],
         .form-group input[type="password"],
-        .form-group select,
-        .form-group textarea {
+        .form-group select{
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
 
-        .btn-submit {
-            display: block;
-            width: 100%;
+        textarea{
+            width: 80%; /* 기본 너비를 80%로 설정 */
+            max-width: 600px; /* 최대 너비를 600px로 설정 */
             padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
+            border: 1px solid #ccc;
             border-radius: 4px;
-            cursor: pointer;
+        }
+
+        .btn-submit {
+            font-family: 'DM Sans', sans-serif;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #b35858;
+            color: #fff;
             text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn-submit:hover {
-            background-color: #218838;
+            background-color: #9c1e1e;
         }
 
         .answer-group {
             margin-bottom: 20px;
+            text-align: left;
         }
 
         .answer-group label {
@@ -85,20 +163,61 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
+        .answer-group .option {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .num_question {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #2ba390;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .question_context{
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+<header>
+    <a onclick="location.href='/home/'">
+        <div class="logo">SurveyBay</div>
+    </a>
+    <div class="menu">
+        <div class="user-info">
+            <span class="username"></span>
+            <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
+            <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"> </span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
+        </div>
+    </div>
+</header>
+
 <div class="container">
     <h1>설문 참여 수정</h1>
 
-    <form th:action="@{/user/participation/edit/{participationId}(participationId=${participationId})}" th:object="${answerListForm}"  method="post">
+    <form th:action="@{/user/participation/edit/{participationId}(participationId=${participationId})}" th:object="${answerListForm}" method="post">
         <div th:if="${#fields.hasErrors()}">
             <p style="color: red;">입력한 내용에 오류가 있습니다. 다시 확인해 주세요.</p>
         </div>
 
         <div th:each="answerForm, iterStat : ${answerListForm.editAnswerList}">
             <div class="answer-group">
-                <label th:text="${answerForm.question.context}">Question Text</label>
+                <p><span class="num_question" th:text=" 'Q' + ${iterStat.index + 1}"></span><span
+                        class="question_context" th:text="${answerForm.question.context}"></span></p>
                 <input type="hidden" th:field="*{editAnswerList[__${iterStat.index}__].questionId}" />
                 <input type="hidden" th:field="*{editAnswerList[__${iterStat.index}__].answerType}" />
                 <div th:if="${answerForm.answerType.name() == 'SUBJECTIVE'}">
@@ -107,15 +226,12 @@
                     </label>
                 </div>
                 <div th:if="${answerForm.answerType.name() == 'OBJECTIVE'}">
-                    <label>
-                        <select th:field="*{editAnswerList[__${iterStat.index}__].objectiveAnswer}">
-                            <option th:each="option : ${answerForm.question.questionOptions}"
-                                    th:value="${option.questionOptionId}"
-                                    th:text="${option.questionOptionText}"
-                                    th:selected="${option.questionOptionId == answerForm.objectiveAnswer}">
-                            </option>
-                        </select>
-                    </label>
+                    <div th:each="option, optStat : ${answerForm.question.questionOptions}">
+                        <label class="option">
+                            <input type="radio" th:field="*{editAnswerList[__${iterStat.index}__].objectiveAnswer}" th:value="${option.questionOptionId}" th:checked="${option.questionOptionId == answerForm.objectiveAnswer}" />
+                            <span th:text="${option.questionOptionText}"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>

@@ -8,10 +8,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
 
-        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poetsen+One&display=swap');
-        @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap");
-
         body {
             font-family: 'IBM Plex Sans KR', Arial, sans-serif;
             background-color: #1f1f1f;
@@ -40,6 +36,18 @@
             animation: gradient-animation 5s ease infinite;
             margin-left: 20px;
             padding-top: 10px;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .menu {
@@ -108,7 +116,7 @@
         }
 
         .btn_post {
-            background: #28a745;
+            background: #28a790;
             color: white;
             border: none;
             padding: 12px;
@@ -116,13 +124,13 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 16px;
-            width: 100%;
+            width: 10%;
             text-align: center;
             box-sizing: border-box;
         }
 
         .btn_post:hover {
-            background-color: #218838;
+            background-color: #17554a;
         }
 
         .gender-group {
@@ -149,9 +157,9 @@
         }
 
         .gender-group input:checked + .gender-option {
-            background-color: #28a745;
+            background-color: #28a790;
             color: white;
-            border-color: #28a745;
+            border-color: #28a790;
         }
 
         @media (max-width: 768px) {
@@ -169,14 +177,56 @@
             font-size: 20px;
             margin-right: 20px;
         }
-        .contain{
+
+        .contain {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
+        .error-message {
+            color: red;
+            font-size: 12px;
+        }
+        .warn{
+            color: red;
+        }
+
     </style>
+    <script>
+        function validateForm() {
+            const password = document.getElementById("password").value;
+            const name = document.getElementById("name").value;
+            const birthDate = document.getElementById("birthDate").value;
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const genderMale = document.querySelector('input[name="genderType"][value="MALE"]').checked;
+            const genderFemale = document.querySelector('input[name="genderType"][value="FEMALE"]').checked;
+            let valid = true;
+
+            // Check required fields
+            if (!password || !name || (!genderMale && !genderFemale) || !phoneNumber) {
+                alert("모든 필드를 채워주세요.");
+                return false;
+            }
+
+            // Validate phone number
+            const phonePattern = /^010\d{8}$/;
+            if (!phonePattern.test(phoneNumber)) {
+                alert("연락처를 010xxxxxxxx 형식으로 입력해주세요.");
+                return false;
+            }
+
+            // Validate birth date
+            const today = new Date().toISOString().split('T')[0];
+            if (birthDate >= today) {
+                alert("생년월일은 오늘 날짜보다 이전이어야 합니다.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -197,7 +247,7 @@
 <div class="contain">
     <div class="container">
         <h1>프로필 설정</h1>
-        <form role="form" action="/user/profile/edit" th:object="${userForm}" method="post">
+        <form role="form" action="/user/profile/edit" th:object="${userForm}" method="post" onsubmit="return validateForm()">
             <div class="form-group">
                 <label for="loginId">아이디</label>
                 <input type="text" id="loginId" name="loginId" th:value="${loginUser.loginId}" readonly>
@@ -212,19 +262,19 @@
             </div>
             <div class="form-group">
                 <label for="birthDate">생년월일</label>
-                <input type="date" id="birthDate" name="birthDate" th:value="${loginUser.birthDate}">
+                <input type="date" id="birthDate" name="birthDate" th:value="${loginUser.birthDate}" required>
             </div>
             <div class="form-group">
-                <label>성별</label>
+                <p><label>성별</label><span class = "warn"> * 성별을 꼭 선택해 주세요 !!</span></p>
                 <div class="gender-group">
                     <label>
                         <input type="radio" name="genderType" value="MALE"
-                               th:checked="${loginUser.genderType == 'MALE'}">
+                               th:checked="${loginUser.genderType == 'MALE'}" required>
                         <div class="gender-option">남성</div>
                     </label>
                     <label>
                         <input type="radio" name="genderType" value="FEMALE"
-                               th:checked="${loginUser.genderType == 'FEMALE'}">
+                               th:checked="${loginUser.genderType == 'FEMALE'}" required>
                         <div class="gender-option">여성</div>
                     </label>
                 </div>
