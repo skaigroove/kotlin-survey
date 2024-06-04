@@ -237,7 +237,7 @@
 
 <main>
     <div class="survey-form">
-        <form id="createSurveyForm" action="/home/post" method="POST">
+        <form id="createSurveyForm" action="/home/post" method="POST" onsubmit="return validateForm()">
             <input class="title" type="text" id="title" name="title" placeholder="제목을 입력하세요." required><br>
             <textarea class="description" id="description" name="description" placeholder="설명을 입력하세요." required></textarea><br>
             <div class="div-row">
@@ -274,8 +274,8 @@
         newQuestionDiv.innerHTML = `
             <div>
                 <p id="questionLabel${questionIndex}">🐼 ${questionIndex + 1}번 질문</p>
-                <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})">
-                    <option value="NONE">유형 선택</option>
+                <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})" required>
+                    <option value="" disabled selected>유형 선택</option>
                     <option value='SUBJECTIVE'>주관식</option>
                     <option value='OBJECTIVE'>객관식</option>
                 </select>
@@ -296,6 +296,7 @@
         questionDiv.remove();
         questions.splice(questionIndex, 1);
         updateQuestionLabels();
+        updateQuestionIndexes();
     }
 
     function updateQuestionLabels() {
@@ -314,23 +315,31 @@
         } else {
             optionsContainer.style.display = 'none';
             questions[questionIndex].options = [];
+            const optionDivs = optionsContainer.querySelectorAll('.option-div');
+            optionDivs.forEach(div => div.remove());
         }
     }
 
     function addOption(questionIndex) {
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
         const optionIndex = questions[questionIndex].options.length;
+
+        if (optionIndex >= 8) {
+            alert("선지는 8개 넘게 생성할 수 없습니다.");
+            return;
+        }
+
         questions[questionIndex].options.push('');
 
         const optionDiv = document.createElement('div');
         optionDiv.className = 'option-div';
         optionDiv.id = `option${questionIndex}-${optionIndex}`;
         optionDiv.innerHTML = `
-        <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}"
-               name="questions[${questionIndex}].questionOptions[${optionIndex}].optionText"
-               placeholder="${optionIndex + 1}번 선지를 입력하세요" required>
-        <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})"> 삭제</button><br>
-    `;
+            <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}"
+                   name="questions[${questionIndex}].questionOptions[${optionIndex}].optionText"
+                   placeholder="${optionIndex + 1}번 선지를 입력하세요" required>
+            <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})"> 삭제</button><br>
+        `;
         optionsContainer.appendChild(optionDiv);
     }
 
@@ -345,9 +354,25 @@
         const optionsContainer = document.getElementById(`optionsContainer${questionIndex}`);
         const optionDivs = optionsContainer.querySelectorAll('.option-div');
         optionDivs.forEach((div, index) => {
-            div.querySelector('input').id = `option${questionIndex}-${index}`;
-            div.querySelector('input').placeholder = `${index + 1}번 선지를 입력하세요`;
+            div.id = `option${questionIndex}-${index}`;
+            const input = div.querySelector('input');
+            input.id = `option${questionIndex}-${index}`;
+            input.name = `questions[${questionIndex}].questionOptions[${index}].optionText`;
+            input.placeholder = `${index + 1}번 선지를 입력하세요`;
         });
+        questions[questionIndex].options = Array.from(optionDivs).map((div) => div.querySelector('input').value);
+    }
+
+    function validateForm() {
+        const form = document.getElementById('createSurveyForm');
+        const selects = form.querySelectorAll('select');
+        for (let i = 0; i < selects.length; i++) {
+            if (selects[i].value === "") {
+                alert("모든 질문의 유형을 선택해 주세요.");
+                return false;
+            }
+        }
+        return true;
     }
 </script>
 </body>
