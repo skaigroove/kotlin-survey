@@ -85,7 +85,6 @@
     </style>
 </head>
 <body>
-<!-- <div id="surveyDetail" style="overflow-x: auto; white-space: nowrap;"> --> <!-- 이건 가로 스크롤 생성 ver. -->
 <div id="surveyDetail">
     <div class="surveyContainer">
         <div class="section">
@@ -123,11 +122,6 @@
                             <li th:each="option, iterStat : ${question.questionOptions}" th:text="${iterStat.index + 1} + '. ' + ${option.questionOptionText}"></li>
                         </ul>
                     </div>
-
-                    <!-- 주관식 문제 밑에 주관식이라고 적는 부분
-                    <div th:if="${question.questionType.name()} == 'SUBJECTIVE'">
-                        <p>주관식</p>
-                    </div> -->
                 </div>
             </div>
         </div>
