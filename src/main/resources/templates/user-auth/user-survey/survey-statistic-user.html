@@ -167,6 +167,29 @@
         ul {
             margin-left: 20px; /* 주관식 답변 텍스트 옆에 공간 추가 */
         }
+
+        table {
+            width: 80%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            font-size: 16px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .survey-details {
+            border-left: 7px solid #007bff;
+            background-color: white; /* 수정 전 : #1f1f1f */
+            padding-left: 40px;
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
@@ -185,8 +208,8 @@
 <main>
     <input type="hidden" id="surveyId" th:value="${surveyId}">
     <div class="survey-details">
+        <p>설문 기간 :   <span id="surveyPeriod" th:text="  ${survey.startDate} + ' ~ ' + ${survey.endDate} "></span></p>
         <h1 th:text="${survey.title}"></h1>
-        <p>설문 기간: <span id="surveyPeriod" th:text="${survey.startDate} + ' ~ ' + ${survey.endDate}"></span></p>
         <h4 th:text="${survey.description}"></h4>
     </div>
     <div id="chartsContainer"></div>
@@ -332,6 +355,35 @@
                             }
                         }
                     });
+
+                    // 표 추가
+                    const table = document.createElement('table');
+                    const thead = document.createElement('thead');
+                    const tbody = document.createElement('tbody');
+
+                    const headerRow = document.createElement('tr');
+                    const optionHeader = document.createElement('th');
+                    optionHeader.textContent = '선택지';
+                    const countHeader = document.createElement('th');
+                    countHeader.textContent = '응답자 수';
+                    headerRow.appendChild(optionHeader);
+                    headerRow.appendChild(countHeader);
+                    thead.appendChild(headerRow);
+
+                    options.forEach(option => {
+                        const row = document.createElement('tr');
+                        const optionCell = document.createElement('td');
+                        optionCell.textContent = option.optionText;
+                        const countCell = document.createElement('td');
+                        countCell.textContent = option.count;
+                        row.appendChild(optionCell);
+                        row.appendChild(countCell);
+                        tbody.appendChild(row);
+                    });
+
+                    table.appendChild(thead);
+                    table.appendChild(tbody);
+                    chartGroupDiv.appendChild(table);
                 });
             }
 
