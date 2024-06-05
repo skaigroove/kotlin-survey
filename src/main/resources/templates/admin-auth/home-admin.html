@@ -430,6 +430,76 @@
             .catch(error => console.error('Error:', error));
     }
 
+    function replyInquiry(inquiryId) { // 문의 답변 처음 작성할 때 처리
+        console.log("replyInquiry called with inquiryId: " + inquiryId);
+        const replyText = document.getElementById(`reply`).value;
+
+        if (!replyText) {
+            alert("답변 내용을 입력하세요.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("reply", replyText);
+        console.log("FormData prepared with reply:", replyText);
+
+        fetch(`/admin/inquiry/${inquiryId}`, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Reply saved successfully");
+                    // 문의 답변 작성 후 상세 보기 다시 불러
+                    loadInquiryDetail(inquiryId);
+                } else {
+                    return response.text().then(text => {
+                        console.error("Error response from server:", text);
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('문의 답변 작성 중 오류가 발생했습니다.');
+            });
+    }
+
+    function editReply(inquiryId) { // 문의 답변 수정할 때 처리
+        console.log("editReply called with inquiryId: " + inquiryId);
+        const replyText = document.getElementById(`replyEdit`).value;
+
+        if (!replyText) {
+            alert("수정할 답변 내용을 입력하세요.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("replyEdit", replyText);
+        console.log("FormData prepared with replyEdit:", replyText);
+
+        fetch(`/admin/inquiry/edit/${inquiryId}`, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Reply edited successfully");
+                    // 문의 답변 수정 후 상세 보기 다시 불러오기
+                    loadInquiryDetail(inquiryId);
+                } else {
+                    return response.text().then(text => {
+                        console.error("Error response from server:", text);
+                        throw new Error(text);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('문의 답변 수정 중 오류가 발생했습니다.');
+            });
+    }
+
     function openEditForm() { // 답변 수정 버튼 눌렀을 때 실행되는 함수 : 답변 수정란 생김
         document.getElementById('editForm').style.display = 'block';
     }
@@ -456,6 +526,29 @@
                 showPage('surveyDetail');
             })
             .catch(error => console.error('Error:', error));
+    }
+
+    function deleteSurvey(surveyId) {
+        if (confirm('해당 설문을 삭제하시겠습니까?')) {
+            fetch(`/admin/survey/delete/${surveyId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 설문 삭제 후 설문 목록 다시 불러
+                        loadSurveyList();
+                    } else {
+                        return response.text().then(text => { throw new Error(text); });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('설문 삭제 중 오류가 발생했습니다.');
+                });
+        }
     }
 
     function confirmSurveyDelete() { // 설문 삭제 여부 확인
@@ -487,25 +580,24 @@
     }
 
     function deleteMember(userId) {
-        if (confirm('정말 삭제하시겠습니까?')) {
-            fetch(`/member/delete/${userId}`, {
+        if (confirm('해당 회원을 탈퇴시키겠습니까?')) {
+            fetch(`/admin/member/delete/${userId}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                },
+                    'Content-Type': 'application/json'
+                }
             })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                    if (response.ok) {
+                        // 회원 탈퇴 후 회원 목록 다시 불러
+                        loadMemberList();
+                    } else {
+                        return response.text().then(text => { throw new Error(text); });
                     }
-                    return response.text();
-                })
-                .then(data => {
-                    alert('회원 탈퇴 처리가 완료되었습니다.');
-                    loadMemberList(); // 회원 목록 갱신
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    alert('회원 탈퇴 중 오류가 발생했습니다.');
                 });
         }
     }
