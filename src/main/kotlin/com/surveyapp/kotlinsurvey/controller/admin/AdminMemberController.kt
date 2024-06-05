@@ -51,22 +51,6 @@ class AdminMemberController (
         return regex.replace(phoneNumber, "$1$separator$2$separator$3")
     }
 
-/*
-
-    @PostMapping("/member/delete/{userId}")
-    fun adminMemberDelete(@PathVariable userId: Long, session: HttpSession): String { // 관리자 (admin) - 회원 탈퇴 관련 처리
-        // login 여부 확인
-        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
-            return "redirect:/"
-
-        userService.deleteUserByUserId(userId) // 해당 회원 정보 삭제 => 탈퇴
-
-        return "redirect:/admin/member"
-        //return ""
-    }
-
-  */
-
     @PostMapping("/member/delete/{userId}")
     @ResponseBody
     fun adminMemberDelete(@PathVariable userId: Long, session: HttpSession): ResponseEntity<String> { // 관리자 (admin) - 회원 탈퇴 관련 처리

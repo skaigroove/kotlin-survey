@@ -70,11 +70,6 @@
             </td>
 
             <td>
-                <!--
-                <form th:action="@{/admin/member/delete/{userId}(userId=${member.userId})}" method="post" style="display:inline;" onsubmit="return confirmMemberDelete();">
-                    <button type="submit" class="btn_action">탈퇴</button>
-                </form>
-               -->
                 <button type="button" class="btn_action" th:onclick="'deleteMember('+${member.userId}+');'">삭제</button>
             </td>
         </tr>
