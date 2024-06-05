@@ -6,12 +6,11 @@ import com.surveyapp.kotlinsurvey.service.SurveyService
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 
 @Controller
@@ -50,6 +49,7 @@ class AdminSurveyController(
         return "admin-auth/admin-survey/admin-survey-detail" // 경로 반환
     }
 
+    /*
     @PostMapping("/survey/delete/{surveyId}")
     fun adminSurveyDelete(@PathVariable surveyId: Long, session: HttpSession): String { // 관리자 (admin) - 설문 삭제 관련 처리
         // login 여부 확인
@@ -61,5 +61,20 @@ class AdminSurveyController(
         surveyService.deleteSurvey(surveyId) // 해당 설문 삭제
 
         return "redirect:/admin/survey"
+    }
+
+     */
+
+    @PostMapping("/survey/delete/{surveyId}")
+    @ResponseBody
+    fun adminSurveyDelete(@PathVariable surveyId: Long, session: HttpSession): ResponseEntity<String> { // 관리자 (admin) - 설문 삭제 관련 처리
+        // 로그인 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized")
+
+        // 설문 삭제 처리
+        surveyService.deleteSurvey(surveyId) // 해당 설문 삭제
+
+        return ResponseEntity.ok("Survey deleted successfully")
     }
 }
