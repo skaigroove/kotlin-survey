@@ -48,7 +48,7 @@
         </tr>
 
         <tbody>
-        <tr class="text-center" th:each="member, iterState : ${adminMemberList}">
+        <tr class="text-center" th:each="member : ${adminMemberList}">
             <!-- adminMemberList 에 있는 원소 하나씩 member 에 대입해서 반복 -->
             <th scope="row">
                 <span th:text="${member.userId}"></span> <!-- member - id(userId) 출력 -->
@@ -70,9 +70,12 @@
             </td>
 
             <td>
+                <!--
                 <form th:action="@{/admin/member/delete/{userId}(userId=${member.userId})}" method="post" style="display:inline;" onsubmit="return confirmMemberDelete();">
                     <button type="submit" class="btn_action">탈퇴</button>
                 </form>
+               -->
+                <button type="button" class="btn_action" th:onclick="'deleteMember('+${member.userId}+');'">삭제</button>
             </td>
         </tr>
         </tbody>

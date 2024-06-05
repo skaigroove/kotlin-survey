@@ -1,8 +1,12 @@
 package com.surveyapp.kotlinsurvey.controller.admin
 
+import com.surveyapp.kotlinsurvey.chat.listener.WebSocketEventListener
 import com.surveyapp.kotlinsurvey.service.UserService
 import jakarta.servlet.http.HttpSession
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.*
 class AdminMemberController (
     @Autowired private val userService: UserService,
 ) {
+    private val logger = LoggerFactory.getLogger(WebSocketEventListener::class.java) // 로그 확인용
+
     @GetMapping("/member")
     fun adminMemberList(model: Model, session:HttpSession): String { // 관리자 (admin) - 회원 관리 관련 처리 : 모든 회원 목록 조회
         // login 여부 확인
@@ -45,7 +51,7 @@ class AdminMemberController (
         return regex.replace(phoneNumber, "$1$separator$2$separator$3")
     }
 
-
+/*
 
     @PostMapping("/member/delete/{userId}")
     fun adminMemberDelete(@PathVariable userId: Long, session: HttpSession): String { // 관리자 (admin) - 회원 탈퇴 관련 처리
@@ -59,21 +65,21 @@ class AdminMemberController (
         //return ""
     }
 
+  */
 
-
-/*
     @PostMapping("/member/delete/{userId}")
-    fun adminMemberDelete(@PathVariable userId: Long, model: Model, session: HttpSession): ResponseEntity<String> {
-        if (userService.checkLogin(session) == null)
+    @ResponseBody
+    fun adminMemberDelete(@PathVariable userId: Long, session: HttpSession): ResponseEntity<String> { // 관리자 (admin) - 회원 탈퇴 관련 처리
+        // 로그인 여부 확인
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized")
 
-        userService.deleteUserByUserId(userId)
-        val updatedMemberList = adminMemberList(model, session)
+        logger.info("adminMemberDelete() run.")
 
-        return ResponseEntity.ok("User deleted successfully")
+        // 회원 탈퇴 처리
+        userService.deleteUserByUserId(userId) // 해당 회원 정보 삭제 => 탈퇴
+        logger.info("userService.deleteUserByUserId($userId) done.")
+
+        return ResponseEntity.ok("Member deleted successfully")
     }
-
-
- */
-
 }
