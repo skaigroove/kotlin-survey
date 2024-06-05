@@ -45,9 +45,15 @@
         }
 
         @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .menu {
@@ -81,6 +87,7 @@
             flex: 1;
             display: flex;
             padding: 20px;
+            overflow-y: auto; /* 스크롤 가능하도록 설정 */
         }
 
         .content {
@@ -90,6 +97,8 @@
             color: black;
             border-radius: 10px;
             justify-content: center;
+            max-height: 70vh; /* 최대 높이를 설정하여 스크롤이 가능하게 함 */
+            overflow-y: auto; /* 스크롤 가능하도록 설정 */
         }
 
         .table {
@@ -101,6 +110,8 @@
         .table th, .table td {
             border: 1px solid #ddd;
             padding: 8px;
+            min-height: 50px; /* 최소 높이 설정 */
+            vertical-align: middle; /* 내용의 세로 정렬을 가운데로 설정 */
         }
 
         .table th {
@@ -194,13 +205,18 @@
                     <span class="surveyEnd" th:if="${T(java.time.LocalDate).now().isAfter(post.endDate)}">
                         설문 종료
                     </span>
-                    <a th:if="${!T(java.time.LocalDate).now().isAfter(post.endDate) and !#lists.contains(participatedSurveyIds, post.surveyId)}" th:href="@{/home/list/participate/{surveyId}(surveyId=${post.surveyId})}">
+                    <span th:if="${T(java.time.LocalDate).now().isBefore(post.startDate)}">
+                        설문 예정
+                    </span>
+                    <a th:if="${!T(java.time.LocalDate).now().isAfter(post.endDate) and !T(java.time.LocalDate).now().isBefore(post.startDate) and !#lists.contains(participatedSurveyIds, post.surveyId)}"
+                       th:href="@{/home/list/participate/{surveyId}(surveyId=${post.surveyId})}">
                         <button class="btn_post">참여</button>
                     </a>
                     <span th:if="${#lists.contains(participatedSurveyIds, post.surveyId) and !T(java.time.LocalDate).now().isAfter(post.endDate)}">참여 완료</span>
                 </td>
                 <td>
-                    <a th:if="${#lists.contains(participatedSurveyIds, post.surveyId) or T(java.time.LocalDate).now().isAfter(post.endDate)}" th:href="@{/home/list/statistic/{surveyId}(surveyId=${post.surveyId})}">
+                    <a th:if="${#lists.contains(participatedSurveyIds, post.surveyId) or T(java.time.LocalDate).now().isAfter(post.endDate)}"
+                       th:href="@{/home/list/statistic/{surveyId}(surveyId=${post.surveyId})}">
                         <button class="btn_post">결과</button>
                     </a>
                     <span th:if="${!#lists.contains(participatedSurveyIds, post.surveyId) and !T(java.time.LocalDate).now().isAfter(post.endDate)}">참여 필요</span>

@@ -24,6 +24,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
         }
 
         .logo {
@@ -232,13 +233,13 @@
 
         <!-- thymeleaf 조건문 if : 답변 작성 x (답변 안 적은 것) -->
         <div class="reply-Inquiry"
-             th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}">
+             th:if="${inquiryPost.status.name() == 'UNCOMPLETE'}">
             <strong>아직 답변이 작성되지 않았습니다.</strong>
         </div>
 
         <!-- thymeleaf 조건문 if : 답변 작성 o (답변 적은 것) -->
         <div class="answered-Inquiry"
-             th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}">
+             th:if="${inquiryPost.status.name() == 'COMPLETE'}">
             <div class="answer-card">
                 <h2 class="card-title answer-title">A. [RE]: <span th:text="${inquiryPost.title}"></span></h2>
                 <div class="card-text answer-content">

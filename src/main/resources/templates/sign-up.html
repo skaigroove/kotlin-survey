@@ -33,6 +33,7 @@
         }
 
         .register-title {
+            margin-top: 80px;
             font-size: 36px;
             margin-bottom: 20px;
             font-family: 'Poetsen One', sans-serif;
@@ -153,6 +154,8 @@
         var birthDate = document.getElementById('birthDate').value;
         var loginIdPattern = /^[^@]+@[^@]+\.[^@]+$/;
         var phonePattern = /^[0-9]+$/;
+        var today = new Date();
+        var birthDateObj = new Date(birthDate);
 
         if (!loginId) {
             alert('이메일을 입력해 주세요.');
@@ -182,6 +185,10 @@
             alert('생년월일을 입력해 주세요.');
             return false;
         }
+        if (birthDateObj > today) {
+            alert('미래 날짜는 생년월일로 입력할 수 없습니다.');
+            return false;
+        }
         if (password.length > 15) {
             alert('비밀번호는 15자리 이하여야 합니다.');
             return false;
@@ -197,5 +204,8 @@
         return true;
     }
 </script>
+
+</script>
+
 </body>
 </html>

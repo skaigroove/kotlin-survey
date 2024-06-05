@@ -108,7 +108,7 @@
 
         .title {
             width: calc(100% - 50px);
-            height: 50px; /* 높이를 200px로 설정 */
+            height: 50px;
             padding: 10px;
             margin-top: 50px;
             font-size: 30px;
@@ -141,7 +141,7 @@
             padding: 10px ;
         }
 
-        .select_option{
+        .select_option {
             padding: 10px;
             margin: 10px;
         }
@@ -168,7 +168,7 @@
         .option-div {
             display: flex;
             align-items: center;
-            justify-content: center; /* 중앙 정렬 */
+            justify-content: center;
             width: 100%;
             margin-bottom: 10px;
         }
@@ -181,7 +181,7 @@
 
         .option-div button {
             flex-shrink: 0;
-            height: 40px; /* 버튼 높이를 입력 필드와 맞춤 */
+            height: 40px;
         }
 
         footer {
@@ -366,14 +366,38 @@
     function validateForm() {
         const form = document.getElementById('createSurveyForm');
         const selects = form.querySelectorAll('select');
-        for (let i = 0; i < selects.length; i++) {
-            if (selects[i].value === "") {
-                alert("모든 질문의 유형을 선택해 주세요.");
-                return false;
-            }
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        const today = new Date();
+
+        if (questions.length === 0) {
+            alert("최소 하나의 질문을 추가해 주세요.");
+            return false;
         }
+
+        if (selects.length !== questions.length || Array.from(selects).some(select => select.value === "")) {
+            alert("모든 질문의 유형을 선택해 주세요.");
+            return false;
+        }
+
+        if (startDate < today) {
+            alert("설문 시작 날짜는 현재 날짜 이후로 설정해 주세요.");
+            return false;
+        }
+
+        if (endDate < today) {
+            alert("설문 마감 날짜는 현재 날짜 이후로 설정해 주세요.");
+            return false;
+        }
+
+        if (startDate >= endDate) {
+            alert("설문 마감 날짜는 설문 시작 날짜 이후로 설정해 주세요.");
+            return false;
+        }
+
         return true;
     }
 </script>
+
 </body>
 </html>
