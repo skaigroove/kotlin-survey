@@ -29,10 +29,18 @@ class UserInquiryService(
     fun getInquiryList(): List<UserInquiry>? { return userInquiryRepository.getInquiryList() }
 
     // 문의 답변 저장
+    /*
     fun saveReplyInquiry(inquiry: UserInquiry, replyInquiryForm: ReplyInquiryForm)
     {
         inquiry.answerDate = replyInquiryForm.answerDate
         inquiry.reply = replyInquiryForm.reply
+        inquiry.status = InquiryState.COMPLETE
+    }
+*/
+    fun saveReplyInquiry(inquiry: UserInquiry, reply: String)
+    {
+        inquiry.answerDate = LocalDateTime.now()
+        inquiry.reply = reply
         inquiry.status = InquiryState.COMPLETE
     }
 
