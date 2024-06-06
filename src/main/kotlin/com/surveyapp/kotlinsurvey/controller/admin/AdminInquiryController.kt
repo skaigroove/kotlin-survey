@@ -46,12 +46,10 @@ class AdminInquiryController(
         session: HttpSession
     ): ResponseEntity<String> { // 관리자 (admin) - 문의 글 답변 관련 처리 : 처음 답변 작성할 때
         // login 여부 확인
-        val user = userService.checkLogin(session)
-        if (user == null) // 로그인 안 되었음 => null 반환됨
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized")
 
-        val inquiry = userInquiryService.getInquiryById(inquiryId)
-        userInquiryService.saveReplyInquiry(inquiry, reply)
+        userInquiryService.saveReplyInquiry(userInquiryService.getInquiryById(inquiryId), reply) // 해당 문의에다가 답변 기록
 
         return ResponseEntity.ok("Reply saved successfully")
     }
@@ -64,15 +62,15 @@ class AdminInquiryController(
         session: HttpSession
     ): ResponseEntity<String> { // 관리자 (admin) - 문의 답변 수정 처리 함수
         // login 여부 확인
-        val user = userService.checkLogin(session)
-        if (user == null) // 로그인 안 되었음 => null 반환됨
+        if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized")
 
         if (reply.isEmpty()) {
             return ResponseEntity.badRequest().body("Reply cannot be empty")
         }
 
-        userInquiryService.editReplyInquiry(inquiryId, reply)
+        userInquiryService.saveReplyInquiry(userInquiryService.getInquiryById(inquiryId), reply)
+
         return ResponseEntity.ok("Reply edited successfully")
     }
 }
