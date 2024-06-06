@@ -182,64 +182,24 @@ class SurveyService(
         return editAnswerListForm
     }
 
-    //    @Transactional
-//    fun updateAnswers(surveyParticipation: SurveyParticipation, editAnswerListForm: EditAnswerListForm) {
-//        val existingAnswers = surveyRepository.findAnswersByParticipation(surveyParticipation)
-//
-//        // 기존 답변을 map으로 변환하여 질문 ID를 키로 사용
-//        val existingAnswerMap = existingAnswers.associateBy { it.question.questionId }
-//
-//        // 새로운 답변 리스트 생성
-//        val updatedAnswers = (editAnswerListForm.editAnswerList ?: emptyList()).map { answerForm ->
-//            val existingAnswer = existingAnswerMap[answerForm.questionId]
-//
-//            if (existingAnswer != null) {
-//                // 기존 답변이 있는 경우 업데이트
-//                existingAnswer.answerType = answerForm.answerType
-//                existingAnswer.objectiveAnswer = answerForm.objectiveAnswer?.let { surveyRepository.findQuestionOptionById(it) }
-//                existingAnswer.subjectiveAnswer = answerForm.subjectiveAnswer
-//                existingAnswer
-//            } else {
-//                // 기존 답변이 없는 경우 새로운 답변 생성
-//                Answer(
-//                    question = surveyRepository.findQuestionById(answerForm.questionId)!!,
-//                    answerType = answerForm.answerType,
-//                    objectiveAnswer = answerForm.objectiveAnswer?.let { surveyRepository.findQuestionOptionById(it) },
-//                    subjectiveAnswer = answerForm.subjectiveAnswer,
-//                    user = surveyParticipation.user,
-//                    surveyParticipation = surveyParticipation
-//                )
-//            }
-//        }
-//
-//        // 업데이트된 답변을 저장하거나 새로 추가
-//        updatedAnswers.forEach { answer ->
-//            surveyRepository.saveAnswer(answer)
-//        }
-//    }
     @Transactional
     fun updateAnswers(surveyParticipation: SurveyParticipation, editAnswerListForm: EditAnswerListForm) {
-        println("updateAnswers 시작")
 
+        // 기존 답변 받아오기
         val existingAnswers = surveyRepository.findAnswersByParticipation(surveyParticipation)
-        println("기존 답변: $existingAnswers")
 
         // 기존 답변을 map으로 변환하여 질문 ID를 키로 사용
         val existingAnswerMap = existingAnswers.associateBy { it.question.questionId }
-        println("기존 답변 맵: $existingAnswerMap")
 
         // editAnswerListForm.editAnswerList가 null인 경우 빈 리스트로 초기화
         val answerList = editAnswerListForm.editAnswerList ?: emptyList()
-        println("새로운 답변 리스트: $answerList")
 
         // 새로운 답변 리스트 생성
         val updatedAnswers = answerList.map { answerForm ->
             val existingAnswer = existingAnswerMap[answerForm.questionId]
-            println("처리 중인 답변 폼: $answerForm")
 
             if (existingAnswer != null) {
                 // 기존 답변이 있는 경우 업데이트
-                println("기존 답변 업데이트: $existingAnswer")
                 existingAnswer.answerType = answerForm.answerType
                 existingAnswer.objectiveAnswer =
                     answerForm.objectiveAnswer?.let { surveyRepository.findQuestionOptionById(it) }
@@ -247,7 +207,6 @@ class SurveyService(
                 existingAnswer
             } else {
                 // 기존 답변이 없는 경우 새로운 답변 생성
-                println("새 답변 생성")
                 Answer(
                     question = surveyRepository.findQuestionById(answerForm.questionId)!!,
                     answerType = answerForm.answerType,
@@ -258,15 +217,10 @@ class SurveyService(
                 )
             }
         }
-        println("업데이트된 답변 리스트: $updatedAnswers")
-
         // 업데이트된 답변을 저장하거나 새로 추가
         updatedAnswers.forEach { answer ->
-            println("저장 중인 답변: $answer")
             surveyRepository.saveAnswer(answer)
         }
-
-        println("updateAnswers 완료")
     }
 }
 

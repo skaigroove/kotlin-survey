@@ -156,17 +156,19 @@ class UserProfileController(
         return "redirect:/user/profile"
     }
 
+    // 참여 정보 보기
     @GetMapping("/participation/view/{participationId}")
     fun viewSurveyParticipation(@PathVariable participationId: Long, model: Model, session: HttpSession): String {
+
         // login 여부 확인
         if (userService.checkLogin(session) == null) // 로그인 안 되었음 => null 반환됨
             return "redirect:/"
-
+        // loginId를 세션으로부터 받아온다.
         val sessionLoginId = session.getAttribute("loginId") as String
 
         // 참여 정보를 가져온다
         val participation = surveyService.getParticipationById(participationId)
-
+        // 참여 정보를 모델에 넣는다.
         model.addAttribute("participation", participation)
 
         // 세션에서 사용자 이름 가져오기 -> 헤더의 사용자 정보 표시
@@ -174,12 +176,14 @@ class UserProfileController(
         print("username: $username")
         model.addAttribute("username", username)
 
+        // 참여 정보의 user의 loginId와 세션의 loginId가 같으면 참여 정보를 볼 수 있는 페이지로 이동한다.
         if (participation?.user?.loginId == sessionLoginId) {
-            model.addAttribute("participationId", participationId) // participationId를 모델에 추가
+            // participationId를 모델에 추가한다
+            model.addAttribute("participationId", participationId)
             return "user-auth/user-profile/view-participate-user"
         }
-
-        return "redirect:/user/profile"
+        // loginId가 다르면 홈으로 리다이렉트
+        return "redirect:/home"
     }
 
     @GetMapping("/participation/edit/{participationId}")

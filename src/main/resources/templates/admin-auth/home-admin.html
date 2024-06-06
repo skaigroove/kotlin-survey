@@ -191,6 +191,7 @@
             margin-right: 10px;
             font-size: 16px;
             text-transform: uppercase;
+            flex-shrink: 0; /* 아바타의 크기가 줄어들지 않도록 */
         }
 
         .message .username {
@@ -204,6 +205,7 @@
             background-color: #f9f9f9;
             border-radius: 10px;
             flex-grow: 1;
+            word-wrap: break-word; /* 긴 단어도 자동으로 줄바꿈되도록 */
         }
 
         .message .text {
@@ -240,6 +242,7 @@
             padding: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            align-items: flex-start; /* flex-start로 수정하여 여러 줄 메시지도 올바르게 정렬 */
         }
 
         .message-form button {
