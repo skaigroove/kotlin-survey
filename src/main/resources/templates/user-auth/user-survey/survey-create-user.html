@@ -371,7 +371,7 @@
         const optionIndex = questions[questionIndex].options.length;
 
         if (optionIndex >= 8) {
-            alert("선지는 8개 넘게 생성할 수 없습니다.");
+            alert("객관식 선지는 최대 8개 작성 가능합니다.");
             return;
         }
 
@@ -392,7 +392,7 @@
     function removeOption(questionIndex, optionIndex) {
         const options = questions[questionIndex].options;
         if (options.length <= 2) {
-            alert("객관식 질문의 선지는 최소 2개 이상으로 설정해주세요.");
+            alert("객관식 질문의 선지는 최소 2개 이상이어야 합니다.");
             return;
         }
         const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
