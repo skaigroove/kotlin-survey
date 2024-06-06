@@ -219,6 +219,13 @@
             width: 100%;
             margin-bottom: 20px;
         }
+
+        .logout-text {
+            font-size: 20px;
+            color: white;
+            margin-right: 30px;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -231,6 +238,9 @@
             <span class="username"></span>
             <img src="/profile.jpg" alt="User Profile" class="profile-img">
             <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
         </div>
     </div>
 </header>
@@ -344,9 +354,14 @@
     }
 
     function removeOption(questionIndex, optionIndex) {
+        const options = questions[questionIndex].options;
+        if (options.length <= 2) {
+            alert("객관식 질문의 선지는 최소 2개 이상으로 설정해주세요.");
+            return;
+        }
         const optionDiv = document.getElementById(`option${questionIndex}-${optionIndex}`);
         optionDiv.remove();
-        questions[questionIndex].options.splice(optionIndex, 1);
+        options.splice(optionIndex, 1);
         updateOptionIndexes(questionIndex);
     }
 
@@ -398,7 +413,6 @@
 
         return true;
     }
-
 </script>
 
 </body>

@@ -160,6 +160,14 @@
             color: #ff5b5b;
         }
 
+        .logout-text {
+            font-size: 20px;
+            color: white;
+            margin-right: 30px;
+            text-decoration: underline;
+        }
+
+
     </style>
 </head>
 <body>
@@ -172,6 +180,9 @@
             <span class="username"></span>
             <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
             <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
         </div>
     </div>
 </header>

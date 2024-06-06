@@ -202,6 +202,9 @@
             <span class="username"></span>
             <img th:src="@{/profile.jpg}" alt="User Profile" class="profile-img">
             <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"></span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
         </div>
     </div>
 </header>
@@ -255,65 +258,11 @@
                     title.textContent = question;
                     chartGroupDiv.appendChild(title);
 
-                    // 바 차트와 파이 차트를 같은 행에 배치
-                    const chartsRowDiv = document.createElement('div');
-                    chartsRowDiv.className = 'charts-row';
-
-                    const barCanvas = document.createElement('canvas');
-                    barCanvas.id = 'barChart' + questionId;
-                    chartsRowDiv.appendChild(barCanvas);
-
                     const pieCanvas = document.createElement('canvas');
                     pieCanvas.id = 'pieChart' + questionId;
-                    chartsRowDiv.appendChild(pieCanvas);
+                    chartGroupDiv.appendChild(pieCanvas);
 
-                    chartGroupDiv.appendChild(chartsRowDiv);
                     chartsContainer.appendChild(chartGroupDiv);
-
-                    const barCtx = barCanvas.getContext('2d');
-                    new Chart(barCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: options.map(o => o.optionText),
-                            datasets: [{
-                                label: '응답자 수',
-                                data: options.map(o => o.count),
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: false,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    ticks: {
-                                        beginAtZero: true,
-                                        font: {
-                                            size: 20 // y축 글자 크기
-                                        }
-                                    }
-                                },
-                                x: {
-                                    ticks: {
-                                        font: {
-                                            size: 20 // x축 글자 크기
-                                        }
-                                    }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    labels: {
-                                        font: {
-                                            size: 20 // 범례 글자 크기
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    });
 
                     const pieCtx = pieCanvas.getContext('2d');
                     new Chart(pieCtx, {
@@ -388,12 +337,14 @@
             }
 
             // 주관식 데이터 처리
-            if (data.subjective) {
+            if (data.subjective && Object.keys(data.subjective).length > 0) {
                 subjectiveData = data.subjective;
                 Object.keys(subjectiveData).forEach(questionId => {
                     currentPages[questionId] = 1;
                 });
                 renderAllSubjectiveData(data);
+            } else {
+                subjectiveContainer.style.display = 'none'; // 주관식 데이터가 없으면 컨테이너 숨기기
             }
         })
         .catch(error => console.error('Error loading the charts:', error));
@@ -470,5 +421,6 @@
         nextBtn.disabled = currentPages[questionId] === totalPages;
     }
 </script>
+
 </body>
 </html>
