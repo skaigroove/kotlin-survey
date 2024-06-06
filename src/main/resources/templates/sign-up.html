@@ -157,6 +157,10 @@
         var today = new Date();
         var birthDateObj = new Date(birthDate);
 
+        // 날짜를 비교할 때 시간 부분을 제외하도록 설정
+        today.setHours(0, 0, 0, 0);
+        birthDateObj.setHours(0, 0, 0, 0);
+
         if (!loginId) {
             alert('이메일을 입력해 주세요.');
             return false;
@@ -203,8 +207,6 @@
         }
         return true;
     }
-</script>
-
 </script>
 
 </body>

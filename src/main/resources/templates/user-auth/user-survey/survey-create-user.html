@@ -272,22 +272,22 @@
         newQuestionDiv.className = 'form-column';
         newQuestionDiv.id = `question${questionIndex}`;
         newQuestionDiv.innerHTML = `
-            <div>
-                <p id="questionLabel${questionIndex}">🐼 ${questionIndex + 1}번 질문</p>
-                <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})" required>
-                    <option value="" disabled selected>유형 선택</option>
-                    <option value='SUBJECTIVE'>주관식</option>
-                    <option value='OBJECTIVE'>객관식</option>
-                </select>
-                <button class="btn" type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
-            </div>
-            <div>
-                <textarea class="questionContext" id="questionText${questionIndex}" name="questions[${questionIndex}].context" placeholder="질문 내용을 입력하세요." required rows="3"></textarea>
-            </div>
-            <div id="optionsContainer${questionIndex}" style="display:none;">
-                <button class="btn" type="button" onclick="addOption(${questionIndex})">선지 추가</button>
-            </div>
-        `;
+        <div>
+            <p id="questionLabel${questionIndex}">🐼 ${questionIndex + 1}번 질문</p>
+            <select class="select" id="questionType${questionIndex}" name="questions[${questionIndex}].questionType" onchange="toggleOptions(this, ${questionIndex})" required>
+                <option value="" disabled selected>유형 선택</option>
+                <option value='SUBJECTIVE'>주관식</option>
+                <option value='OBJECTIVE'>객관식</option>
+            </select>
+            <button class="btn" type="button" onclick="removeQuestion(${questionIndex})">질문 삭제</button>
+        </div>
+        <div>
+            <textarea class="questionContext" id="questionText${questionIndex}" name="questions[${questionIndex}].context" placeholder="질문 내용을 입력하세요." required rows="3"></textarea>
+        </div>
+        <div id="optionsContainer${questionIndex}" style="display:none;">
+            <button class="btn" type="button" onclick="addOption(${questionIndex})">선지 추가</button>
+        </div>
+    `;
         questionsContainer.appendChild(newQuestionDiv);
     }
 
@@ -335,11 +335,11 @@
         optionDiv.className = 'option-div';
         optionDiv.id = `option${questionIndex}-${optionIndex}`;
         optionDiv.innerHTML = `
-            <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}"
-                   name="questions[${questionIndex}].questionOptions[${optionIndex}].optionText"
-                   placeholder="${optionIndex + 1}번 선지를 입력하세요" required>
-            <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})"> 삭제</button><br>
-        `;
+        <input class="select_option" type="text" id="option${questionIndex}-${optionIndex}"
+               name="questions[${questionIndex}].questionOptions[${optionIndex}].optionText"
+               placeholder="${optionIndex + 1}번 선지를 입력하세요" required>
+        <button class="btn" type="button" onclick="removeOption(${questionIndex}, ${optionIndex})"> 삭제</button><br>
+    `;
         optionsContainer.appendChild(optionDiv);
     }
 
@@ -369,6 +369,7 @@
         const startDate = new Date(document.getElementById('startDate').value);
         const endDate = new Date(document.getElementById('endDate').value);
         const today = new Date();
+        today.setHours(0, 0, 0, 0); // 시간을 0으로 초기화
 
         if (questions.length === 0) {
             alert("최소 하나의 질문을 추가해 주세요.");
@@ -381,22 +382,23 @@
         }
 
         if (startDate < today) {
-            alert("설문 시작 날짜는 현재 날짜 이후로 설정해 주세요.");
+            alert("설문 시작 날짜를 현재 날짜 이후로 설정해 주세요.");
             return false;
         }
 
         if (endDate < today) {
-            alert("설문 마감 날짜는 현재 날짜 이후로 설정해 주세요.");
+            alert("설문 마감 날짜를 현재 날짜 이후로 설정해 주세요.");
             return false;
         }
 
-        if (startDate >= endDate) {
-            alert("설문 마감 날짜는 설문 시작 날짜 이후로 설정해 주세요.");
+        if (startDate > endDate) {
+            alert("설문 마감 날짜를 설문 시작 날짜 이후로 설정해 주세요.");
             return false;
         }
 
         return true;
     }
+
 </script>
 
 </body>
