@@ -249,10 +249,12 @@
                 <div class="box"></div>
                 <p><span class="num_question" th:text=" 'Q' + ${iterStat.index + 1}"></span><span
                         class="question_context" th:text="${answer.question.context}"></span></p>
-                <p th:if="${answer.answerType.name() == 'SUBJECTIVE' }"><span class="answer_block">A</span><span
-                        th:text="${answer.subjectiveAnswer}"></span></p>
-                <p th:if="${answer.answerType.name() == 'OBJECTIVE'}"><span class="answer_block">A</span> <span
-                        th:text="${answer.objectiveAnswer.questionOptionText}"></span></p>
+                <p th:if="${answer.answerType.name() == 'SUBJECTIVE' }">
+                    <span class="answer_block" th:text=" 'A' + ${iterStat.index + 1}"></span>
+                    <span th:text="${answer.subjectiveAnswer}"></span></p>
+                <p th:if="${answer.answerType.name() == 'OBJECTIVE'}">
+                    <span class="answer_block" th:text=" 'A' + ${iterStat.index + 1}"></span>
+                    <span th:text="${answer.objectiveAnswer.questionOptionText}"></span></p>
             </div>
         </div>
     </div>

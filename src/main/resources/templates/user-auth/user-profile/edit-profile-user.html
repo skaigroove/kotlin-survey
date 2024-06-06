@@ -24,6 +24,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px; /* 패딩 추가 */
         }
 
         .logo {
@@ -35,7 +36,6 @@
             -webkit-text-fill-color: transparent;
             animation: gradient-animation 5s ease infinite;
             margin-left: 20px;
-            padding-top: 10px;
         }
 
         @keyframes gradient-animation {
@@ -86,7 +86,7 @@
             width: 100%;
             text-align: center;
             color: #333;
-            align-items: center;
+            margin-top: 20px; /* 배너와 폼 사이의 거리 줄이기 */
         }
 
         h1 {
@@ -124,9 +124,11 @@
             cursor: pointer;
             font-weight: bold;
             font-size: 16px;
-            width: 10%;
+            width: 100px; /* 버튼 크기 고정 */
             text-align: center;
             box-sizing: border-box;
+            margin: 0 auto; /* 가로 중앙 정렬 */
+            display: block; /* 블록 요소로 설정 */
         }
 
         .btn_post:hover {
@@ -164,7 +166,19 @@
 
         @media (max-width: 768px) {
             body {
-                font-size: 20px;
+                font-size: 16px; /* 폰트 크기 줄이기 */
+            }
+            .container {
+                margin-top: 10px; /* 모바일에서 배너와 폼 사이의 거리 줄이기 */
+                padding: 20px; /* 모바일에서 패딩 줄이기 */
+            }
+            .form-group input,
+            .form-group select {
+                padding: 10px; /* 모바일에서 인풋 패딩 줄이기 */
+            }
+            .btn_post {
+                width: 80px; /* 모바일에서 버튼 크기 줄이기 */
+                font-size: 14px; /* 모바일에서 버튼 폰트 크기 줄이기 */
             }
         }
 
@@ -181,18 +195,18 @@
         .contain {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start; /* 폼이 상단에 위치하도록 설정 */
+            padding-top: 10px; /* 배너와 폼 사이의 거리 줄이기 */
+            width: 100%;
         }
 
         .error-message {
             color: red;
             font-size: 12px;
         }
-        .warn{
+        .warn {
             color: red;
         }
-
     </style>
     <script>
         function validateForm() {

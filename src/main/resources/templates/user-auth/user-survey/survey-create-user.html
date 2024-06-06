@@ -17,8 +17,6 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            align-items: center;
-            justify-content: center;
         }
 
         header {
@@ -26,7 +24,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
+            padding: 10px;
         }
 
         .logo {
@@ -38,13 +36,18 @@
             -webkit-text-fill-color: transparent;
             animation: gradient-animation 5s ease infinite;
             margin-left: 20px;
-            padding-top: 10px;
         }
 
         @keyframes gradient-animation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .menu {
@@ -77,9 +80,10 @@
         main {
             min-height: 80vh;
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* 상단에 위치하도록 설정 */
             justify-content: center;
             width: 100%;
+            padding-top: 20px; /* 배너와 폼 사이의 간격 설정 */
         }
 
         .container {
@@ -88,6 +92,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            width: 100%;
         }
 
         .survey-form {
@@ -110,7 +115,7 @@
             width: calc(100% - 50px);
             height: 50px;
             padding: 10px;
-            margin-top: 50px;
+            margin-top: 20px;
             font-size: 30px;
         }
 
@@ -225,6 +230,37 @@
             color: white;
             margin-right: 30px;
             text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                padding-top: 10px; /* 모바일에서 배너와 폼 사이의 거리 줄이기 */
+            }
+
+            .title {
+                font-size: 20px; /* 모바일에서 폰트 크기 줄이기 */
+            }
+
+            .description {
+                font-size: 16px; /* 모바일에서 폰트 크기 줄이기 */
+            }
+
+            .date {
+                width: 40%; /* 모바일에서 날짜 입력 필드 크기 조정 */
+            }
+
+            .select {
+                width: 80%; /* 모바일에서 셀렉트 필드 크기 조정 */
+            }
+
+            .questionContext {
+                font-size: 12px; /* 모바일에서 폰트 크기 줄이기 */
+            }
+
+            .btn, .btn_submit {
+                width: 100%; /* 모바일에서 버튼 너비 조정 */
+                margin: 10px 0; /* 모바일에서 마진 조정 */
+            }
         }
     </style>
 </head>

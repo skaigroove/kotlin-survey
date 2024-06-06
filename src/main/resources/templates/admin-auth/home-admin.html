@@ -88,20 +88,6 @@
             width: 100%;
         }
 
-        @media (max-width: 768px), (max-width: 1024px) {
-            .container {
-                flex-direction: column;
-            }
-
-            .chat-container {
-                order: 2; /* chat-container가 main 뒤에 오도록 설정 */
-            }
-
-            main.content {
-                order: 1; /* main이 먼저 오도록 설정 */
-            }
-        }
-
         .sidebar {
             background-color: #2c3e50;
             color: white;
@@ -256,7 +242,7 @@
             padding: 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            align-items: flex-start; /* flex-start로 수정하여 여러 줄 메시지도 올바르게 정렬 */
+            margin-right: 10px;
         }
 
         .message-form button {
@@ -334,6 +320,9 @@
             <span class="username"></span>
             <img th:src="@{/profile.jpg}" alt="Admin Profile" class="profile-img">
             <span class="username-welcome" th:text="' ' + ${username} + ' 님 환영합니다.'"> </span>
+            <div class="logout" onclick="location.href='/home/logout'">
+                <div class="logout-text">로그아웃</div>
+            </div>
         </div>
     </div>
 </header>
