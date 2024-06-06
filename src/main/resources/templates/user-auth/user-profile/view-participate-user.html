@@ -258,7 +258,13 @@
             </div>
         </div>
     </div>
+    <!--
     <a class="btn-post"
+       th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}">
+        Edit Participation
+    </a>
+    -->
+    <a class="btn-post" th:if="${canEditCheck}"
        th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}">
         Edit Participation
     </a>

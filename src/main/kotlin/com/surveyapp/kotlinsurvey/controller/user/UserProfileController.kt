@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/user")
@@ -168,8 +170,18 @@ class UserProfileController(
 
         // 참여 정보를 가져온다
         val participation = surveyService.getParticipationById(participationId)
+
         // 참여 정보를 모델에 넣는다.
         model.addAttribute("participation", participation)
+
+        // 설문 응답 기한이 끝나면 답변 수정 불가
+        var canEditCheck = participation?.survey?.endDate?.isAfter(LocalDate.now()) ?: false // 답변 수정 가능 여부
+        if (participation?.survey?.endDate?.isEqual(LocalDate.now()) == true)
+        { // 마감 기한 날짜 == 오늘 날짜 ; 답변 수정 가능
+            canEditCheck = true
+        }
+        model.addAttribute("canEditCheck", canEditCheck) // model 에 속성 추가
+
 
         // 세션에서 사용자 이름 가져오기 -> 헤더의 사용자 정보 표시
         val username = session.getAttribute("username")
