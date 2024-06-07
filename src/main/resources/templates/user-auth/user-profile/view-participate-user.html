@@ -239,28 +239,36 @@
 
     <div class="survey-info">
         <p class="title"><span th:text="${participation.survey.title}"></span></p>
-        <p><span th:text="${participation.survey.startDate}"></span> ~ <span
-                th:text="${participation.survey.endDate}"></span></p>
+        <p>
+            <span th:text="${participation.survey.startDate}"></span> ~
+            <span th:text="${participation.survey.endDate}"></span>
+        </p>
     </div>
     <hr>
     <div class="answer-info">
         <div th:each="answer, iterStat : ${participation.answers}">
             <div>
                 <div class="box"></div>
-                <p><span class="num_question" th:text=" 'Q' + ${iterStat.index + 1}"></span><span
-                        class="question_context" th:text="${answer.question.context}"></span></p>
+                <p>
+                    <span class="num_question" th:text="'Q' + ${iterStat.index + 1}"></span>
+                    <span class="question_context" th:text="${answer.question.context}"></span>
+                </p>
                 <p th:if="${answer.answerType.name() == 'SUBJECTIVE' }">
-                    <span class="answer_block" th:text=" 'A' + ${iterStat.index + 1}"></span>
-                    <span th:text="${answer.subjectiveAnswer}"></span></p>
+                    <span class="answer_block" th:text="'A' + ${iterStat.index + 1}"></span>
+                    <span th:text="${answer.subjectiveAnswer}"></span>
+                </p>
                 <p th:if="${answer.answerType.name() == 'OBJECTIVE'}">
-                    <span class="answer_block" th:text=" 'A' + ${iterStat.index + 1}"></span>
-                    <span th:text="${answer.objectiveAnswer.questionOptionText}"></span></p>
+                    <span class="answer_block" th:text="'A' + ${iterStat.index + 1}"></span>
+                    <span th:text="${answer.objectiveAnswer.questionOptionText}"></span>
+                </p>
             </div>
         </div>
     </div>
-    <!--
-    <a class="btn-post"
-       th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}">
+
+    <!-- 설문 기간에 따라 버튼 비활성화 및 알림 표시 -->
+    <a class="btn-post" id="editParticipationBtn"
+       th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}"
+       onclick="checkSurveyDate(event)">
         Edit Participation
     </a>
     -->
@@ -270,5 +278,29 @@
     </a>
     <a href="/user/profile" class="btn-back">Back to Profile</a>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 타임리프 모델 값을 사용하여 설문 종료 날짜 가져오기
+        var endDateText = [[${#dates.format(participation.survey.endDate, 'yyyy-MM-dd')}]]
+        var endDate = new Date(endDateText);
+        var currentDate = new Date();
+
+        // 수정 버튼 가져오기
+        var editButton = document.getElementById('editParticipationBtn');
+
+        // 현재 날짜가 설문 기간 내에 있는지 확인
+        if (currentDate > endDate) {
+            // 설문 기간이 지난 경우
+            editButton.addEventListener('click', function(event) {
+                event.preventDefault(); // 기본 동작 방지
+                alert('설문 수정 기간이 지났습니다.'); // 사용자에게 알림
+            });
+            editButton.classList.add('disabled-button'); // 버튼 비활성화 스타일 적용
+        }
+    });
+</script>
+
+
 </body>
 </html>

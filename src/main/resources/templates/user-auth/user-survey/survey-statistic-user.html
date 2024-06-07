@@ -235,7 +235,6 @@
             const subjectiveContainer = document.getElementById('subjectiveContainer');
 
             // 설문 정보 및 사용자 이름 설정
-            document.querySelector('.username-welcome').textContent = `${data.username} 님 환영합니다.`;
             document.querySelector('.survey-details h1').textContent = data.survey.title;
             document.querySelector('#surveyPeriod').textContent = `${data.survey.startDate} ~ ${data.survey.endDate}`;
             document.querySelector('.survey-details h4').textContent = data.survey.description;
