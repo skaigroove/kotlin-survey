@@ -123,8 +123,4 @@ class UserInquiryController(
         return "user-auth/user-inquiry/inquiry-view-user"
     }
 
-
-
-
-
 }
