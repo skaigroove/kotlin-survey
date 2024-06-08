@@ -1,11 +1,8 @@
 package com.surveyapp.kotlinsurvey.service
 
-import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
 import com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
-import com.surveyapp.kotlinsurvey.domain.survey.Survey
 import com.surveyapp.kotlinsurvey.repository.UserInquiryRepository
-import jakarta.servlet.http.HttpSession
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

@@ -1,6 +1,5 @@
 package com.surveyapp.kotlinsurvey.controller.admin
 
-import com.surveyapp.kotlinsurvey.controller.form.ReplyInquiryForm
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
 import com.surveyapp.kotlinsurvey.service.UserInquiryService
 import com.surveyapp.kotlinsurvey.service.UserService
@@ -33,7 +32,6 @@ class AdminInquiryController(
         val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
 
         model.addAttribute("adminInquiryPost", inquiryPost)
-        model.addAttribute("replyInquiryForm", ReplyInquiryForm()) // 답변 양식
 
         return "admin-auth/admin-inquiry/admin-inquiry-detail";
     }
