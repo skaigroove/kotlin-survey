@@ -228,7 +228,7 @@
                 <div th:if="${answerForm.answerType.name() == 'OBJECTIVE'}">
                     <div th:each="option, optStat : ${answerForm.question.questionOptions}">
                         <label class="option">
-                            <input type="radio" th:field="*{editAnswerList[__${iterStat.index}__].objectiveAnswer}" th:value="${option.questionOptionId}" th:checked="${option.questionOptionId == answerForm.objectiveAnswer}" />
+                            <input type="radio" th:field="*{editAnswerList[__${iterStat.index}__].objectiveAnswerId}" th:value="${option.questionOptionId}" th:checked="${option.questionOptionId == answerForm.objectiveAnswerId}" />
                             <span th:text="${option.questionOptionText}"></span>
                         </label>
                     </div>

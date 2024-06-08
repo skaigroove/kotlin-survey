@@ -17,7 +17,6 @@ import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.util.*
 
 @Service
 @Transactional
@@ -169,7 +168,7 @@ class SurveyService(
             EditAnswerForm().apply {
                 answerType = answer.answerType
                 questionId = answer.question.questionId
-                objectiveAnswer = answer.objectiveAnswer?.questionOptionId
+                objectiveAnswerId = answer.objectiveAnswer?.questionOptionId
                 subjectiveAnswer = answer.subjectiveAnswer
                 question = answer.question
             }
@@ -202,7 +201,7 @@ class SurveyService(
                 // 기존 답변이 있는 경우 업데이트
                 existingAnswer.answerType = answerForm.answerType
                 existingAnswer.objectiveAnswer =
-                    answerForm.objectiveAnswer?.let { surveyRepository.findQuestionOptionById(it) }
+                    answerForm.objectiveAnswerId?.let { surveyRepository.findQuestionOptionById(it) }
                 existingAnswer.subjectiveAnswer = answerForm.subjectiveAnswer
                 existingAnswer
             } else {
@@ -210,7 +209,7 @@ class SurveyService(
                 Answer(
                     question = surveyRepository.findQuestionById(answerForm.questionId)!!,
                     answerType = answerForm.answerType,
-                    objectiveAnswer = answerForm.objectiveAnswer?.let { surveyRepository.findQuestionOptionById(it) },
+                    objectiveAnswer = answerForm.objectiveAnswerId?.let { surveyRepository.findQuestionOptionById(it) },
                     subjectiveAnswer = answerForm.subjectiveAnswer,
                     user = surveyParticipation.user,
                     surveyParticipation = surveyParticipation
