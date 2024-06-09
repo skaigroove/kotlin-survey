@@ -60,8 +60,8 @@
             </td>
 
             <td>
-                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE}" th:text="'완료'"></span>
-                <span th:if="${inquiryPost.status == T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE}" th:text="'미완료'"></span>
+                <span th:if="${inquiryPost.status.equals(T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).COMPLETE)}" th:text="'완료'"></span>
+                <span th:if="${inquiryPost.status.equals(T(com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState).UNCOMPLETE)}" th:text="'미완료'"></span>
             </td>
         </tr>
         </tbody>

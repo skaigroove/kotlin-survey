@@ -144,5 +144,4 @@ class UserSurveyController(
 
         return "redirect:/home/list" // 경로 반환 : survey-list-user.html
     }
-
 }
