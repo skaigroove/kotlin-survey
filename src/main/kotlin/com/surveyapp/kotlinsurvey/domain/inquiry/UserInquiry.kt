@@ -1,3 +1,9 @@
+/* UserInquiry.kt
+* SurveyBay - 1:1 문의 관련 doamin
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.5.21.
+*/
+
 package com.surveyapp.kotlinsurvey.domain.inquiry
 
 import com.surveyapp.kotlinsurvey.domain.user.User
@@ -14,7 +20,7 @@ class UserInquiry (
 
     @ManyToOne
     @JoinColumn(name="member_id")
-    val user: User, // 문의 작성자
+    val user: User, // 문의 글 작성자
 
     @Column
     val title: String, // 문의 게시 글 제목
@@ -33,7 +39,7 @@ class UserInquiry (
 
     @Column
     @Enumerated(EnumType.STRING)
-    var status : InquiryState = InquiryState.UNCOMPLETE // default value
+    var status : InquiryState = InquiryState.UNCOMPLETE // default value = UNCOMPLETE (답변 미완료)
 )
 {
     val isComplete: Boolean

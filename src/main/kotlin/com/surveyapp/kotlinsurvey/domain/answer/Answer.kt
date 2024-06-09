@@ -1,3 +1,9 @@
+/* Answer.kt
+* SurveyBay - 답변 관련 doamin
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.4.
+*/
+
 package com.surveyapp.kotlinsurvey.domain.answer
 
 import com.surveyapp.kotlinsurvey.domain.question.Question
@@ -21,11 +27,11 @@ class Answer(
 
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = ForeignKey(name = "fk_user_id"))
-    val user: User, // 멤버 하나당 여러개의 답변이 있을 수 있다.
+    val user: User, // 멤버 하나당 여러 개의 답변 존재 가능
 
     @ManyToOne
     @JoinColumn(name = "question_id", foreignKey = ForeignKey(name = "fk_question_id"))
-    val question: Question, // 질문 하나당 여러 개의 답변이 있을 수 있다.
+    val question: Question, // 질문 하나당 여러 개의 답변 존재 가능
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "participation_id", nullable = false)
@@ -33,7 +39,7 @@ class Answer(
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "objectiveAnswers")
-    var objectiveAnswer: QuestionOption? = null, // 주관식 답변일 때, 선택된 선택지
+    var objectiveAnswer: QuestionOption? = null, // 객관식 답변일 때, 선택된 선택지
 
     @Column
     var subjectiveAnswer: String? = null // 주관식 답변 내용

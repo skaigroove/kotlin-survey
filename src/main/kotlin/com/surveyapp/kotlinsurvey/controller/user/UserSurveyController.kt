@@ -1,3 +1,9 @@
+/* UserSurveyController.kt
+* SurveyBay - 회원 : 설문 관련 Controller
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2. 설문 답변 수정 관련 처리
+*/
+
 package com.surveyapp.kotlinsurvey.controller.user
 
 import com.surveyapp.kotlinsurvey.controller.form.AnswerListForm
@@ -24,25 +30,26 @@ class UserSurveyController(
     @Autowired private val userService: UserService
 ) {
     @GetMapping("/list")
-    fun viewSurveyList(model: Model, session: HttpSession): String {
+    fun viewSurveyList(model: Model, session: HttpSession): String { // 설문 목록 관련 처리 함수
         val username = session.getAttribute("username")
-        model.addAttribute("username", username)
+        model.addAttribute("username", username) // model 에 user 이름 속성으로 추가
 
         val userLoginId = session.getAttribute("loginId") as? String ?: return "redirect:/"
 
         val user = userRepository.findByLoginId(userLoginId)
-        model.addAttribute("user", user)
+        model.addAttribute("user", user) // model 에 user 속성 추가
 
         val surveyPostList = surveyService.getSurveyList()
         val participatedSurveyIds = surveyService.getParticipatedSurveyIds(userLoginId)
-        model.addAttribute("postList", surveyPostList)
-        model.addAttribute("participatedSurveyIds", participatedSurveyIds)
 
-        return "user-auth/user-survey/survey-list-user"
+        model.addAttribute("postList", surveyPostList) // 설문 목록을 model 속성으로 추가
+        model.addAttribute("participatedSurveyIds", participatedSurveyIds) // 설문 참여 목록을 model 속성으로 추가 - 중복 참여 불가 처리
+
+        return "user-auth/user-survey/survey-list-user" // 경로 반환
     }
 
     @GetMapping("/post")
-    fun createSurveyForm(model: Model, session:HttpSession): String {
+    fun createSurveyForm(model: Model, session:HttpSession): String { // 설문 생성 폼
 
         // 모델에 surveyForm 초기화하여 추가
         model.addAttribute("surveyForm", SurveyForm())
@@ -53,19 +60,16 @@ class UserSurveyController(
         val user = userRepository.findByLoginId(userLoginId)
         model.addAttribute("username", user?.name)
 
-
-
-        return "user-auth/user-survey/survey-create-user"
+        return "user-auth/user-survey/survey-create-user" // 경로 반환
     }
 
     @PostMapping("/post")
     fun createSurvey(
-        // 설문 조사 생성
         @Valid @ModelAttribute("surveyForm") surveyForm: SurveyForm,
         session: HttpSession,
         result: BindingResult,
         redirectAttributes: RedirectAttributes,
-    ): String {
+    ): String { // 설문 조사 생성
 
         // surveyForm, questionForm binding 에서 오류가 있을 경우
         if (result.hasErrors()) {
@@ -95,9 +99,9 @@ class UserSurveyController(
         // 입력된 응답 기한 날짜 중 시작일이 오늘보다 더 빠를 때 오류 처리
         if (surveyForm.startDate < LocalDate.now()) return "redirect:/home/post?dateSettingError2=true"
 
-        surveyService.saveSurvey(survey)
+        surveyService.saveSurvey(survey) // 설문 저장
 
-        return "redirect:/home/list"
+        return "redirect:/home/list" // 경로 반환
     }
 
     @GetMapping("/list/participate/{surveyId}")
@@ -108,7 +112,7 @@ class UserSurveyController(
         val remainingDays = surveyService.getRemainingDays(survey) // 남은 날짜 계산
 
         val username = session.getAttribute("username") // 세션에서 사용자 이름 가져오기
-        model.addAttribute("username", username); // model에 "username" 추가
+        model.addAttribute("username", username) // model에 "username" 추가
         model.addAttribute("survey", survey) // 참여 할 설문 정보를 model에 추가
         model.addAttribute("questions", questions) // 질문 리스트를 model에 추가
         model.addAttribute("answerListForm", AnswerListForm()) // 답변 리스트 폼을 model에 추가
@@ -125,11 +129,11 @@ class UserSurveyController(
         session: HttpSession,
         result: BindingResult,
         redirectAttributes: RedirectAttributes,
-    ): String {
-        if (result.hasErrors()) {
+    ): String { // 설문 응답
+        if (result.hasErrors()) { // binding 에 문제 있으면 오류 메시지 출력
             result.allErrors.forEach { error ->
                 println("Error: ${error.defaultMessage}")
-            } // binding 에 에러가 있을 경우 에러 매세지 출력
+            }
         }
 
         val loginId = session.getAttribute("loginId") as? String ?: return "redirect:/"

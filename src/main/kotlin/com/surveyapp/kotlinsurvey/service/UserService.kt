@@ -1,3 +1,10 @@
+/* UserService.kt
+* SurveyBay - 사용자 관련 서비스 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2. 회원 탈퇴 (회원 정보 삭제) 함수 작성
+*/
+
+
 package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.controller.form.LoginForm
@@ -15,7 +22,7 @@ import org.springframework.stereotype.Service
 @Transactional
 class UserService(@Autowired private val userRepository: UserRepository) {
 
-    /* userRepository에 받은 user 정보로 회원가입*/
+    /* userRepository에 받은 user 정보로 회원 가입*/
     @Transactional
     fun join(user: User): User {
         validateDuplicateUserByLoginId(user) // 중복이면 에러를 반환한다
@@ -23,7 +30,7 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         return user
     }
 
-    fun validateAdmin(user: User): Boolean {
+    fun validateAdmin(user: User): Boolean { // 관리자 계정인지 아닌지 판단
 
         if (user.userType == UserType.ADMIN) {
             return true
@@ -40,7 +47,7 @@ class UserService(@Autowired private val userRepository: UserRepository) {
         return false
     }
 
-    fun validateDuplicateUserByPhoneNum(user: User) : Boolean{
+    fun validateDuplicateUserByPhoneNum(user: User) : Boolean{ // 전화번호 중복 확인
         val findMember: User? = userRepository.findByPhoneNumber(user.phoneNumber)
         if (findMember != null) // 레포지토리에 멤버가 존재한다면
             return true
@@ -54,56 +61,56 @@ class UserService(@Autowired private val userRepository: UserRepository) {
              2. DB에서 조회한 비밀번호와 사용자가 입력한 비밀번호가 일치하는지 판단
         */
 
-        val byloginId = userRepository.findByLoginId(loginForm.loginId) // 유저가 입력한 loginId로 부터 User객체를 받아옴
+        val byloginId = userRepository.findByLoginId(loginForm.loginId) // 유저가 입력한 loginId로 부터 User 객체를 받아 옴
         if (byloginId != null) {
             // 조회 결과가 있다(해당 이메일을 가진 회원 정보가 있다)
-            if (byloginId.password.equals(loginForm.password)) { // 유저가 입력한 password와 Repo에 저장되어있는 password가 일치한다면
+            if (byloginId.password.equals(loginForm.password)) { // 유저가 입력한 password 와 Repo에 저장되어 있는 password 가 일치한다면
                 return loginForm
             } else {
-                // 비밀번호 불일치(로그인실패)
+                // 비밀번호 불일치(로그인 실패)
                 return null
             }
         } else {
-            // 조회 결과가 없다(해당 이메일을 가진 회원이 없다)
+            // 조회 결과가 없다 (해당 이메일을 가진 회원이 없다)
             return null
         }
     }
 
-    fun checkLogin(session: HttpSession): User? {
+    fun checkLogin(session: HttpSession): User? { // 로그인 상태인지 확인
         val loginId = session.getAttribute("loginId") as? String // 사용자 - loginId get
         if (loginId == null) { // 로그인 안 된 상황
             println("사용자 로그인 정보가 없습니다.")
+
             return null
         }
         else { // 로그인 된 상황
-            val user = userRepository.findByLoginId(loginId)
-            return user
+            return userRepository.findByLoginId(loginId) // user 반환
         }
     }
 
-    /* userId(Long)으로 회원 한 명 조회*/
+    /* userId(Long)으로 user 한 명 조회 */
     fun findOne(userId: Long): User {
         return userRepository.findOne(userId)
     }
 
-    fun findUserByLoginId(loginId:String):User?{
+    fun findUserByLoginId(loginId:String):User?{ // loginId 에 해당하는 user 반환
         return userRepository.findByLoginId(loginId)
     }
 
-    fun updateUser(loginId: String, userForm: UserForm) {
+    fun updateUser(loginId: String, userForm: UserForm) { // 수정된 회원 정보 수정
         val user = userRepository.findByLoginId(loginId)
 
         user?.let {
-            it.name = userForm.name
-            it.password = userForm.password
-            it.birthDate = userForm.birthDate
-            it.genderType = userForm.genderType
-            it.phoneNumber = userForm.phoneNumber
+            it.name = userForm.name // 이름
+            it.password = userForm.password // 비밀번호
+            it.birthDate = userForm.birthDate // 생년월일
+            it.genderType = userForm.genderType // 성별
+            it.phoneNumber = userForm.phoneNumber // 전화번호
             userRepository.save(it)
         }
     }
 
-    fun getUserList(): List<User>? { // 모든 회원 목록을 List 로 반환
+    fun getUserList(): List<User>? { // 모든 사용자 (관리자, 회원) 목록을 List 로 반환
         return userRepository.findAll()
     }
 

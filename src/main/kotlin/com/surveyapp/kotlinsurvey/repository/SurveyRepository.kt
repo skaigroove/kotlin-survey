@@ -1,3 +1,9 @@
+/* SurveyRepository.kt
+* SurveyBay - 설문 관련 Repository 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.4. 설문 응답 수정 부분 추가 처리
+*/
+
 package com.surveyapp.kotlinsurvey.repository
 
 import com.surveyapp.kotlinsurvey.domain.answer.Answer
@@ -17,19 +23,19 @@ class SurveyRepository(
     @PersistenceContext private val em: EntityManager
 ) {
     @Transactional
-    fun saveSurvey(survey: Survey) {
+    fun saveSurvey(survey: Survey) { // 설문 저장
         em.persist(survey)
     }
 
-    fun getSurveyById(id: Long): Survey? {
+    fun getSurveyById(id: Long): Survey? { // (survey)Id 에 해당하는 설문 반환
         return em.find(Survey::class.java, id)
     }
 
-    fun getSurveyList(): List<Survey>? {
+    fun getSurveyList(): List<Survey>? { // 모든 설문 목록 반환
         return em.createQuery("select m from Survey m", Survey::class.java).resultList
     }
 
-    fun getUserSurveyList(loginId: String): List<Survey>? {
+    fun getUserSurveyList(loginId: String): List<Survey>? { // loginId - 회원이 작성한 모든 설문 목록 반환
         return em.createQuery(
             "select s from Survey s where s.user.loginId = :loginId",
             Survey::class.java
@@ -38,7 +44,7 @@ class SurveyRepository(
             .resultList
     }
 
-    fun getQuestionList(): List<Question>? {
+    fun getQuestionList(): List<Question>? { // 질문 목록 반환
         return em.createQuery("select m from Question m", Question::class.java).resultList
     }
 
@@ -46,11 +52,11 @@ class SurveyRepository(
         em.merge(survey)
     }
 
-    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
+    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? { // questionOptionId 에 해당하는 질문의 선지 반환
         return em.find(QuestionOption::class.java, questionOptionId)
     }
 
-    fun findParticipatedSurveysByLoginId(loginId: String): List<Long> {
+    fun findParticipatedSurveysByLoginId(loginId: String): List<Long> { // loginId - 회원이 참여한 설문 id 목록 반환
         return em.createQuery(
             "select p.survey.surveyId from SurveyParticipation p where p.user.loginId = :loginId",
             java.lang.Long::class.java
@@ -60,11 +66,11 @@ class SurveyRepository(
             .map { it.toLong() }
     }
 
-    fun deleteSurvey(survey: Survey) {
+    fun deleteSurvey(survey: Survey) { // 설문 삭제
         em.remove(survey)
     }
 
-    fun getQuestionOptionByQuestionId(questionId: Long): QuestionOption? {
+    fun getQuestionOptionByQuestionId(questionId: Long): QuestionOption? { // questionOptionId 에 해당하는 질문의 선지 반환
         return em.createQuery(
             "select qo from QuestionOption qo JOIN Answer a where a.question.questionId= :questionId and  qo.questionOptionId == a.objectiveAnswer.questionOptionId",
             QuestionOption::class.java
@@ -73,7 +79,7 @@ class SurveyRepository(
             .singleResult
     }
 
-    fun findAnswersByParticipation(surveyParticipation: SurveyParticipation): List<Answer> {
+    fun findAnswersByParticipation(surveyParticipation: SurveyParticipation): List<Answer> { // 참여한 설문의 답변 반환
         return em.createQuery(
             "select a from Answer a where a.surveyParticipation.participationId = :participationId",
             Answer::class.java
@@ -83,12 +89,12 @@ class SurveyRepository(
 
     }
 
-    fun findQuestionById(questionId: Long?): Question? {
+    fun findQuestionById(questionId: Long?): Question? { // questionId 에 해당하는 질문 반환
         return em.find(Question::class.java, questionId)
 
     }
 
-    fun saveAnswer(answer: Answer) {
+    fun saveAnswer(answer: Answer) { // 설문 답변 저장
         if (answer.answerId == null) {
             em.persist(answer)
         } else {

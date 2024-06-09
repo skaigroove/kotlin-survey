@@ -1,3 +1,9 @@
+/* Survey.kt
+* SurveyBay - 설문 관련 doamin
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2.
+*/
+
 package com.surveyapp.kotlinsurvey.domain.survey
 
 import com.surveyapp.kotlinsurvey.domain.question.Question
@@ -25,7 +31,7 @@ class Survey(
 
     @Column(name = "start_date", nullable = false)
     @Temporal(TemporalType.DATE) // 날짜만 입력
-    val startDate : LocalDate, // 설문 게시일
+    val startDate : LocalDate, // 설문 시작일
 
     @Column(name = "end_date")
     @Temporal(TemporalType.DATE) // 날짜만 입력
@@ -33,7 +39,7 @@ class Survey(
 
 ) {
     @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    var questions: MutableList<Question> = mutableListOf() // 하나의 설문 조사가 담고 있는 질문 리스트
+    var questions: MutableList<Question> = mutableListOf() // 해당 설문 조사의 질문 목록
 
     // Survey에서 SurveyParticipation으로의 일대다 매핑
     @OneToMany(mappedBy = "survey", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)

@@ -1,3 +1,9 @@
+/* UserInquiryController.kt
+* SurveyBay - 회원 : 1:1 문의 관련 Controller
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.7. 설문 답변 수정 관련 처리
+*/
+
 package com.surveyapp.kotlinsurvey.controller.user
 
 import com.surveyapp.kotlinsurvey.controller.form.UserInquiryForm
@@ -30,17 +36,17 @@ class UserInquiryController(
         // 세션에서 사용자 이름 가져오기
         val username = session.getAttribute("username")
         print("username: $username")
-        model.addAttribute("username", username);
+        model.addAttribute("username", username) // user 이름을 model 속성으로 추가
 
-        val inquiryList = userInquiryService.getInquiryList()
+        val inquiryList = userInquiryService.getInquiryList() // 문의 글 목록 get
 
-        model.addAttribute("inquiryList", inquiryList)
+        model.addAttribute("inquiryList", inquiryList) // 문의 글 목록을 model 속성으로 추가
 
         return "user-auth/user-inquiry/inquiry-list-user" // 경로 반환 : inquiry-list-user.html
     }
 
     @GetMapping("/post")
-    fun createInquiryForm(model: Model, session:HttpSession): String {
+    fun createInquiryForm(model: Model, session:HttpSession): String { // 문의 글 생성 폼
         // login 여부 확인
         if (userService.checkLogin(session) == null) // login 안 된 것
             return "redirect:/"
@@ -51,7 +57,7 @@ class UserInquiryController(
         // 세션에서 사용자 이름 가져오기
         val username = session.getAttribute("username")
         print("username: $username")
-        model.addAttribute("username", username);
+        model.addAttribute("username", username) // user 이름을 model 속성으로 추가
 
         return "user-auth/user-inquiry/inquiry-create" // 경로 반환 : create-inquiry-list-user.html
     }
@@ -62,7 +68,7 @@ class UserInquiryController(
         session: HttpSession,
         result: BindingResult,
         redirectAttributes: RedirectAttributes,
-    ): String {
+    ): String { // 1:1 문의 작성 처리
 
         // userInquiryFrom : binding 오류 확인
         if (result.hasErrors())
@@ -78,19 +84,9 @@ class UserInquiryController(
         // inquiry 생성
         val inquiry = createInquiry(userInquiryForm, user)
 
-        /*
-        // title 입력 x 오류 처리
-        if (userInquiryForm.title.isEmpty())
-            return "redirect:/home/inquiry/post?titleEmptyError=true"
-
-        // content 입력 x 오류 처리
-        if (userInquiryForm.content.isEmpty())
-            return "redirect:/home/inquiry/post?contentEmptyError=true"
-         */
-
         userInquiryService.saveInquiry(inquiry) // 저장
 
-        return "redirect:/home/inquiry"
+        return "redirect:/home/inquiry" // 경로 반환
     }
 
     fun createInquiry(inquiryForm: UserInquiryForm, user: User): UserInquiry { // inquiry 생성
@@ -107,20 +103,18 @@ class UserInquiryController(
         if (userService.checkLogin(session) == null) // login 안 된 것
             return "redirect:/"
 
-        val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId)
+        val inquiryPost: UserInquiry = userInquiryService.getInquiryById(inquiryId) // inquiryId 에 해당하는 문의 글 get
 
         println("Status: ${inquiryPost.status}")
 
         // 세션에서 사용자 이름 가져오기
         val username = session.getAttribute("username")
         print("username: $username")
-        model.addAttribute("username", username);
+        model.addAttribute("username", username) // user 이름을 model 속성으로 추가
 
-        // 속성 추가
-        model.addAttribute("inquiryPost", inquiryPost)
-        //model.addAttribute("replyInquiryForm", ReplyInquiryForm())
+        model.addAttribute("inquiryPost", inquiryPost) // 문의 글을 model 속성으로 추가
 
-        return "user-auth/user-inquiry/inquiry-view-user"
+        return "user-auth/user-inquiry/inquiry-view-user" // 경로 반환
     }
 
 }

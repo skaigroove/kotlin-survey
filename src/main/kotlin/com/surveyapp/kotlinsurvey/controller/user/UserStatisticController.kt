@@ -1,3 +1,9 @@
+/* UserStatisticController.kt
+* SurveyBay - 회원 : 설문 결과 관련 Controller
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2.
+*/
+
 package com.surveyapp.kotlinsurvey.controller.user
 
 import com.surveyapp.kotlinsurvey.repository.SurveyRepository
@@ -15,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 class UserStatisticController(@Autowired private val surveyRepository: SurveyRepository, @Autowired private val userRepository: UserRepository)
 {
     @GetMapping("/list/statistic/{surveyId}")
-    fun showSurveyStatisticPage(@PathVariable surveyId: Long, model: Model, session: HttpSession): String {
+    fun showSurveyStatisticPage(@PathVariable surveyId: Long, model: Model, session: HttpSession): String { // 설문 결과 보여 줄 때
 
         model.addAttribute("surveyId", surveyId)
         model.addAttribute(
@@ -28,6 +34,6 @@ class UserStatisticController(@Autowired private val surveyRepository: SurveyRep
         val user = userRepository.findByLoginId(userLoginId)
         model.addAttribute("username", user?.name)
 
-        return "user-auth/user-survey/survey-statistic-user"
+        return "user-auth/user-survey/survey-statistic-user" // 경로 반환
     }
 }

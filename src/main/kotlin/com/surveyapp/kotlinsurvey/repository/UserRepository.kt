@@ -1,3 +1,10 @@
+/* UserRepository.kt
+* SurveyBay - 사용자 관련 Repository 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2. 회원 탈퇴 (회원 정보 수정) 함수 작성
+*/
+
+
 package com.surveyapp.kotlinsurvey.repository
 
 import com.surveyapp.kotlinsurvey.domain.survey.Survey

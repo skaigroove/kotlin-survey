@@ -1,3 +1,9 @@
+/* SurveyService.kt
+* SurveyBay - 설문 관련 서비스 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.7. 교수님 조언 -> EditAnswerForm - 'objectiveAnswerId' 로 변수명 수정
+*/
+
 package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.controller.form.AnswerListForm
@@ -26,19 +32,19 @@ class SurveyService(
     @Autowired private val userService: UserService,
 ) {
 
-    fun saveSurvey(survey: Survey) {
+    fun saveSurvey(survey: Survey) { // 설문 저장
         surveyRepository.saveSurvey(survey)
     }
 
-    fun getSurveyById(surveyId: Long): Survey? {
+    fun getSurveyById(surveyId: Long): Survey? { // surveyId 에 해당하는 설문 반환
         return surveyRepository.getSurveyById(surveyId)
     }
 
-    fun getSurveyList(): List<Survey>? {
+    fun getSurveyList(): List<Survey>? { // 모든 설문 목록 반환
         return surveyRepository.getSurveyList()
     }
 
-    fun getUserSurveyList(loginId: String): List<Survey>? {
+    fun getUserSurveyList(loginId: String): List<Survey>? { // loginId - 회원이 생성한 설문 목록 반환
         return surveyRepository.getUserSurveyList(loginId)
     }
 
@@ -57,7 +63,7 @@ class SurveyService(
         return survey
     }
 
-    private fun createQuestions(form: SurveyForm, survey: Survey): MutableList<Question> {
+    private fun createQuestions(form: SurveyForm, survey: Survey): MutableList<Question> { // 설문 - 질문 생성
         return form.questions.map { questionForm ->
             val question = Question(
                 questionId = 0,  // 신규 생성이므로 ID는 null
@@ -83,7 +89,7 @@ class SurveyService(
         }.toMutableList()
     }
 
-    fun participateSurvey(survey: Survey, loginId: String, answerListForm: AnswerListForm): Survey {
+    fun participateSurvey(survey: Survey, loginId: String, answerListForm: AnswerListForm): Survey { // 설문 참여
 
         val user = userService.findUserByLoginId(loginId)
         if (user == null)
@@ -130,35 +136,34 @@ class SurveyService(
         return survey
     }
 
-    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? {
+    fun findQuestionOptionById(questionOptionId: Long): QuestionOption? { // questionOptionId 에 해당하하는 질문 반환
         return surveyRepository.findQuestionOptionById(questionOptionId)
     }
 
-    fun getRemainingDays(survey: Survey?): Any {
+    fun getRemainingDays(survey: Survey?): Any { // 설문 남은 기한 반환
         if (survey == null) return 0
         return survey.endDate!!.toEpochDay() - LocalDate.now().toEpochDay()
-
     }
 
-    fun getParticipatedSurveyIds(loginId: String): List<Long> {
+    fun getParticipatedSurveyIds(loginId: String): List<Long> { // loginId - 회원이 참여한 설문 목록 (id) 반환
         return surveyRepository.findParticipatedSurveysByLoginId(loginId)
     }
 
-    fun deleteSurvey(surveyId: Long) {
+    fun deleteSurvey(surveyId: Long) { // surveyId 에 해당하는 설문 삭제
         val survey = surveyRepository.getSurveyById(surveyId) ?: throw IllegalArgumentException("Survey not found")
         surveyRepository.deleteSurvey(survey)
     }
 
-    fun getQuestionOptionByQuestionId(questionId: Long): QuestionOption? {
+    fun getQuestionOptionByQuestionId(questionId: Long): QuestionOption? { // questionId 에 해당하는 질문의 선지 반환
         return surveyRepository.getQuestionOptionByQuestionId(questionId)
     }
 
-    fun getParticipationById(participationId: Long): SurveyParticipation? {
+    fun getParticipationById(participationId: Long): SurveyParticipation? { // participationId 에 해당하는 설문 참여 기록 반환
         return surveyParticipationRepository.getParticipationById(participationId)
 
     }
 
-    fun getAnswerListFormByParticipation(surveyParticipation: SurveyParticipation): EditAnswerListForm {
+    fun getAnswerListFormByParticipation(surveyParticipation: SurveyParticipation): EditAnswerListForm { // surveyParticipation 에 해당하는 설문 답변 반환
 
         // participation Id로 답변들을 찾아온다
         val answers = surveyRepository.findAnswersByParticipation(surveyParticipation)
@@ -182,7 +187,7 @@ class SurveyService(
     }
 
     @Transactional
-    fun updateAnswers(surveyParticipation: SurveyParticipation, editAnswerListForm: EditAnswerListForm) {
+    fun updateAnswers(surveyParticipation: SurveyParticipation, editAnswerListForm: EditAnswerListForm) { // 수정한 설문 답변 기록
 
         // 기존 답변 받아오기
         val existingAnswers = surveyRepository.findAnswersByParticipation(surveyParticipation)

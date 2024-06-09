@@ -1,3 +1,9 @@
+/* SurveyParticipationRepository.kt
+* SurveyBay - 설문 참여 관련 Repository 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2. repository 수정
+*/
+
 package com.surveyapp.kotlinsurvey.repository
 
 import com.surveyapp.kotlinsurvey.domain.survey.SurveyParticipation
@@ -14,7 +20,7 @@ class SurveyParticipationRepository(
 
 ) {
     @Transactional
-    fun saveParticipation(surveyParticipation: SurveyParticipation) {
+    fun saveParticipation(surveyParticipation: SurveyParticipation) { // 설문 참여 기록
         em.persist(surveyParticipation)
     }
 
@@ -36,11 +42,11 @@ class SurveyParticipationRepository(
             .resultList
     }
 
-    fun getParticipationById(participationId: Long): SurveyParticipation? {
+    fun getParticipationById(participationId: Long): SurveyParticipation? { // participationId 에 해당하는 설문 참여 정보 반환
         return em.find(SurveyParticipation::class.java, participationId)
     }
 
-    fun getSurveyParticipationListByLoginId(sessionLoginId: String): List<SurveyParticipation>? {
+    fun getSurveyParticipationListByLoginId(sessionLoginId: String): List<SurveyParticipation>? { // sessionLoginId 에 해당하는 회원이 참여한 설문 목록 반환
         return em.createQuery(
             "SELECT s FROM SurveyParticipation s WHERE s.user.loginId = :loginId",
             SurveyParticipation::class.java

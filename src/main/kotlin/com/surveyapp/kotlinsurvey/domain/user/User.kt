@@ -1,3 +1,9 @@
+/* User.kt
+* SurveyBay - 사용자 (관리자, 회원) 관련 doamin
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.5.4.
+*/
+
 package com.surveyapp.kotlinsurvey.domain.user
 
 import com.surveyapp.kotlinsurvey.domain.inquiry.UserInquiry
@@ -40,7 +46,7 @@ class User(
 
     @Column(name = "user_type")
     @Enumerated(EnumType.STRING)
-    val userType: UserType? // 사용자 권한은 nullable로 설정. 처음부터 값을 받지 않고 userService 단에서 회원가입 시, default값으로 'USER' 설정.
+    val userType: UserType? // 사용자 권한은 nullable로 설정. 처음부터 값을 받지 않고, userService 단에서 회원 가입 시 default 값으로 'USER' 설정.
 
 ) {
 

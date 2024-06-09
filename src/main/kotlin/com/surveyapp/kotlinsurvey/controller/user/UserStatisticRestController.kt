@@ -1,3 +1,9 @@
+/* UserStatisticRestController.kt
+* SurveyBay - 회원 : 설문 결과 관련 Controller
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.4. 디자인 + 통계 : 객관식 질문 내용 나오도록 출력
+*/
+
 package com.surveyapp.kotlinsurvey.controller.user
 
 import com.surveyapp.kotlinsurvey.domain.question.QuestionType
@@ -14,7 +20,7 @@ class SurveyStatisticController(
 ) {
 
     @GetMapping("/{surveyId}")
-    fun getSurveyStatistics(@PathVariable surveyId: Long): SurveyStatisticsResponse {
+    fun getSurveyStatistics(@PathVariable surveyId: Long): SurveyStatisticsResponse { // 설문 결과 처리
         val survey = surveyRepository.getSurveyById(surveyId) ?: throw RuntimeException("Survey not found")
         val questions = survey.questions.sortedBy { it.questionId }
 
@@ -23,7 +29,7 @@ class SurveyStatisticController(
         val subjectiveQuestions = mutableListOf<SubjectiveQuestionResponse>() // 주관식 질문 리스트
 
         for (question in questions) {
-            if (question.questionType == QuestionType.OBJECTIVE) {
+            if (question.questionType == QuestionType.OBJECTIVE) { // 객과닉 질문 처리
                 val options = question.questionOptions
                 for (option in options) {
                     val count = option.objectiveAnswers.size
@@ -36,7 +42,7 @@ class SurveyStatisticController(
                         )
                     )
                 }
-            } else if (question.questionType == QuestionType.SUBJECTIVE) {
+            } else if (question.questionType == QuestionType.SUBJECTIVE) { // 주관식 질문 처리
                 val answers = question.answers.mapNotNull { it.subjectiveAnswer }
                 subjectiveStatistics[question.questionId] = answers.toMutableList()
                 subjectiveQuestions.add(

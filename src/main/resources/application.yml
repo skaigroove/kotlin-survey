@@ -1,7 +1,11 @@
+# application.yml
+# SurveyBay - server Port 와 MySQL DB 관련 정보 처리
+#작성자 : 박예림 (21913687), 이홍비 (21912191)
+#프로그램 최종 수정 : 2024.6.9. Docker 작성 - address 주석 처리 : localhost 로 접속할 것 // 다른 장치 접속 방법 : 해당 와이파이 ip 주소:port 번호
+
 server:
- # address: 192.168.0.14
- # address: 192.168.45.193
-  port: 8081
+  #address: 192.168.204.1 # IT관
+  port: 8080
   servlet:
     context-path: /
     encoding:
@@ -22,9 +26,9 @@ spring:
     hibernate:
       ddl-auto: update
     properties:
-        hibernate:
-          show_sql: true
-          format_sql: true
+      hibernate:
+        show_sql: true
+        format_sql: true
 logging:
   pattern:
     console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"

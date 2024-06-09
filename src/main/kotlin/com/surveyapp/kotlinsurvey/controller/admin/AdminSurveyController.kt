@@ -1,3 +1,9 @@
+/* AdminSurveyController.kt
+* SurveyBay - 관리자 : 설문 문의 관리 관련 Controller
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.6. 설문 삭제 시 경로 처리 해결
+*/
+
 package com.surveyapp.kotlinsurvey.controller.admin
 
 
@@ -59,6 +65,6 @@ class AdminSurveyController(
         // 설문 삭제 처리
         surveyService.deleteSurvey(surveyId) // 해당 설문 삭제
 
-        return ResponseEntity.ok("Survey deleted successfully")
+        return ResponseEntity.ok("Survey deleted successfully") // fetch API => 경로 처리 : ResponseEntity 가 ok => loadSurveyList() 실행
     }
 }

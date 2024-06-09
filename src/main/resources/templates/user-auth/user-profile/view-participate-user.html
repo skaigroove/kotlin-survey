@@ -1,3 +1,10 @@
+<!--
+* view-participate-user.html
+* SurveyBay - 해당 회원이 참여한 설문 답변 상세 보기 창
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.8. 교수님 조언 - 'change answer' 로 답변 수정 버튼 문구 변경
+-->
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -258,16 +265,12 @@
             </div>
         </div>
     </div>
-    <!--
-    <a class="btn-post"
-       th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}">
-        Edit Participation
-    </a>
-    -->
+
     <a class="btn-post" th:if="${canEditCheck}"
        th:href="@{/user/participation/edit/{participationId}(participationId=${participation.participationId})}">
         Change Answer
     </a>
+
     <a href="/user/profile" class="btn-back">Back to Mypage</a>
 </div>
 </body>

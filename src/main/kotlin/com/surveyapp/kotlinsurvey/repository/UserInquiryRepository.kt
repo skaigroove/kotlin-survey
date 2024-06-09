@@ -1,3 +1,9 @@
+/* UserInquiryRepository.kt
+* SurveyBay - 1:1 문의 관련 Repository 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.5.21.
+*/
+
 package com.surveyapp.kotlinsurvey.repository
 
 import com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState
@@ -15,8 +21,7 @@ class UserInquiryRepository(
     private val em: EntityManager, // 생성자 주입
 ) {
 
-    fun saveInquiry(inquiry:UserInquiry)
-    {
+    fun saveInquiry(inquiry:UserInquiry) { // 1:1 문의 기록
         em.persist(inquiry)
     }
 

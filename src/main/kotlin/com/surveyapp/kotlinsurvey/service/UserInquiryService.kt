@@ -1,3 +1,10 @@
+/* UserInquiryService.kt
+* SurveyBay - 1:1 문의 관련 서비스 클래스
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.6. 문의 답변 기록 함수 수정
+*/
+
+
 package com.surveyapp.kotlinsurvey.service
 
 import com.surveyapp.kotlinsurvey.domain.inquiry.InquiryState

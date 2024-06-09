@@ -1,3 +1,9 @@
+/* Question.kt
+* SurveyBay - 설문 속 질문 관련 doamin
+* 작성자 : 박예림 (21913687), 이홍비 (21912191)
+* 프로그램 최종 수정 : 2024.6.2.
+*/
+
 package com.surveyapp.kotlinsurvey.domain.question
 
 import com.surveyapp.kotlinsurvey.domain.survey.Survey
@@ -10,14 +16,14 @@ class Question(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val questionId: Long,
+    val questionId: Long, // 질문 Id
 
     @ManyToOne
     @JoinColumn(name = "survey_id")
-    val survey: Survey, // 설문 하나 당 여러 개의 질문 가질 수 있다.
+    val survey: Survey, // 설문 하나당 질문 여러 개 존재 가능
 
     @Column(name = "context", nullable = false)
-    val context: String, // 컨텍스트 영역
+    val context: String, // 질문 내용
 
     @Column(name = "question_type", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
@@ -26,10 +32,10 @@ class Question(
 ) {
     // 1:n = question: answers
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    val answers: MutableList<Answer> = mutableListOf() // 질문 하나 당 여러개의 답변을 가질 수 있다.
+    val answers: MutableList<Answer> = mutableListOf() // 질문 하나당 다변 여러 개 존재 가능
 
     @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
-    var questionOptions : MutableList<QuestionOption> = mutableListOf() // 질문 하나 당 여러개의 선택지를 가질 수 있다.
+    var questionOptions : MutableList<QuestionOption> = mutableListOf() // 질문 하나당 선택지 여러 개 존재 가능
 
     fun addAnswer(answer: Answer) {
         answers.add(answer)
