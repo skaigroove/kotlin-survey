@@ -1,0 +1,731 @@
+{
+	"info": {
+		"_postman_id": "7434c7c2-e96f-4d7b-b947-a9d14179039c",
+		"name": "AdminFunctionTest",
+		"description": "AdminMemberController + AdminSurveyController Get/Post Method HTTP Request Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34580677"
+	},
+	"item": [
+		{
+			"name": "UserController - login()_admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"관리자 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "admin@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminMemberController - adminMemberList()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자단 모든 멤버 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/member",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"member"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminMemberController - adminMemberDetail()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자단 특정 멤버(id=1) 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/member/{{userId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"member",
+						"{{userId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - createForm()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저 생성 폼 생성 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - createUser()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저 생성 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"// Increase the newUserId by 1",
+							"let newUserId = parseInt(pm.environment.get('newUserId'));",
+							"pm.environment.set('newUserId', newUserId + 1);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "userexam@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "유저예제",
+							"type": "text"
+						},
+						{
+							"key": "birthDate",
+							"value": "1999-10-14",
+							"type": "text"
+						},
+						{
+							"key": "genderType",
+							"value": "MALE",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "01012346789",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/new",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"new"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - login()_admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"관리자 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "admin@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminMemberController - adminMemberDelete()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자단 멤버 삭제 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/member/delete/{{newUserId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"member",
+						"delete",
+						"{{newUserId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - login()_user(skaigroove)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"유저 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "skaigroove@naver.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController - createSurvey()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 예제 설문 생성 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"// Increase the surveyId by 1",
+							"    let surveyId = parseInt(pm.environment.get('surveyId'), 10);",
+							"    pm.environment.set('surveyId', surveyId + 1);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "예제 설문 제목",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "예제 설문 설명",
+							"type": "text"
+						},
+						{
+							"key": "startDate",
+							"value": "2024-06-09",
+							"type": "text"
+						},
+						{
+							"key": "endDate",
+							"value": "2024-06-30",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].context",
+							"value": "첫번째 설문",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionType",
+							"value": "OBJECTIVE",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[0].optionText",
+							"value": "1번선지",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[1].optionText",
+							"value": "2번선지",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[2].optionText",
+							"value": "3번선지",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - login()_admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"관리자 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "admin@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminSurveyController - adminSurveyList()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자단 모든 설문 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/survey",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"survey"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminSurveyController - adminSurveyList() Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자단 지정 설문 삭제 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/survey/delete/{{surveyId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"survey",
+						"delete",
+						"{{surveyId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

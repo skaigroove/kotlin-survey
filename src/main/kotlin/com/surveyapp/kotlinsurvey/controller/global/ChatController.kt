@@ -11,11 +11,15 @@ package com.surveyapp.kotlinsurvey.controller.global
 import com.surveyapp.kotlinsurvey.chat.domain.ChatMessage
 import com.surveyapp.kotlinsurvey.chat.domain.MessageType
 import com.surveyapp.kotlinsurvey.chat.listener.WebSocketEventListener
+import org.springframework.http.ResponseEntity
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
 class ChatController(
@@ -38,6 +42,14 @@ class ChatController(
         // message.sender 가 참여했다는 메시지 생성 => “/topic/pulic” 경로로 해당 메시지 전송
         val chatMessage = ChatMessage(sender = username, content = "", type = MessageType.JOIN)
         messagingTemplate.convertAndSend("/topic/public", chatMessage)
+    }
+
+    @PostMapping("/chat/sendMessage")
+    @ResponseBody
+    fun sendHttpMessage(@RequestBody message: ChatMessage): ResponseEntity<Map<String, String>> {
+        messagingTemplate.convertAndSend("/topic/public", message)
+        val response = mapOf("message" to "Message sent successfully")
+        return ResponseEntity.ok(response)
     }
 
     @MessageMapping("/chat.getOnlineUsers")

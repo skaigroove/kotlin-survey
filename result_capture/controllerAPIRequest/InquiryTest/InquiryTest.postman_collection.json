@@ -1,0 +1,753 @@
+{
+	"info": {
+		"_postman_id": "89c42c7c-4ad8-47a3-8ff7-103ed47d52d3",
+		"name": "InquiryTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34580677"
+	},
+	"item": [
+		{
+			"name": "UserController - login()_admin",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"관리자 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "admin@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminInquiryController-adminInquiryList()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"모든 응답 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"loginId\":\"skaigroove@gmail.com\",\n    \"password\":\"Ehdsanklaefjn@@#!99\",\n    \"name\":\"박예림\",\n    \"birthDate\":\"1999-10-14\",\n    \"gender\":\"FEMALE\",\n    \"type\":\"ADMIN\",\n    \"phoneNumber\":\"01091983296\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/inquiry",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"inquiry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminInquiryController-adminDetailInquiry()",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"테스트 문의(id = 1) 조회 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/admin/inquiry/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"inquiry",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - login()_user(skaigroove)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"유저 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "skaigroove@naver.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserInquiryController-listInquiry()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"모든 문의 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/inquiry",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"inquiry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserInquiryController-createInquiryForm()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"문의 생성 폼 GET 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/inquiry/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"inquiry",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserInquiryController-detailInquiry()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"지정 문의 Detail 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/inquiry/{{inquiryId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"inquiry",
+						"{{inquiryId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserInquiryController - writeInquiry()",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"유저 문의 작성 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"// Increase the inquiryId by 1",
+							"    let inquiryId = parseInt(pm.globals.get('inquiryId'), 10);",
+							"    pm.globals.set('inquiryId', inquiryId + 1);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "예제문의입니다",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "예제문의콘텐츠입니다",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/inquiry/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"inquiry",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserController - login()_admin Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"관리자 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "admin@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminInquiryController-replyInquiry()",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자 답변 등록 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"let inquiryId = parseInt(pm.globals.get('inquiryId'), 10);",
+							"pm.globals.set('inquiryId', inquiryId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/inquiry/{{inquiryId}}?reply=\"This is a reply\"",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"inquiry",
+						"{{inquiryId}}"
+					],
+					"query": [
+						{
+							"key": "reply",
+							"value": "\"This is a reply\""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "AdminInquiryController-editReply()",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"관리자 답변 수정 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/inquiry/edit/{{inquiryId}}?replyEdit=edit reply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"inquiry",
+						"edit",
+						"{{inquiryId}}"
+					],
+					"query": [
+						{
+							"key": "replyEdit",
+							"value": "edit reply"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "115355fe-baf4-446e-afb9-7bbed553e51f",
+		"name": "SurveyTest",
+		"description": "UserSurveyController API Request Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34580677"
+	},
+	"item": [
+		{
+			"name": "UserController - login()_user(skaigroove)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"유저 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "skaigroove@naver.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController-viewSurveyList()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"설문조사 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/home/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController-createSurveyForm()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"설문조사 리스트 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/home/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController - createSurvey()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 예제 설문 생성 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"// Increase the surveyId by 1",
+							"    let surveyId = parseInt(pm.environment.get('surveyId'), 10);",
+							"    pm.environment.set('surveyId', surveyId + 1);",
+							"",
+							"// Increase the questionId by 1",
+							"let questionId = parseInt(pm.environment.get('questionId'), 10);",
+							"pm.environment.set('questionId', questionId + 1);",
+							"",
+							"// Increase the questionOptionId by 3",
+							"let questionOptionId = parseInt(pm.environment.get('questionOptionId'), 10);",
+							"pm.environment.set('questionOptionId', questionOptionId + 3);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "예제 설문 제목",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "예제 설문 설명",
+							"type": "text"
+						},
+						{
+							"key": "startDate",
+							"value": "2024-06-09",
+							"type": "text"
+						},
+						{
+							"key": "endDate",
+							"value": "2024-06-30",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].context",
+							"value": "첫번째 설문",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionType",
+							"value": "OBJECTIVE",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[0].optionText",
+							"value": "1번선지",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[1].optionText",
+							"value": "2번선지",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[2].optionText",
+							"value": "3번선지",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController-createAnswerForm()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"설문조사 응답 폼 생성 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/home/list",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController - responseSurvey()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 예제 설문 생성 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"// Increase the surveyId by 1",
+							"    let surveyId = parseInt(pm.environment.get('surveyId'), 10);",
+							"    pm.environment.set('surveyId', surveyId + 1);",
+							"",
+							"// Increase the questionId by 3",
+							"let questionId = parseInt(pm.environment.get('questionId'), 10);",
+							"pm.environment.set('questionId', questionId + 3);",
+							"",
+							"// Increase the questionOptionId by 3",
+							"let questionOptionId = parseInt(pm.environment.get('questionOptionId'), 10);",
+							"pm.environment.set('questionOptionId', questionOptionId + 3);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "answerList[0].selectedOption",
+							"value": "{{questionOptionId}}",
+							"type": "text"
+						},
+						{
+							"key": "answerList[0].questionId",
+							"value": "{{questionId}}",
+							"type": "text"
+						},
+						{
+							"key": "answerList[0].answerType",
+							"value": "OBJECTIVE",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/list/participate/{{surveyId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"list",
+						"participate",
+						"{{surveyId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

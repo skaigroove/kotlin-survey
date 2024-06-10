@@ -1,0 +1,551 @@
+{
+	"info": {
+		"_postman_id": "6240c66f-b751-4e74-8b31-909e18a3ede4",
+		"name": "ProfileTest",
+		"description": "UserProfileController API Request Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34580677"
+	},
+	"item": [
+		{
+			"name": "UserController - login()_user(skaigroove)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 로그인 요청 후 세션 쿠키 저장",
+							"pm.test(\"유저 로그인 성공\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    // Set the session cookie for subsequent requests",
+							"    var sessionCookie = pm.cookies.get('JSESSIONID'); // 쿠키 이름은 서버 설정에 따라 다를 수 있습니다",
+							"    pm.environment.set('sessionCookie', sessionCookie);",
+							"});",
+							"",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"content-type": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "skaigroove@naver.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "1234",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - viewUserProfile()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 프로필 조회 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - createUserForm()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 프로필 수정을 위한 폼 생성 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - editUserInformation()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 프로필 수정 완료.\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "loginId",
+							"value": "skaigroove@naver.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12341234",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "박예림",
+							"type": "text"
+						},
+						{
+							"key": "birthDate",
+							"value": "1999-10-14",
+							"type": "text"
+						},
+						{
+							"key": "genderType",
+							"value": "FEMALE",
+							"type": "text"
+						},
+						{
+							"key": "phoneNumber",
+							"value": "01091983296",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/profile/edit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"profile",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserSurveyController - createSurvey()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 예제 설문 생성 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							"",
+							"// Increase the surveyId by 1",
+							"    let surveyId = parseInt(pm.environment.get('surveyId'), 10);",
+							"    pm.environment.set('surveyId', surveyId + 1);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "예제 설문 제목",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "예제 설문 설명",
+							"type": "text"
+						},
+						{
+							"key": "startDate",
+							"value": "2024-06-09",
+							"type": "text"
+						},
+						{
+							"key": "endDate",
+							"value": "2024-06-30",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].context",
+							"value": "첫번째 설문",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionType",
+							"value": "OBJECTIVE",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[0].optionText",
+							"value": "1번선지",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[1].optionText",
+							"value": "2번선지",
+							"type": "text"
+						},
+						{
+							"key": "questions[0].questionOptions[2].optionText",
+							"value": "3번선지",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/home/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"home",
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - viewCreatedSurvey()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저 프로필 생성된 설문 조회 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/survey/view/{{surveyId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"survey",
+						"view",
+						"{{surveyId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - deleteCreatedSurvey()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저단 지정 설문 삭제 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/survey/delete/{{surveyId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"survey",
+						"delete",
+						"{{surveyId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - viewSurveyParticipation()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저 프로필 참여한 설문 상세 조회 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/participation/view/19",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"participation",
+						"view",
+						"19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - editSurveyParticipation()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저 프로필 참여한 설문 상세 조회 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/user/participation/edit/19",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"participation",
+						"edit",
+						"19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UserProfileController - updateSurveyParticipation()",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Assertions",
+							"pm.test(\"유저 프로필 참여한 설문 상세 조회 완료\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"응답 시간이 100ms 이내여야 합니다.\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(100);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "editAnswerList[0].questionId",
+							"value": "18",
+							"type": "text"
+						},
+						{
+							"key": "editAnswerList[0].answerType",
+							"value": "SUBJECTIVE",
+							"type": "text"
+						},
+						{
+							"key": "editAnswerList[0].subjectiveAnswer",
+							"value": "바뀐 설문 주관식 응답",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/participation/edit/19",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"participation",
+						"edit",
+						"19"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
